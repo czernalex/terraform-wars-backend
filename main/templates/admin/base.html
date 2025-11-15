@@ -1,0 +1,9 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block welcome-msg %}
+{% translate 'Welcome,' %}
+    <strong>{% firstof user.get_short_name user.get_username %}</strong>.
+    <a href="{% url 'terraform-wars-api:openapi-view' %}" target="_blank">{% translate 'Swagger API docs' %}</a> /
+    <a href="{% url 'headless:openapi_html' %}" target="_blank">{% translate 'Allauth API docs' %}</a> /
+{% endblock %}
