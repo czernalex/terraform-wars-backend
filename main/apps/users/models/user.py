@@ -2,6 +2,7 @@ from typing import override
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
+from django.db.models import Q, UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from main.apps.core.models import AbstractUUIDModel
@@ -21,7 +22,6 @@ class User(AbstractUUIDModel, AbstractBaseUser, PermissionsMixin):
             "Designates whether this user should be treated as active. Unselect this instead of deleting accounts."
         ),
     )
-    is_admin = models.BooleanField(default=False, help_text=_("Designates whether the user can access the admin site."))
     is_staff = models.BooleanField(
         default=False, help_text=_("Designates whether the user can log into this admin site.")
     )
@@ -31,6 +31,9 @@ class User(AbstractUUIDModel, AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
 
     class Meta:
+        constraints = [
+            UniqueConstraint(fields=["username"], name="unique_non_empty_username", condition=~Q(username=""))
+        ]
         verbose_name = _("User")
         verbose_name_plural = _("Users")
         ordering = ("-created_at",)
@@ -43,5 +46,8 @@ class User(AbstractUUIDModel, AbstractBaseUser, PermissionsMixin):
     def full_name(self) -> str:
         if self.last_name and self.first_name:
             return f"{self.first_name} {self.last_name}"
+
+        if self.username:
+            return self.username
 
         return self.email

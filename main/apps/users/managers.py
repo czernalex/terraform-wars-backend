@@ -18,7 +18,6 @@ class UserManager(BaseUserManager["User"]):
     def create_superuser(self, email: str, password: Optional[str] = None, **extra_fields: Any) -> User:
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
-        extra_fields.setdefault("is_admin", True)
 
         return self.create_user(email, password, **extra_fields)
 
@@ -29,6 +28,9 @@ class UserQuerySet(models.QuerySet["User"]):
 
     def for_email(self, email: str) -> Self:
         return self.filter(email=email)
+
+    def for_username(self, username: str) -> Self:
+        return self.filter(username=username)
 
     def has_permission(self, permission_codename: str) -> Self:
         return self.filter(

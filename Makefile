@@ -17,3 +17,7 @@ test:
 .PHONY: lint
 lint:
 	uv run pre-commit run --all-files
+
+.PHONY: activate-venv
+activate-venv:
+	source .venv/bin/activate

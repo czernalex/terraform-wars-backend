@@ -43,6 +43,7 @@ class UserAdmin(BaseUserAdmin, BaseModelAdmin):
                     "tab",
                 ],
                 "fields": (
+                    "username",
                     "first_name",
                     "last_name",
                 ),
@@ -79,7 +80,6 @@ class UserAdmin(BaseUserAdmin, BaseModelAdmin):
     list_display = (
         "email",
         "is_active",
-        "is_admin",
         "is_staff",
         "is_superuser",
         "created_at",
@@ -87,7 +87,6 @@ class UserAdmin(BaseUserAdmin, BaseModelAdmin):
     )
     list_filter = (
         ("is_active", BooleanRadioFilter),
-        ("is_admin", BooleanRadioFilter),
         ("is_staff", BooleanRadioFilter),
         ("is_superuser", BooleanRadioFilter),
         ("created_at", RangeDateFilter),
@@ -96,6 +95,9 @@ class UserAdmin(BaseUserAdmin, BaseModelAdmin):
     search_fields = (
         "id",
         "email",
+        "username",
+        "first_name",
+        "last_name",
     )
     ordering = ("-created_at",)
 

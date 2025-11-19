@@ -1,0 +1,17 @@
+from typing import Optional
+from uuid import UUID
+
+from anydi import singleton
+from django.utils.translation import gettext as _
+
+from main.apps.users.models import User
+
+
+@singleton
+class UserValidationService:
+    def validate_username(self, username: str, user_id: Optional[UUID] = None) -> None:
+        if not username:
+            return
+
+        if User.objects.for_username(username).exclude(id=user_id).exists():
+            raise ValueError(_("Username is already taken"))

@@ -44,7 +44,7 @@ SECRET_KEY = secrets.SECRET_KEY
 INSTALLED_APPS = [
     "main.apps.api_auth",
     "main.apps.core",
-    # "main.apps.tutorials",
+    "main.apps.tutorials",
     "main.apps.users",
     "unfold",
     "unfold.contrib.filters",
@@ -267,6 +267,7 @@ ACCOUNT_DEFAULT_HTTP_PROTOCOL = BASE_PROTOCOL
 ACCOUNT_USER_DISPLAY = lambda user: user.email  # noqa
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False
 ACCOUNT_SESSION_REMEMBER = None
 ACCOUNT_PASSWORD_RESET_BY_CODE_ENABLED = False
 
@@ -290,9 +291,6 @@ HEADLESS_FRONTEND_URLS = {
 
 ANYDI = {
     "PATCH_NINJA": True,
-    # "CONTAINER_FACTORY": [
-    #     "main.apps.tutorials.container.get_container",
-    # ],
 }
 
 

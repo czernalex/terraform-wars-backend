@@ -7,8 +7,8 @@ from ninja.security import django_auth
 from ninja.throttling import AnonRateThrottle, AuthRateThrottle
 
 from main.apps.api_auth.routers import auth_router
-from main.apps.core.exceptions import ForbiddenError, NotFoundError, ValidationError
-from main.apps.core.schemas import ForbiddenErrorSchema, NotFoundErrorSchema, ValidationErrorSchema
+from main.apps.core.exceptions import ForbiddenError, NotFoundError
+from main.apps.core.schemas import ForbiddenErrorSchema, NotFoundErrorSchema
 from main.apps.users.routers import users_router
 from main.terraform_wars_api import TerraformWarsAPI
 
@@ -65,15 +65,6 @@ def handle_not_found_error(request: HttpRequest, exc: NotFoundError) -> HttpResp
         request,
         data=NotFoundErrorSchema(detail=str(exc)),
         status=HTTPStatus.NOT_FOUND,
-    )
-
-
-@root_api_router.exception_handler(ValidationError)
-def handle_validation_error(request: HttpRequest, exc: ValidationError) -> HttpResponse:
-    return root_api_router.create_response(
-        request,
-        data=ValidationErrorSchema(detail=exc.errors),
-        status=HTTPStatus.UNPROCESSABLE_ENTITY,
     )
 
 
