@@ -401,14 +401,14 @@ UNFOLD = {
     "SITE_SUBHEADER": "Site administration",
     "SITE_DROPDOWN": [
         {
+            "icon": "web",
+            "title": _("App"),
+            "link": FRONTEND_BASE_URL,
+        },
+        {
             "icon": "settings",
             "title": _("Admin"),
             "link": reverse_lazy("admin:index"),
-        },
-        {
-            "icon": "cloud",
-            "title": _("App"),
-            "link": FRONTEND_BASE_URL,
         },
         {
             "icon": "api",
@@ -422,7 +422,7 @@ UNFOLD = {
         },
     ],
     "SITE_URL": FRONTEND_BASE_URL,
-    "SITE_SYMBOL": "apps",
+    "SITE_SYMBOL": "action_key",
     "SHOW_HISTORY": True,
     "SHOW_BACK_BUTTON": True,
     "ENVIRONMENT": get_admin_environment(),
@@ -467,31 +467,49 @@ UNFOLD = {
         "show_search": True,
         "show_all_applications": False,
         "navigation": [
-            # {
-            #     "title": _("Tutorials"),
-            #     "separator": True,
-            #     "collapsible": True,
-            #     "items": [
-            #         {
-            #             "title": _("Tutorial Groups"),
-            #             "icon": "folder",
-            #             "link": reverse_lazy("admin:tutorials_tutorialgroup_changelist"),
-            #             "permission": lambda request: request.user.has_perm("tutorials.view_tutorialgroup"),
-            #         },
-            #         {
-            #             "title": _("Tutorials"),
-            #             "icon": "description",
-            #             "link": reverse_lazy("admin:tutorials_tutorial_changelist"),
-            #             "permission": lambda request: request.user.has_perm("tutorials.view_tutorial"),
-            #         },
-            #         {
-            #             "title": _("Tutorial Submissions"),
-            #             "icon": "contact_page",
-            #             "link": reverse_lazy("admin:tutorials_tutorialsubmission_changelist"),
-            #             "permission": lambda request: request.user.has_perm("tutorials.view_tutorialsubmission"),
-            #         },
-            #     ],
-            # },
+            {
+                "title": _("Tutorials"),
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _("Providers"),
+                        "icon": "cloud",
+                        "link": reverse_lazy("admin:tutorials_provider_changelist"),
+                        "permission": lambda request: request.user.has_perm("tutorials.view_provider"),
+                    },
+                    {
+                        "title": _("Provider Projects"),
+                        "icon": "folder_supervised",
+                        "link": reverse_lazy("admin:tutorials_providerproject_changelist"),
+                        "permission": lambda request: request.user.has_perm("tutorials.view_providerproject"),
+                    },
+                    {
+                        "title": _("Tutorials"),
+                        "icon": "code_blocks",
+                        "link": reverse_lazy("admin:tutorials_tutorial_changelist"),
+                        "permission": lambda request: request.user.has_perm("tutorials.view_tutorial"),
+                    },
+                    {
+                        "title": _("Steps"),
+                        "icon": "step",
+                        "link": reverse_lazy("admin:tutorials_tutorialstep_changelist"),
+                        "permission": lambda request: request.user.has_perm("tutorials.view_tutorialstep"),
+                    },
+                    {
+                        "title": _("Submissions"),
+                        "icon": "data_object",
+                        "link": reverse_lazy("admin:tutorials_tutorialstepsubmission_changelist"),
+                        "permission": lambda request: request.user.has_perm("tutorials.view_tutorialstepsubmission"),
+                    },
+                    {
+                        "title": _("Tags"),
+                        "icon": "shoppingmode",
+                        "link": reverse_lazy("admin:tutorials_tutorialtag_changelist"),
+                        "permission": lambda request: request.user.has_perm("tutorials.view_tutorialtag"),
+                    },
+                ],
+            },
             {
                 "title": _("Users"),
                 "separator": True,

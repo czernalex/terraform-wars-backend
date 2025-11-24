@@ -5,23 +5,6 @@ from django.db import models
 from django.db.models import Q
 
 
-class UserManager(BaseUserManager["User"]):
-    def create_user(self, email: str, password: Optional[str] = None, **extra_fields: Any) -> User:
-        if not email:
-            raise ValueError("The Email field must be set")
-        email = self.normalize_email(email)
-        user: User = self.model(email=email, is_active=True, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, email: str, password: Optional[str] = None, **extra_fields: Any) -> User:
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", True)
-
-        return self.create_user(email, password, **extra_fields)
-
-
 class UserQuerySet(models.QuerySet["User"]):
     def is_active(self, is_active: bool = True) -> Self:
         return self.filter(is_active=is_active)
@@ -51,3 +34,28 @@ class UserQuerySet(models.QuerySet["User"]):
             )
 
         return qs
+
+
+class UserManager(BaseUserManager["User"]):
+    def get_queryset(self) -> UserQuerySet:
+        return UserQuerySet(self.model, using=self._db)
+
+    def create_user(self, email: str, password: Optional[str] = None, **extra_fields: Any) -> User:
+        if not email:
+            raise ValueError("The Email field must be set")
+        email = self.normalize_email(email)
+        user: User = self.model(email=email, is_active=True, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email: str, password: Optional[str] = None, **extra_fields: Any) -> User:
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+
+        return self.create_user(email, password, **extra_fields)
+
+
+class ActiveUserManager(UserManager):
+    def get_queryset(self) -> UserQuerySet:
+        return super().get_queryset().is_active(True)

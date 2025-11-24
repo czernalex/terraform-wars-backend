@@ -12,7 +12,7 @@ shell:
 
 .PHONY: test
 test:
-	uv run pytest --reuse-db
+	uv run pytest --reuse-db  --cov=main --cov-report=html
 
 .PHONY: lint
 lint:

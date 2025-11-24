@@ -1,0 +1,34 @@
+from typing import override
+
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+from main.apps.core.models import AbstractUUIDModel
+from main.apps.tutorials.enums import Difficulty
+from main.apps.tutorials.models.provider import Provider
+from main.apps.tutorials.managers import TutorialQuerySet
+from main.apps.tutorials.models.tutorial_tag import TutorialTag
+from main.apps.users.models import User
+
+
+class Tutorial(AbstractUUIDModel):
+    provider = models.ForeignKey(Provider, on_delete=models.PROTECT, related_name="tutorials")
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="tutorials")
+    title = models.CharField(_("Title"), max_length=255)
+    slug = models.SlugField(_("Slug"), unique=True)
+    description = models.TextField(_("Description"))
+    difficulty = models.CharField(
+        _("Difficulty"), max_length=255, choices=Difficulty.choices, default=Difficulty.BEGINNER
+    )
+    tags = models.ManyToManyField(TutorialTag, related_name="tutorials", blank=True)
+
+    objects = TutorialQuerySet.as_manager()
+
+    class Meta:
+        verbose_name = _("Tutorial")
+        verbose_name_plural = _("Tutorials")
+        ordering = ("-created_at",)
+
+    @override
+    def __str__(self) -> str:
+        return self.title

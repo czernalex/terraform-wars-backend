@@ -5,17 +5,10 @@
             "depth": 10,
         }
     ],
-    "python.envFile": "${workspaceFolder}/.env",
     "python.analysis.autoImportCompletions": true,
+    "python.envFile": "${workspaceFolder}/.env",
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
-    "python.testing.pytestArgs": [
-        "-v",
-        "-s",
-        "./main",
-        "-p",
-        "test*.py"
-    ],
     "[python]": {
         "editor.formatOnSave": true,
         "editor.tabSize": 4,

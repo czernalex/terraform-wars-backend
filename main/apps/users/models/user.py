@@ -6,7 +6,7 @@ from django.db.models import Q, UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from main.apps.core.models import AbstractUUIDModel
-from main.apps.users.managers import UserManager, UserQuerySet
+from main.apps.users.managers import ActiveUserManager, UserManager, UserQuerySet
 
 
 class User(AbstractUUIDModel, AbstractBaseUser, PermissionsMixin):
@@ -26,7 +26,8 @@ class User(AbstractUUIDModel, AbstractBaseUser, PermissionsMixin):
         default=False, help_text=_("Designates whether the user can log into this admin site.")
     )
 
-    objects = UserManager.from_queryset(UserQuerySet)()
+    all_objects = UserManager.from_queryset(UserQuerySet)()
+    objects = ActiveUserManager.from_queryset(UserQuerySet)()
 
     USERNAME_FIELD = "email"
 
@@ -34,6 +35,7 @@ class User(AbstractUUIDModel, AbstractBaseUser, PermissionsMixin):
         constraints = [
             UniqueConstraint(fields=["username"], name="unique_non_empty_username", condition=~Q(username=""))
         ]
+        default_manager_name = "objects"
         verbose_name = _("User")
         verbose_name_plural = _("Users")
         ordering = ("-created_at",)

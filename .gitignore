@@ -14,3 +14,6 @@ wheels/
 local.py
 .env
 .env.docker
+.coverage
+htmlcov/
+.idea
