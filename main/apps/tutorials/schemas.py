@@ -1,6 +1,6 @@
-from typing import Optional
+from typing import Annotated, Optional
 from uuid import UUID
-from ninja import Field, ModelSchema, Schema
+from ninja import Field, FilterLookup, FilterSchema, ModelSchema, Schema
 
 from main.apps.tutorials.enums import Difficulty
 from main.apps.tutorials.models import Provider, Tutorial, TutorialTag
@@ -32,30 +32,21 @@ class TutorialTagSchema(ModelSchema):
         ]
 
 
+class TutorialListFilterSchema(FilterSchema):
+    search: Annotated[
+        Optional[str], FilterLookup(["title__icontains", "description__icontains", "provider__name__icontains"])
+    ] = None
+    difficulty: Optional[Difficulty] = None
+    provider_id: Optional[UUID] = None
+    tag_ids: Annotated[Optional[list[UUID]], FilterLookup(["tags__id__in"])] = None
+
+
 class TutorialListSchema(ModelSchema):
     id: UUID
     provider_id: UUID
     provider_name: str = Field(alias="provider.name")
-    author_email: Optional[str] = Field(alias="author.email")
-    author_username: Optional[str] = Field(alias="author.username")
-    tags: list[TutorialTagSchema]
-    difficulty: Difficulty
-
-    class Meta:
-        model = Tutorial
-        fields = [
-            "title",
-            "slug",
-            "created_at",
-            "updated_at",
-        ]
-
-
-class TutorialDetailSchema(ModelSchema):
-    id: UUID
-    provider: ProviderSchema
-    author_email: Optional[str] = Field(alias="author.email")
-    author_username: Optional[str] = Field(alias="author.username")
+    author_email: Optional[str]
+    author_username: Optional[str]
     tags: list[TutorialTagSchema]
     difficulty: Difficulty
 
@@ -68,6 +59,41 @@ class TutorialDetailSchema(ModelSchema):
             "created_at",
             "updated_at",
         ]
+
+    @staticmethod
+    def resolve_author_email(obj: Tutorial) -> Optional[str]:
+        return obj.author.email if obj.author else None
+
+    @staticmethod
+    def resolve_author_username(obj: Tutorial) -> Optional[str]:
+        return obj.author.username if obj.author else None
+
+
+class TutorialDetailSchema(ModelSchema):
+    id: UUID
+    provider: ProviderSchema
+    author_email: Optional[str]
+    author_username: Optional[str]
+    tags: list[TutorialTagSchema]
+    difficulty: Difficulty
+
+    class Meta:
+        model = Tutorial
+        fields = [
+            "title",
+            "slug",
+            "description",
+            "created_at",
+            "updated_at",
+        ]
+
+    @staticmethod
+    def resolve_author_email(obj: Tutorial) -> Optional[str]:
+        return obj.author.email if obj.author else None
+
+    @staticmethod
+    def resolve_author_username(obj: Tutorial) -> Optional[str]:
+        return obj.author.username if obj.author else None
 
 
 class TutorialCreateSchema(Schema):

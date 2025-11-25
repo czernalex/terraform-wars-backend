@@ -2,12 +2,12 @@ from http import HTTPStatus
 
 from anydi import auto
 from django.db import models
-from ninja import Router
+from ninja import Query, Router
 from ninja.pagination import paginate
 
 from main.apps.core.types import AuthedHttpRequest
 from main.apps.tutorials.models import Tutorial
-from main.apps.tutorials.schemas import TutorialListSchema
+from main.apps.tutorials.schemas import TutorialListFilterSchema, TutorialListSchema
 from main.apps.tutorials.services.tutorial_retrieval_service import TutorialRetrievalService
 
 
@@ -22,6 +22,8 @@ tutorials_router = Router()
 )
 @paginate
 def get_tutorial_list(
-    request: AuthedHttpRequest, tutorial_retrieval_service: TutorialRetrievalService = auto
+    request: AuthedHttpRequest,
+    filters: Query[TutorialListFilterSchema],
+    tutorial_retrieval_service: TutorialRetrievalService = auto,
 ) -> models.QuerySet[Tutorial]:
-    return tutorial_retrieval_service.get_tutorial_list()
+    return tutorial_retrieval_service.get_tutorial_list(filters)

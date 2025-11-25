@@ -4,6 +4,7 @@ from anydi import singleton
 from django.db import models, transaction
 
 from main.apps.tutorials.models import Tutorial
+from main.apps.tutorials.schemas import TutorialListFilterSchema
 
 
 @singleton
@@ -13,8 +14,10 @@ class TutorialRetrievalService:
     ) -> models.QuerySet[Tutorial]:
         return Tutorial.objects.select_related(*select_related_fields).prefetch_related(*prefetch_related_fields)
 
-    def get_tutorial_list(self) -> models.QuerySet[Tutorial]:
-        return self._get_tutorial_queryset(select_related_fields=["provider"], prefetch_related_fields=["tags"]).all()
+    def get_tutorial_list(self, filters: TutorialListFilterSchema) -> models.QuerySet[Tutorial]:
+        return filters.filter(
+            self._get_tutorial_queryset(select_related_fields=["provider"], prefetch_related_fields=["tags"]).all()
+        )
 
     def get_tutorial_for_read(self, tutorial_id: UUID) -> Tutorial:
         return self._get_tutorial_queryset(
