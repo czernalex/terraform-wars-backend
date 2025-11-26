@@ -109,3 +109,18 @@ class TutorialStepListSchema(ModelSchema):
             "description",
             "order",
         ]
+
+
+class TutorialStepDetailSchema(ModelSchema):
+    id: UUID
+    tutorial: TutorialDetailSchema
+
+    class Meta:
+        model = TutorialStep
+        fields = [
+            "title",
+            "slug",
+            "description",
+            "assignment",
+            "order",
+        ]
