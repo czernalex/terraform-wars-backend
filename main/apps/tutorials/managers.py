@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 
 from django.db import models
 
@@ -12,7 +12,8 @@ class TutorialQuerySet(models.QuerySet["Tutorial"]):
 
 
 class TutorialStepQuerySet(models.QuerySet["TutorialStep"]):
-    pass
+    def for_tutorial(self, tutorial_slug: str) -> Self:
+        return self.filter(tutorial__slug=tutorial_slug)
 
 
 class TutorialStepSubmissionQuerySet(models.QuerySet["TutorialStepSubmission"]):

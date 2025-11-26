@@ -1,9 +1,9 @@
 from typing import Annotated, Optional
 from uuid import UUID
-from ninja import Field, FilterLookup, FilterSchema, ModelSchema, Schema
+from ninja import Field, FilterLookup, FilterSchema, ModelSchema
 
 from main.apps.tutorials.enums import Difficulty
-from main.apps.tutorials.models import Provider, Tutorial, TutorialTag
+from main.apps.tutorials.models import Provider, Tutorial, TutorialStep, TutorialTag
 
 
 class ProviderSchema(ModelSchema):
@@ -96,10 +96,16 @@ class TutorialDetailSchema(ModelSchema):
         return obj.author.username if obj.author else None
 
 
-class TutorialCreateSchema(Schema):
-    title: str = Field(..., max_length=255)
-    description: str
+class TutorialStepListSchema(ModelSchema):
+    id: UUID
+    tutorial_id: UUID
+    tutorial_slug: str = Field(alias="tutorial.slug")
 
-
-class TutorialUpdateSchema(TutorialCreateSchema):
-    pass
+    class Meta:
+        model = TutorialStep
+        fields = [
+            "title",
+            "slug",
+            "description",
+            "order",
+        ]

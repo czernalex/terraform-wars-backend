@@ -5,10 +5,17 @@ from django.db import models
 from ninja import Query, Router
 from ninja.pagination import paginate
 
+from main.apps.core.schemas import NotFoundErrorSchema
 from main.apps.core.types import AuthedHttpRequest
 from main.apps.tutorials.models import Tutorial
-from main.apps.tutorials.schemas import TutorialListFilterSchema, TutorialListSchema
+from main.apps.tutorials.schemas import (
+    TutorialDetailSchema,
+    TutorialListFilterSchema,
+    TutorialListSchema,
+    TutorialStepListSchema,
+)
 from main.apps.tutorials.services.tutorial_retrieval_service import TutorialRetrievalService
+from main.apps.tutorials.services.tutorial_step_retrieval_service import TutorialStepRetrievalService
 
 
 tutorials_router = Router()
@@ -27,3 +34,34 @@ def get_tutorial_list(
     tutorial_retrieval_service: TutorialRetrievalService = auto,
 ) -> models.QuerySet[Tutorial]:
     return tutorial_retrieval_service.get_tutorial_list(filters)
+
+
+@tutorials_router.get(
+    "/{tutorial_slug}/",
+    url_name="tutorial_detail",
+    response={
+        HTTPStatus.OK: TutorialDetailSchema,
+        HTTPStatus.NOT_FOUND: NotFoundErrorSchema,
+    },
+    description="Get a tutorial by slug",
+)
+def get_tutorial_detail(
+    request: AuthedHttpRequest,
+    tutorial_slug: str,
+    tutorial_retrieval_service: TutorialRetrievalService = auto,
+) -> Tutorial:
+    return tutorial_retrieval_service.get_tutorial_detail(tutorial_slug)
+
+
+@tutorials_router.get(
+    "/{tutorial_slug}/steps/",
+    url_name="tutorial_step_list",
+    response={HTTPStatus.OK: list[TutorialStepListSchema]},
+    description="List all steps for a tutorial",
+)
+def get_tutorial_step_list(
+    request: AuthedHttpRequest,
+    tutorial_slug: str,
+    tutorial_step_retrieval_service: TutorialStepRetrievalService = auto,
+) -> models.QuerySet[TutorialStepListSchema]:
+    return tutorial_step_retrieval_service.get_tutorial_step_list(tutorial_slug)

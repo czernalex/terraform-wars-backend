@@ -176,7 +176,19 @@ class TutorialStepAdmin(BaseModelAdmin):
         "slug": ("title",),
     }
     fieldsets = (
-        (_("Tutorial step information"), {"fields": ("tutorial", "title", "slug", "description", "order")}),
+        (
+            _("Tutorial step information"),
+            {
+                "fields": (
+                    "tutorial",
+                    "title",
+                    "slug",
+                    "description",
+                    "assignment",
+                    "order",
+                )
+            },
+        ),
         (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
     )
 
