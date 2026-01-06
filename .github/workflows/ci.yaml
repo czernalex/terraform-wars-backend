@@ -118,7 +118,7 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ env.IMAGE_URI }} terraform-wars-backend
+          docker build -t ${{ env.IMAGE_URI }} .
           docker push ${{ env.IMAGE_URI }}
 
   deploy-production:
