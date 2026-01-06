@@ -35,7 +35,7 @@ jobs:
     needs: lint
     services:
       postgres:
-        image: postgres:17
+        image: postgres:18
         env:
           POSTGRES_DB: terraform-wars
           POSTGRES_USER: terraform-wars
