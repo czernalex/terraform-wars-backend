@@ -97,7 +97,7 @@ jobs:
     if: github.event_name == 'push'
     env:
       IMAGE_URI: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.GCP_REPOSITORY }}/app-${{ github.ref == 'refs/heads/master' && 'production' || 'testing' }}:${{ github.sha }}
-      WORKLOAD_IDENTITY_PROVIDER: "projects/${{ vars.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/${{ vars.GCP_WIF_POOL_ID }}/providers/github"
+      WORKLOAD_IDENTITY_PROVIDER: "projects/${{ vars.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ vars.GCP_WIF_POOL_ID }}/providers/github"
     steps:
       - uses: actions/checkout@v6
 
@@ -131,7 +131,7 @@ jobs:
     environment: production
     env:
       IMAGE_URI: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.GCP_REPOSITORY }}/app-production:${{ github.sha }}
-      WORKLOAD_IDENTITY_PROVIDER: "projects/${{ vars.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/${{ vars.GCP_WIF_POOL_ID }}/providers/github"
+      WORKLOAD_IDENTITY_PROVIDER: "projects/${{ vars.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ vars.GCP_WIF_POOL_ID }}/providers/github"
     steps:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v3
