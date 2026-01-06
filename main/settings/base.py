@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "corsheaders",
     "anydi_django",
+    "django_json_widget",
 ]
 
 
@@ -494,9 +495,10 @@ UNFOLD = {
                 "collapsible": True,
                 "items": [
                     {
-                        "title": _("API Auth"),
-                        "icon": "api",
-                        "link": reverse_lazy("admin:api_auth_apikey_changelist"),
+                        "title": _("Authenticators"),
+                        "icon": "encrypted",
+                        "link": reverse_lazy("admin:mfa_authenticator_changelist"),
+                        "permission": lambda request: request.user.has_perm("allauth_mfa.view_authenticator"),
                     },
                 ],
             },

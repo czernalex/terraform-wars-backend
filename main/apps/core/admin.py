@@ -7,7 +7,11 @@ from unfold.contrib.forms.widgets import ArrayWidget, WysiwygWidget
 
 
 class BaseModelAdmin(ModelAdmin):
-    readonly_fields = ("id", "created_at", "updated_at")
+    readonly_fields = (
+        "id",
+        "created_at",
+        "updated_at",
+    )
     formfield_overrides = {
         ArrayField: {
             "widget": ArrayWidget,
