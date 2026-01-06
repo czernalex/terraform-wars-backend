@@ -60,7 +60,6 @@ jobs:
           uv sync
       - name: Run tests
         run: |
-          cd terraform-wars-backend
           uv run manage.py makemigrations --dry-run --check
           uv run pytest --junitxml=junit/test-results.xml --cov=main --cov-report=xml --cov-report=html
         env:
