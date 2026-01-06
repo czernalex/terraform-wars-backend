@@ -20,7 +20,6 @@ class UserDetailSchema(ModelSchema):
     class Meta:
         model = User
         fields = [
-            "id",
             "email",
             "username",
             "first_name",

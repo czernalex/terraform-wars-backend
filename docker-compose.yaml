@@ -10,46 +10,17 @@ services:
       - .:/app
     depends_on:
       - db
-      - redis
 
   db:
-    image: postgres:17
+    image: postgres:18
     environment:
         - POSTGRES_USER=terraform-wars
         - POSTGRES_PASSWORD=terraform-wars
         - POSTGRES_DB=terraform-wars
     volumes:
-        - terraform-wars-pg:/var/lib/postgresql/data
+        - terraform-wars-pg:/var/lib/postgresql
     ports:
         - "54320:5432"
 
-  redis:
-    image: redis:alpine
-    volumes:
-        - terraform-wars-redis:/var/lib/redis
-    ports:
-        - "63790:6379"
-
-  celery:
-    build: .
-    command: [sh, -c, entrypoints/entrypoint-celery-worker.sh]
-    env_file:
-      - .env.docker
-    volumes:
-      - .:/app
-    depends_on:
-      - redis
-
-  celery-beat:
-    build: .
-    command: [sh, -c, entrypoints/entrypoint-celery-beat.sh]
-    env_file:
-      - .env.docker
-    volumes:
-      - .:/app
-    depends_on:
-      - redis
-
 volumes:
   terraform-wars-pg:
-  terraform-wars-redis:

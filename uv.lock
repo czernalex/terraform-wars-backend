@@ -25,29 +25,29 @@ wheels = [
 
 [[package]]
 name = "anydi"
-version = "0.53.0"
+version = "0.61.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
     { name = "typing-extensions" },
     { name = "wrapt" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/81/d5/d8734c06d48d11099eadfe4a0249cb1390ccbb021990d92ce0d6bb2935ba/anydi-0.53.0.tar.gz", hash = "sha256:c8ceb4773718041998e2ad581ad7ebfd477c9e9eae57f8b3d39c87d2dde057c6", size = 17512, upload-time = "2025-10-29T09:49:55.916Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1e/5d/0de4a98072b0e1777c0e308887b5c0047fbf4fbca20396ecd9424048b990/anydi-0.61.0.tar.gz", hash = "sha256:da9602c481bc4d09a247c33b2d1b9b6d652515556e47af3a7a3d352ddc80f169", size = 26506, upload-time = "2025-12-04T08:17:07.899Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ab/a7/e98f4c2ebeac9b3685ef687a1320e33aeebb53816d09a9e0366817fe3d38/anydi-0.53.0-py3-none-any.whl", hash = "sha256:00d76d4fcbd47da59d49db2418e188a79d2d7397140f6577e8a672659a7a9abc", size = 23822, upload-time = "2025-10-29T09:49:54.845Z" },
+    { url = "https://files.pythonhosted.org/packages/35/ef/14c06918b5af34bc0a0c6b850b727da1cd9e3ec5e8de9c4651c126d5b242/anydi-0.61.0-py3-none-any.whl", hash = "sha256:bd6cf04bb949ed62c3ffc54e860160bb054ffc4ba9457cd589bb047a8777e643", size = 34093, upload-time = "2025-12-04T08:17:06.463Z" },
 ]
 
 [[package]]
 name = "anydi-django"
-version = "0.2.0"
+version = "0.4.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anydi" },
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/52/a5/cafe44df707e2184f349183edc6c79dc07d55529296a44341fc42170091a/anydi_django-0.2.0.tar.gz", hash = "sha256:e3fbe7fb5ba0e414122dded3ae5b0a1bc81524ed7573c9774c26cb232a922107", size = 5449, upload-time = "2025-10-14T18:03:35.155Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b4/03/7961e3018f9d05bfd26f00b25efee849b35b1946055392602010a5ad2c69/anydi_django-0.4.0.tar.gz", hash = "sha256:47c6d97bb49f27b44bfe34f7f6abe32064a7fd84cf9438066a0c0e09f189f7e4", size = 5288, upload-time = "2025-11-28T21:12:53.261Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5a/37/20000162fc7709988727e33c8e6746a4e1da46d5f3dfd5bd9a63090741c3/anydi_django-0.2.0-py3-none-any.whl", hash = "sha256:873ae94dd43ffb183ec8051d3c6cd07e3bb45955fa6dfb9bdb20ef977590569d", size = 7981, upload-time = "2025-10-14T18:03:34.061Z" },
+    { url = "https://files.pythonhosted.org/packages/2c/60/6df7d1f2af7d92f4ff2ff80bedf36e11436f91b44ed4405664ab7600acfe/anydi_django-0.4.0-py3-none-any.whl", hash = "sha256:e30a0ad0a1642ce4ae71967fa29c89f73c3b56a8fe14a4278b676a88344a677c", size = 7814, upload-time = "2025-11-28T21:12:52.045Z" },
 ]
 
 [package.optional-dependencies]
@@ -393,16 +393,16 @@ wheels = [
 
 [[package]]
 name = "django"
-version = "5.2.8"
+version = "6.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "asgiref" },
     { name = "sqlparse" },
     { name = "tzdata", marker = "sys_platform == 'win32'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/05/a2/933dbbb3dd9990494960f6e64aca2af4c0745b63b7113f59a822df92329e/django-5.2.8.tar.gz", hash = "sha256:23254866a5bb9a2cfa6004e8b809ec6246eba4b58a7589bc2772f1bcc8456c7f", size = 10849032, upload-time = "2025-11-05T14:07:32.778Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/15/75/19762bfc4ea556c303d9af8e36f0cd910ab17dff6c8774644314427a2120/django-6.0.tar.gz", hash = "sha256:7b0c1f50c0759bbe6331c6a39c89ae022a84672674aeda908784617ef47d8e26", size = 10932418, upload-time = "2025-12-03T16:26:21.878Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5e/3d/a035a4ee9b1d4d4beee2ae6e8e12fe6dee5514b21f62504e22efcbd9fb46/django-5.2.8-py3-none-any.whl", hash = "sha256:37e687f7bd73ddf043e2b6b97cfe02fcbb11f2dbb3adccc6a2b18c6daa054d7f", size = 8289692, upload-time = "2025-11-05T14:07:28.761Z" },
+    { url = "https://files.pythonhosted.org/packages/d7/ae/f19e24789a5ad852670d6885f5480f5e5895576945fcc01817dfd9bc002a/django-6.0-py3-none-any.whl", hash = "sha256:1cc2c7344303bbfb7ba5070487c17f7fc0b7174bbb0a38cebf03c675f5f19b6d", size = 8339181, upload-time = "2025-12-03T16:26:16.231Z" },
 ]
 
 [[package]]
@@ -419,6 +419,10 @@ wheels = [
 ]
 
 [package.optional-dependencies]
+mfa = [
+    { name = "fido2" },
+    { name = "qrcode" },
+]
 socialaccount = [
     { name = "oauthlib" },
     { name = "pyjwt", extra = ["crypto"] },
@@ -449,15 +453,15 @@ wheels = [
 
 [[package]]
 name = "django-ninja"
-version = "1.5.0"
+version = "1.5.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
     { name = "pydantic" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/cc/12/4f3d739994b15a5af7da9b028ddad6bbb2f6634b5b1f0fc19e6e29ccacad/django_ninja-1.5.0.tar.gz", hash = "sha256:181bc8266a684be8c4cdd8f555d8ccbbc72e9fad86a5928ddccdd13faf73a1c5", size = 3725725, upload-time = "2025-11-13T17:58:02.502Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/42/8e/10b4299aa37017bb026ae091b2192d05b3d4b78a9dc57d59c4f362551907/django_ninja-1.5.1.tar.gz", hash = "sha256:6acda68a64d60934c6fdccb4d97c3ac7f02cfefd78a5d87ae053effe081b17c7", size = 3719868, upload-time = "2025-12-04T11:35:46.615Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e6/51/86968a38f074a56a675d72d470dce9405c9ddb53856c1686ca5e2ba44f81/django_ninja-1.5.0-py3-none-any.whl", hash = "sha256:e305fc42588406a202d4479263b501813ec863a3a4e11cb091fb905ecdf9bc62", size = 2428939, upload-time = "2025-11-13T17:57:59.967Z" },
+    { url = "https://files.pythonhosted.org/packages/0a/fc/124c3f999fbc77680777ff331ac9552227d7a6753639ef66dbba780fc6b4/django_ninja-1.5.1-py3-none-any.whl", hash = "sha256:135aaa1117dce8dfd7a1e80b4487a8cccee3a4182c3c8b562d08ea94e4d2cbdf", size = 2426577, upload-time = "2025-12-04T11:35:44.656Z" },
 ]
 
 [[package]]
@@ -510,6 +514,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/bf/89/780e11f9588d9e7128a3f87788354c7946a9cbb1401ad38a48c4db9a4f07/execnet-2.1.2.tar.gz", hash = "sha256:63d83bfdd9a23e35b9c6a3261412324f964c2ec8dcd8d3c6916ee9373e0befcd", size = 166622, upload-time = "2025-11-12T09:56:37.75Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ab/84/02fc1827e8cdded4aa65baef11296a9bbe595c474f0d6d758af082d849fd/execnet-2.1.2-py3-none-any.whl", hash = "sha256:67fba928dd5a544b783f6056f449e5e3931a5c378b128bc18501f7ea79e296ec", size = 40708, upload-time = "2025-11-12T09:56:36.333Z" },
+]
+
+[[package]]
+name = "fido2"
+version = "2.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cryptography" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/8d/b9/6ec8d8ec5715efc6ae39e8694bd48d57c189906f0628558f56688d0447b2/fido2-2.0.0.tar.gz", hash = "sha256:3061cd05e73b3a0ef6afc3b803d57c826aa2d6a9732d16abd7277361f58e7964", size = 274942, upload-time = "2025-05-20T09:45:00.974Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/4c/7d/a1dba174d7ec4b6b8d6360eed0ac3a4a4e2aa45f234e903592d3184c6c3f/fido2-2.0.0-py3-none-any.whl", hash = "sha256:685f54a50a57e019c6156e2dd699802a603e3abf70bab334f26affdd4fb8d4f7", size = 224761, upload-time = "2025-05-20T09:44:59.029Z" },
 ]
 
 [[package]]
@@ -1041,6 +1057,18 @@ wheels = [
 ]
 
 [[package]]
+name = "qrcode"
+version = "8.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "colorama", marker = "sys_platform == 'win32'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/8f/b2/7fc2931bfae0af02d5f53b174e9cf701adbb35f39d69c2af63d4a39f81a9/qrcode-8.2.tar.gz", hash = "sha256:35c3f2a4172b33136ab9f6b3ef1c00260dd2f66f858f24d88418a015f446506c", size = 43317, upload-time = "2025-05-01T15:44:24.726Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/dd/b8/d2d6d731733f51684bbf76bf34dab3b70a9148e8f2cef2bb544fccec681a/qrcode-8.2-py3-none-any.whl", hash = "sha256:16e64e0716c14960108e85d853062c9e8bba5ca8252c0b4d0231b9df4060ff4f", size = 45986, upload-time = "2025-05-01T15:44:22.781Z" },
+]
+
+[[package]]
 name = "redis"
 version = "7.0.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1126,7 +1154,7 @@ dependencies = [
     { name = "argon2-cffi" },
     { name = "celery" },
     { name = "django" },
-    { name = "django-allauth", extra = ["socialaccount"] },
+    { name = "django-allauth", extra = ["mfa", "socialaccount"] },
     { name = "django-cors-headers" },
     { name = "django-json-widget" },
     { name = "django-ninja" },
@@ -1152,15 +1180,15 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "anydi", specifier = ">=0.53.0" },
-    { name = "anydi-django", extras = ["ninja"], specifier = ">=0.2.0" },
+    { name = "anydi", specifier = ">=0.61.0" },
+    { name = "anydi-django", extras = ["ninja"], specifier = ">=0.4.0" },
     { name = "argon2-cffi", specifier = ">=25.1.0" },
     { name = "celery", specifier = ">=5.5.3" },
-    { name = "django", specifier = ">=5.2.8" },
-    { name = "django-allauth", extras = ["socialaccount"], specifier = ">=65.13.0" },
+    { name = "django", specifier = ">=6.0.0" },
+    { name = "django-allauth", extras = ["mfa", "socialaccount"], specifier = ">=65.13.0" },
     { name = "django-cors-headers", specifier = ">=4.9.0" },
     { name = "django-json-widget", specifier = ">=2.1.0" },
-    { name = "django-ninja", specifier = "==1.5.0" },
+    { name = "django-ninja", specifier = "==1.5.1" },
     { name = "django-storages", extras = ["google"], specifier = ">=1.14.6" },
     { name = "django-unfold", specifier = ">=0.71.0" },
     { name = "gunicorn", specifier = ">=23.0.0" },

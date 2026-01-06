@@ -14,7 +14,7 @@ class TutorialStepSubmission(AbstractUUIDModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="submissions")
     provider_project = models.ForeignKey(ProviderProject, on_delete=models.CASCADE, related_name="submissions")
 
-    user_input = models.TextField(_("User Input"))
+    code = models.TextField(_("Code"))
 
     # TODO: Add a field for the output, monitor submission status, etc. Will be implemented later
 

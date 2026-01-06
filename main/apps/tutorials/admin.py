@@ -186,6 +186,7 @@ class TutorialStepAdmin(BaseModelAdmin):
                     "description",
                     "assignment",
                     "order",
+                    "code_skeleton",
                 )
             },
         ),

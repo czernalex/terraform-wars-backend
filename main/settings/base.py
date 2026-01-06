@@ -7,7 +7,6 @@ from decouple import AutoConfig
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from sentry_sdk.integrations.django import DjangoIntegration
-from sentry_sdk.integrations.celery import CeleryIntegration
 
 from main.settings.secrets import Secrets
 
@@ -58,6 +57,7 @@ INSTALLED_APPS = [
     "django.contrib.postgres",
     "allauth",
     "allauth.account",
+    "allauth.mfa",
     "allauth.headless",
     "allauth.socialaccount",
     "corsheaders",
@@ -272,6 +272,14 @@ ACCOUNT_SESSION_REMEMBER = None
 ACCOUNT_PASSWORD_RESET_BY_CODE_ENABLED = False
 
 
+### ALLAUTH MFA
+
+MFA_PASSKEY_LOGIN_ENABLED = False
+MFA_SUPPORTED_TYPES = [
+    "recovery_codes",
+    "totp",
+]
+
 ### ALLAUTH HEADLESS
 
 HEADLESS_ONLY = True
@@ -353,6 +361,17 @@ if "0.0.0.0" not in ALLOWED_HOSTS:
 SECURE_SSL_REDIRECT = config("SECURE_SSL_REDIRECT", cast=bool, default=True)
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
+SECURE_HSTS_SECONDS = 3600
+
+
+# CSP
+
+# FIXME: Configure CSP
+
+# SECURE_CSP = {
+#     "default-src": [CSP.SELF],
+# }
+
 
 # Email
 
@@ -372,7 +391,9 @@ SHELL = "shell" in sys.argv or "shell_plus" in sys.argv
 
 sentry_sdk.init(
     dsn=config("SENTRY_DSN", default=""),
-    integrations=[DjangoIntegration(), CeleryIntegration()],
+    integrations=[
+        DjangoIntegration(),
+    ],
     traces_sample_rate=0,
     environment=ENVIRONMENT,
     send_default_pii=True,
@@ -467,6 +488,18 @@ UNFOLD = {
         "show_search": True,
         "show_all_applications": False,
         "navigation": [
+            {
+                "title": _("API Auth"),
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _("API Auth"),
+                        "icon": "api",
+                        "link": reverse_lazy("admin:api_auth_apikey_changelist"),
+                    },
+                ],
+            },
             {
                 "title": _("Tutorials"),
                 "separator": True,

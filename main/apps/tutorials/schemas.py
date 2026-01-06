@@ -1,9 +1,9 @@
 from typing import Annotated, Optional
 from uuid import UUID
-from ninja import Field, FilterLookup, FilterSchema, ModelSchema
+from ninja import Field, FilterLookup, FilterSchema, ModelSchema, Schema
 
 from main.apps.tutorials.enums import Difficulty
-from main.apps.tutorials.models import Provider, Tutorial, TutorialStep, TutorialTag
+from main.apps.tutorials.models import Provider, Tutorial, TutorialStep, TutorialStepSubmission, TutorialTag
 
 
 class ProviderSchema(ModelSchema):
@@ -122,5 +122,21 @@ class TutorialStepDetailSchema(ModelSchema):
             "slug",
             "description",
             "assignment",
+            "code_skeleton",
             "order",
+        ]
+
+
+class CreateTutorialStepSubmissionSchema(Schema):
+    tutorial_step_id: UUID
+    code: str
+
+
+class TutorialStepSubmissionDetailSchema(ModelSchema):
+    id: UUID
+
+    class Meta:
+        model = TutorialStepSubmission
+        fields = [
+            "code",
         ]

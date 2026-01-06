@@ -17,5 +17,5 @@ auth_router = Router()
 )
 @ensure_csrf_cookie
 @csrf_exempt
-async def get_csrf_token(request: HttpRequest) -> HttpResponse:
+def get_csrf_token(request: HttpRequest) -> HttpResponse:
     return HttpResponse(status=HTTPStatus.NO_CONTENT)

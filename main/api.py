@@ -9,7 +9,12 @@ from ninja.throttling import AnonRateThrottle, AuthRateThrottle
 from main.apps.api_auth.routers import auth_router
 from main.apps.core.exceptions import ForbiddenError, NotFoundError
 from main.apps.core.schemas import ForbiddenErrorSchema, NotFoundErrorSchema
-from main.apps.tutorials.routers import providers_router, tutorial_tags_router, tutorials_router
+from main.apps.tutorials.routers import (
+    providers_router,
+    tutorial_step_submissions_router,
+    tutorial_tags_router,
+    tutorials_router,
+)
 from main.apps.users.routers import users_router
 from main.terraform_wars_api import TerraformWarsAPI
 
@@ -71,6 +76,7 @@ def handle_not_found_error(request: HttpRequest, exc: NotFoundError) -> HttpResp
 
 root_api_router.add_router("/auth", auth_router, tags=["auth"])
 root_api_router.add_router("/providers", providers_router, tags=["providers"])
+root_api_router.add_router("/submissions", tutorial_step_submissions_router, tags=["submissions"])
 root_api_router.add_router("/tutorials", tutorials_router, tags=["tutorials"])
 root_api_router.add_router("/tutorial-tags", tutorial_tags_router, tags=["tutorial-tags"])
 root_api_router.add_router("/users", users_router, tags=["users"])
