@@ -1,10 +1,10 @@
 from http import HTTPStatus
 
-from anydi import auto
 from django.db import models
 from ninja import Query, Router
 from ninja.pagination import paginate
 
+from main.di import injector
 from main.apps.core.schemas import NotFoundErrorSchema
 from main.apps.core.types import AuthedHttpRequest
 from main.apps.tutorials.models import Tutorial, TutorialStep
@@ -32,8 +32,8 @@ tutorials_router = Router()
 def get_tutorial_list(
     request: AuthedHttpRequest,
     filters: Query[TutorialListFilterSchema],
-    tutorial_retrieval_service: TutorialRetrievalService = auto,
 ) -> models.QuerySet[Tutorial]:
+    tutorial_retrieval_service = injector.get(TutorialRetrievalService)
     return tutorial_retrieval_service.get_tutorial_list(filters)
 
 
@@ -49,8 +49,8 @@ def get_tutorial_list(
 def get_tutorial_detail(
     request: AuthedHttpRequest,
     tutorial_slug: str,
-    tutorial_retrieval_service: TutorialRetrievalService = auto,
 ) -> Tutorial:
+    tutorial_retrieval_service = injector.get(TutorialRetrievalService)
     return tutorial_retrieval_service.get_tutorial_detail(tutorial_slug)
 
 
@@ -63,8 +63,8 @@ def get_tutorial_detail(
 def get_tutorial_step_list(
     request: AuthedHttpRequest,
     tutorial_slug: str,
-    tutorial_step_retrieval_service: TutorialStepRetrievalService = auto,
 ) -> models.QuerySet[TutorialStepListSchema]:
+    tutorial_step_retrieval_service = injector.get(TutorialStepRetrievalService)
     return tutorial_step_retrieval_service.get_tutorial_step_list(tutorial_slug)
 
 
@@ -78,6 +78,6 @@ def get_tutorial_step_detail(
     request: AuthedHttpRequest,
     tutorial_slug: str,
     tutorial_step_slug: str,
-    tutorial_step_retrieval_service: TutorialStepRetrievalService = auto,
 ) -> TutorialStep:
+    tutorial_step_retrieval_service = injector.get(TutorialStepRetrievalService)
     return tutorial_step_retrieval_service.get_tutorial_step_detail(tutorial_slug, tutorial_step_slug)

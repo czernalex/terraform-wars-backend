@@ -1,9 +1,9 @@
 from http import HTTPStatus
 
-from anydi import auto
 from django.db import models
 from ninja import Router
 
+from main.di import injector
 from main.apps.core.types import AuthedHttpRequest
 from main.apps.tutorials.schemas import TutorialTagSchema
 from main.apps.tutorials.services import TutorialTagRetrievalService
@@ -20,6 +20,7 @@ tutorial_tags_router = Router()
     description="List all tutorial tags",
 )
 def get_tutorial_tag_list(
-    request: AuthedHttpRequest, tutorial_tag_retrieval_service: TutorialTagRetrievalService = auto
+    request: AuthedHttpRequest,
 ) -> models.QuerySet[TutorialTag]:
+    tutorial_tag_retrieval_service = injector.get(TutorialTagRetrievalService)
     return tutorial_tag_retrieval_service.get_tutorial_tag_list()

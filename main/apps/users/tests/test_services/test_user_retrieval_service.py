@@ -1,6 +1,7 @@
 import pytest
 from model_bakery import baker
 
+from main.di import injector
 from main.apps.users.services.user_retrieval_service import UserRetrievalService
 
 
@@ -8,8 +9,10 @@ from main.apps.users.services.user_retrieval_service import UserRetrievalService
 class TestUserRetrievalService:
     def test_get_user_for_read(self):
         user = baker.make_recipe("main.apps.users.tests.active_user")
-        assert UserRetrievalService().get_user_for_read(user.id) == user
+        service = injector.get(UserRetrievalService)
+        assert service.get_user_for_read(user.id) == user
 
     def test_get_user_for_update(self):
         user = baker.make_recipe("main.apps.users.tests.active_user")
-        assert UserRetrievalService().get_user_for_update(user.id) == user
+        service = injector.get(UserRetrievalService)
+        assert service.get_user_for_update(user.id) == user

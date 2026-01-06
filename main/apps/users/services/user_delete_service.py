@@ -2,9 +2,9 @@ import logging
 from uuid import UUID
 
 from allauth.account.models import EmailAddress
-from anydi import singleton, auto
 from django.db import transaction
 from django.utils.translation import gettext as _
+from injector import inject
 
 from main.apps.core.exceptions import NotFoundError
 from main.apps.users.models import User
@@ -14,9 +14,9 @@ from main.apps.users.services.user_retrieval_service import UserRetrievalService
 logger = logging.getLogger(__name__)
 
 
-@singleton
 class UserDeleteService:
-    def __init__(self, user_retrieval_service: UserRetrievalService = auto):
+    @inject
+    def __init__(self, user_retrieval_service: UserRetrievalService):
         self.user_retrieval_service = user_retrieval_service
 
     def _delete_user_email_addresses(self, user: User) -> None:

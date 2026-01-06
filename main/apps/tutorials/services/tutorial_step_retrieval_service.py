@@ -1,4 +1,3 @@
-from anydi import singleton
 from django.db import models
 from django.utils.translation import gettext as _
 
@@ -7,7 +6,6 @@ from main.apps.tutorials.models import TutorialStep
 from main.apps.tutorials.schemas import TutorialStepListSchema
 
 
-@singleton
 class TutorialStepRetrievalService:
     def _get_tutorial_step_queryset(
         self,

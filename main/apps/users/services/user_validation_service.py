@@ -1,13 +1,11 @@
 from typing import Optional
 from uuid import UUID
 
-from anydi import singleton
 from django.utils.translation import gettext as _
 
 from main.apps.users.models import User
 
 
-@singleton
 class UserValidationService:
     def validate_username(self, username: Optional[str], user_id: Optional[UUID] = None) -> None:
         if not username:

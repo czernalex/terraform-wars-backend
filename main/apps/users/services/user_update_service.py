@@ -1,9 +1,9 @@
 import logging
 from uuid import UUID
 
-from anydi import auto, singleton
 from django.db import transaction
 from django.utils.translation import gettext as _
+from injector import inject
 from ninja.errors import ValidationError
 
 from main.apps.core.exceptions import NotFoundError
@@ -15,10 +15,12 @@ from main.apps.users.services.user_validation_service import UserValidationServi
 logger = logging.getLogger(__name__)
 
 
-@singleton
 class UserUpdateService:
+    @inject
     def __init__(
-        self, user_retrieval_service: UserRetrievalService = auto, user_validation_service: UserValidationService = auto
+        self,
+        user_retrieval_service: UserRetrievalService,
+        user_validation_service: UserValidationService,
     ):
         self.user_retrieval_service = user_retrieval_service
         self.user_validation_service = user_validation_service

@@ -1,8 +1,8 @@
 from http import HTTPStatus
 
-from anydi import auto
 from ninja import Router
 
+from main.di import injector
 from main.apps.core.types import AuthedHttpRequest
 from main.apps.users.models import User
 from main.apps.users.schemas import UserDetailSchema, UserUpdateSchema
@@ -29,9 +29,8 @@ def get_me(request: AuthedHttpRequest) -> User:
     response={HTTPStatus.OK: UserDetailSchema},
     description="Update the authenticated user",
 )
-def update_me(
-    request: AuthedHttpRequest, data: UserUpdateSchema, user_update_service: UserUpdateService = auto
-) -> User:
+def update_me(request: AuthedHttpRequest, data: UserUpdateSchema) -> User:
+    user_update_service = injector.get(UserUpdateService)
     return user_update_service.update_user(request.user.id, data)
 
 
@@ -41,5 +40,6 @@ def update_me(
     response={HTTPStatus.NO_CONTENT: None},
     description="Delete the authenticated user",
 )
-def delete_me(request: AuthedHttpRequest, user_delete_service: UserDeleteService = auto) -> None:
+def delete_me(request: AuthedHttpRequest) -> None:
+    user_delete_service = injector.get(UserDeleteService)
     return user_delete_service.delete_user(request.user.id)

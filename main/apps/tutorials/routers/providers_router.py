@@ -1,9 +1,9 @@
 from http import HTTPStatus
 
-from anydi import auto
 from django.db import models
 from ninja import Router
 
+from main.di import injector
 from main.apps.core.types import AuthedHttpRequest
 from main.apps.tutorials.models import Provider
 from main.apps.tutorials.schemas import ProviderSchema
@@ -20,6 +20,7 @@ providers_router = Router()
     description="List all providers",
 )
 def get_provider_list(
-    request: AuthedHttpRequest, provider_retrieval_service: ProviderRetrievalService = auto
+    request: AuthedHttpRequest,
 ) -> models.QuerySet[Provider]:
+    provider_retrieval_service = injector.get(ProviderRetrievalService)
     return provider_retrieval_service.get_provider_list()

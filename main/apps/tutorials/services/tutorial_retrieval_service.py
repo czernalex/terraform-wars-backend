@@ -1,6 +1,5 @@
 from uuid import UUID
 
-from anydi import singleton
 from django.db import models, transaction
 from django.utils.translation import gettext as _
 
@@ -9,7 +8,6 @@ from main.apps.tutorials.models import Tutorial
 from main.apps.tutorials.schemas import TutorialListFilterSchema
 
 
-@singleton
 class TutorialRetrievalService:
     def _get_tutorial_queryset(
         self, select_related_fields: list[str] = [], prefetch_related_fields: list[str] = []

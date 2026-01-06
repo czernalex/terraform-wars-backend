@@ -1,6 +1,7 @@
 import pytest
 from model_bakery import baker
 
+from main.di import injector
 from main.apps.users.services.user_validation_service import UserValidationService
 
 
@@ -8,14 +9,17 @@ from main.apps.users.services.user_validation_service import UserValidationServi
 class TestUserValidationService:
     def test_validate_username_already_taken(self):
         baker.make_recipe("main.apps.users.tests.active_user", username="test")
+        service = injector.get(UserValidationService)
         with pytest.raises(ValueError):
-            UserValidationService().validate_username("test")
+            service.validate_username("test")
 
     def test_validate_username_update(self):
         user = baker.make_recipe("main.apps.users.tests.active_user", username="test")
-        assert UserValidationService().validate_username("test", user_id=user.id) is None
+        service = injector.get(UserValidationService)
+        assert service.validate_username("test", user_id=user.id) is None
 
     def test_validate_username_empty(self):
         baker.make_recipe("main.apps.users.tests.active_user", username="test")
-        assert UserValidationService().validate_username("") is None
-        assert UserValidationService().validate_username(None) is None
+        service = injector.get(UserValidationService)
+        assert service.validate_username("") is None
+        assert service.validate_username(None) is None

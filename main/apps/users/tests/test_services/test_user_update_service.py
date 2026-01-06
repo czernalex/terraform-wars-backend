@@ -1,6 +1,7 @@
 import pytest
 from model_bakery import baker
 
+from main.di import injector
 from main.apps.users.schemas import UserUpdateSchema
 from main.apps.users.services.user_update_service import UserUpdateService
 
@@ -14,7 +15,7 @@ class TestUserUpdateService:
             first_name="John",
             last_name="Doe",
         )
-        service = UserUpdateService()
+        service = injector.get(UserUpdateService)
         updated_user = service.update_user(user.id, data)
 
         assert updated_user.username == data.username

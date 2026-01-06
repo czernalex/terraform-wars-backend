@@ -1,8 +1,8 @@
 from http import HTTPStatus
 from uuid import UUID
-from anydi import auto
 from ninja import Router
 
+from main.di import injector
 from main.apps.core.types import AuthedHttpRequest
 from main.apps.tutorials.models import TutorialStepSubmission
 from main.apps.tutorials.schemas import CreateTutorialStepSubmissionSchema, TutorialStepSubmissionDetailSchema
@@ -20,10 +20,9 @@ tutorial_step_submissions_router = Router()
 def create_tutorial_step_submission(
     request: AuthedHttpRequest,
     data: CreateTutorialStepSubmissionSchema,
-    tutorial_step_submission_service: TutorialStepSubmissionService = auto,
 ) -> None:
-    user = request.user
-    return tutorial_step_submission_service.create_tutorial_step_submission(data)
+    tutorial_step_submission_service = injector.get(TutorialStepSubmissionService)
+    return tutorial_step_submission_service.create_tutorial_step_submission(request.user, data)
 
 
 @tutorial_step_submissions_router.get(
@@ -34,6 +33,6 @@ def create_tutorial_step_submission(
 def get_tutorial_step_submission_detail(
     request: AuthedHttpRequest,
     tutorial_step_submission_id: UUID,
-    tutorial_step_submission_service: TutorialStepSubmissionService = auto,
 ) -> TutorialStepSubmission:
+    tutorial_step_submission_service = injector.get(TutorialStepSubmissionService)
     return tutorial_step_submission_service.get_tutorial_step_submission_detail(tutorial_step_submission_id)
