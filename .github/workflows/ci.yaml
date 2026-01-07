@@ -1,4 +1,4 @@
-name: TW CI
+name: Terraform Wars Backend CI
 
 on:
   push:
