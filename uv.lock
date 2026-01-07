@@ -374,6 +374,9 @@ wheels = [
 ]
 
 [package.optional-dependencies]
+headless-spec = [
+    { name = "pyyaml" },
+]
 mfa = [
     { name = "fido2" },
     { name = "qrcode" },
@@ -1107,7 +1110,7 @@ dependencies = [
     { name = "argon2-cffi" },
     { name = "celery" },
     { name = "django" },
-    { name = "django-allauth", extra = ["mfa", "socialaccount"] },
+    { name = "django-allauth", extra = ["headless-spec", "mfa", "socialaccount"] },
     { name = "django-cors-headers" },
     { name = "django-json-widget" },
     { name = "django-ninja" },
@@ -1137,7 +1140,7 @@ requires-dist = [
     { name = "argon2-cffi", specifier = ">=25.1.0" },
     { name = "celery", specifier = ">=5.5.3" },
     { name = "django", specifier = ">=6.0.0" },
-    { name = "django-allauth", extras = ["mfa", "socialaccount"], specifier = ">=65.13.0" },
+    { name = "django-allauth", extras = ["mfa", "socialaccount", "headless-spec"], specifier = ">=65.13.0" },
     { name = "django-cors-headers", specifier = ">=4.9.0" },
     { name = "django-json-widget", specifier = ">=2.1.0" },
     { name = "django-ninja", specifier = "==1.5.1" },
