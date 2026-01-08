@@ -1,4 +1,4 @@
-FROM python:3.14-slim as build
+FROM python:3.14-slim AS build
 COPY --from=ghcr.io/astral-sh/uv:0.9.22 /uv /uvx /bin/
 
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PYTHON_DOWNLOADS=0
