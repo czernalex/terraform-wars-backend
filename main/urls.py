@@ -18,6 +18,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("_allauth/", include("allauth.headless.urls")),
     path("api/", root_api_router.urls),
+    path("_worker/", include("django_cloud_tasks.urls")),
     path("admin/", admin.site.urls),
 ]
 

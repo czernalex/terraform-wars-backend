@@ -141,18 +141,18 @@ jobs:
           workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ vars.GCP_SA_ACCOUNT }}
 
-      - name: Deploy Backend to Google Cloud Run
+      - name: Deploy Backend Task Worker to Google Cloud Run
         uses: google-github-actions/deploy-cloudrun@v3
         with:
-          service: ${{ vars.GCP_SERVICE_NAME }}
+          service: ${{ vars.GCP_TASK_WORKER_SERVICE_NAME }}
           image: ${{ env.IMAGE_URI }}
           project_id: ${{ vars.GCP_PROJECT_ID }}
           region: ${{ vars.GCP_REGION }}
 
-      - name: Deploy Tasks Mediator to Google Cloud Run
+      - name: Deploy Backend Server to Google Cloud Run
         uses: google-github-actions/deploy-cloudrun@v3
         with:
-          service: ${{ vars.GCP_SERVICE_NAME }}
+          service: ${{ vars.GCP_SERVER_SERVICE_NAME }}
           image: ${{ env.IMAGE_URI }}
           project_id: ${{ vars.GCP_PROJECT_ID }}
           region: ${{ vars.GCP_REGION }}

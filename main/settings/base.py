@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "allauth.headless",
     "allauth.socialaccount",
     "corsheaders",
+    "django_cloud_tasks",
     "django_json_widget",
 ]
 
@@ -355,6 +356,12 @@ SECURE_SSL_REDIRECT = config("SECURE_SSL_REDIRECT", cast=bool, default=True)
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 SECURE_HSTS_SECONDS = 3600
+
+# DJANGO GCP TASKS
+
+DJANGO_CLOUD_TASKS_ENDPOINT = config("DJANGO_CLOUD_TASKS_ENDPOINT")
+DJANGO_CLOUD_TASKS_APP_NAME = config("DJANGO_CLOUD_TASKS_APP_NAME")
+DJANGO_CLOUD_TASKS_EAGER = config("DJANGO_CLOUD_TASKS_EAGER", cast=bool, default=False)
 
 
 # CSP
