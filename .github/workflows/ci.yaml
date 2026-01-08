@@ -128,7 +128,9 @@ jobs:
       id-token: "write"
     needs: build
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-    environment: production
+    environment:
+      name: production
+      url: https://api.app.terraformwars.com
     env:
       IMAGE_URI: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.GCP_REPOSITORY }}/app-production:${{ github.sha }}
       WORKLOAD_IDENTITY_PROVIDER: "projects/${{ vars.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ vars.GCP_WIF_POOL_ID }}/providers/github"
