@@ -80,4 +80,4 @@ def get_tutorial_step_detail(
     tutorial_step_slug: str,
 ) -> TutorialStep:
     tutorial_step_retrieval_service = injector.get(TutorialStepRetrievalService)
-    return tutorial_step_retrieval_service.get_tutorial_step_detail(tutorial_slug, tutorial_step_slug)
+    return tutorial_step_retrieval_service.get_tutorial_step_detail_by_slug(tutorial_slug, tutorial_step_slug)
