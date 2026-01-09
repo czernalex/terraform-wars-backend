@@ -31,6 +31,9 @@ root_api_router = TerraformWarsAPI(
         f"<a href='{settings.BASE_URL}/_allauth/openapi.html' target='_blank'>here</a>."
         "<br>"
         "<br>"
+        "<a href='/tasks-api/docs' class='btn'>Tasks API Docs</a>"
+        "<br>"
+        "<br>"
         "<a href='/admin' class='btn'>Administration</a>"
     ),
     docs_decorator=staff_member_required if not settings.DEBUG else None,

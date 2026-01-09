@@ -144,7 +144,7 @@ jobs:
       - name: Deploy Backend Task Worker to Google Cloud Run
         uses: google-github-actions/deploy-cloudrun@v3
         with:
-          service: ${{ vars.GCP_TASK_WORKER_SERVICE_NAME }}
+          service: ${{ vars.GCP_TASK_API_SERVICE }}
           image: ${{ env.IMAGE_URI }}
           project_id: ${{ vars.GCP_PROJECT_ID }}
           region: ${{ vars.GCP_REGION }}
@@ -152,7 +152,7 @@ jobs:
       - name: Deploy Backend Server to Google Cloud Run
         uses: google-github-actions/deploy-cloudrun@v3
         with:
-          service: ${{ vars.GCP_SERVER_SERVICE_NAME }}
+          service: ${{ vars.GCP_API_SERVICE }}
           image: ${{ env.IMAGE_URI }}
           project_id: ${{ vars.GCP_PROJECT_ID }}
           region: ${{ vars.GCP_REGION }}

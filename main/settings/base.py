@@ -43,6 +43,8 @@ SECRET_KEY = secrets.SECRET_KEY
 INSTALLED_APPS = [
     "main.apps.api_auth",
     "main.apps.core",
+    "main.apps.google_cloud_tasks",
+    "main.apps.tasks",
     "main.apps.tutorials",
     "main.apps.users",
     "unfold",
@@ -61,7 +63,6 @@ INSTALLED_APPS = [
     "allauth.headless",
     "allauth.socialaccount",
     "corsheaders",
-    "django_cloud_tasks",
     "django_json_widget",
 ]
 
@@ -188,6 +189,12 @@ LOCALE_PATHS = [
     BASE_DIR / "locale",
 ]
 
+# Google Cloud
+
+GCP_PROJECT_ID = config("GCP_PROJECT_ID")
+GCP_LOCATION = config("GCP_LOCATION")
+GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID = config("GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID")
+
 
 # Static files (CSS, JavaScript, Images)
 
@@ -206,7 +213,7 @@ MEDIA_LOCATION = "media"
 USE_CLOUD_STORAGE = config("USE_CLOUD_STORAGE", cast=bool, default=True)
 
 if USE_CLOUD_STORAGE:
-    GCS_BUCKET_NAME = config("GCS_BUCKET_NAME")
+    GCS_BUCKET_NAME = config("GCP_STORAGE_BUCKET_NAME")
     common_storage_backend = "storages.backends.gcloud.GoogleCloudStorage"
     common_options = {
         "bucket_name": GCS_BUCKET_NAME,
@@ -357,12 +364,6 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 SECURE_HSTS_SECONDS = 3600
 
-# DJANGO GCP TASKS
-
-DJANGO_CLOUD_TASKS_ENDPOINT = config("DJANGO_CLOUD_TASKS_ENDPOINT")
-DJANGO_CLOUD_TASKS_APP_NAME = config("DJANGO_CLOUD_TASKS_APP_NAME")
-DJANGO_CLOUD_TASKS_EAGER = config("DJANGO_CLOUD_TASKS_EAGER", cast=bool, default=False)
-
 
 # CSP
 
@@ -435,6 +436,11 @@ UNFOLD = {
             "icon": "api",
             "title": _("API Docs"),
             "link": reverse_lazy("terraform-wars-api:openapi-view"),
+        },
+        {
+            "icon": "api",
+            "title": _("Tasks API Docs"),
+            "link": reverse_lazy("terraform-wars-tasks-api:openapi-view"),
         },
         {
             "icon": "key",

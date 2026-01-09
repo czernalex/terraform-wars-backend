@@ -22,12 +22,12 @@ class UserUpdateService:
         user_retrieval_service: UserRetrievalService,
         user_validation_service: UserValidationService,
     ):
-        self.user_retrieval_service = user_retrieval_service
-        self.user_validation_service = user_validation_service
+        self._user_retrieval_service = user_retrieval_service
+        self._user_validation_service = user_validation_service
 
     def _validate_data(self, user_id: UUID, data: UserUpdateSchema) -> None:
         try:
-            self.user_validation_service.validate_username(data.username, user_id)
+            self._user_validation_service.validate_username(data.username, user_id)
         except ValueError as error:
             raise ValidationError(
                 [
@@ -50,7 +50,7 @@ class UserUpdateService:
     def update_user(self, user_id: UUID, data: UserUpdateSchema) -> User:
         logger.info(f"Updating user: {user_id}, data: {data}")
         try:
-            user = self.user_retrieval_service.get_user_for_update(user_id)
+            user = self._user_retrieval_service.get_user_for_update(user_id)
         except User.DoesNotExist:
             logger.warning(f"User: {user_id} not found")
             raise NotFoundError(_("User not found"))

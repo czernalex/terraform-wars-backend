@@ -20,7 +20,7 @@ tutorial_step_submissions_router = Router()
 def create_tutorial_step_submission(
     request: AuthedHttpRequest,
     data: CreateTutorialStepSubmissionSchema,
-) -> None:
+) -> TutorialStepSubmission:
     tutorial_step_submission_service = injector.get(TutorialStepSubmissionService)
     return tutorial_step_submission_service.create_tutorial_step_submission(request.user, data)
 

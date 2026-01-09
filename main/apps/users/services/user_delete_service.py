@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 class UserDeleteService:
     @inject
     def __init__(self, user_retrieval_service: UserRetrievalService):
-        self.user_retrieval_service = user_retrieval_service
+        self._user_retrieval_service = user_retrieval_service
 
     def _delete_user_email_addresses(self, user: User) -> None:
         EmailAddress.objects.filter(user=user).delete()
@@ -41,7 +41,7 @@ class UserDeleteService:
     def delete_user(self, user_id: UUID) -> None:
         logger.info(f"Deleting user: {user_id}")
         try:
-            user = self.user_retrieval_service.get_user_for_update(user_id)
+            user = self._user_retrieval_service.get_user_for_update(user_id)
         except User.DoesNotExist:
             logger.warning(f"User: {user_id} not found")
             raise NotFoundError(_("User not found"))
