@@ -46,9 +46,7 @@ class CreateHttpTaskService:
                 headers={
                     "Content-Type": "application/json",
                 },
-                oidc_token=tasks_v2.OidcToken(
-                    service_account_email=self._gcp_service_account_email, audience=self._gcp_audience
-                ),
+                oidc_token=tasks_v2.OidcToken(service_account_email=self._gcp_service_account_email),
             ),
             name=self._construct_http_task_name(queue_id, task_id),
         )
