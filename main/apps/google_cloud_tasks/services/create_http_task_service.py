@@ -10,10 +10,19 @@ from google.protobuf import duration_pb2, timestamp_pb2
 
 class CreateHttpTaskService:
     @inject
-    def __init__(self, client: tasks_v2.CloudTasksClient, gcp_project_id: str, gcp_location: str):
+    def __init__(
+        self,
+        client: tasks_v2.CloudTasksClient,
+        gcp_project_id: str,
+        gcp_location: str,
+        gcp_service_account_email: str,
+        gcp_audience: str,
+    ):
         self._client = client
         self._gcp_project_id = gcp_project_id
         self._gcp_location = gcp_location
+        self._gcp_service_account_email = gcp_service_account_email
+        self._gcp_audience = gcp_audience
 
     def _construct_http_task_name(self, queue_id: str, task_id: Optional[str]) -> Optional[str]:
         if not task_id:
@@ -37,6 +46,9 @@ class CreateHttpTaskService:
                 headers={
                     "Content-Type": "application/json",
                 },
+                oidc_token=tasks_v2.OidcToken(
+                    service_account_email=self._gcp_service_account_email, audience=self._gcp_audience
+                ),
             ),
             name=self._construct_http_task_name(queue_id, task_id),
         )

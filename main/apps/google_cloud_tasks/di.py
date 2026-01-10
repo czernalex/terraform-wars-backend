@@ -12,4 +12,10 @@ class GoogleCloudTasksModule(Module):
     @provider
     @singleton
     def provide_create_http_task_service(self, client: tasks_v2.CloudTasksClient) -> CreateHttpTaskService:
-        return CreateHttpTaskService(client, settings.GCP_PROJECT_ID, settings.GCP_LOCATION)
+        return CreateHttpTaskService(
+            client,
+            settings.GCP_PROJECT_ID,
+            settings.GCP_LOCATION,
+            settings.GCP_SERVICE_ACCOUNT_EMAIL,
+            settings.TASK_API_BASE_URL,
+        )
