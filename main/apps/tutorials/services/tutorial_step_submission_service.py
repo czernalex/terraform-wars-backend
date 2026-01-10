@@ -28,7 +28,7 @@ class TutorialStepSubmissionService:
         transaction.on_commit(
             lambda: self._create_http_task_service.create(
                 queue_id=settings.GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID,
-                url=f"{settings.TASK_API_BASE_URL}/tasks/submissions/{tutorial_step_submission.id}/executions/",
+                url=f"{settings.TASK_API_BASE_URL}/tasks-api/tasks/submissions/{tutorial_step_submission.id}/executions/",
             )
         )
 
