@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "allauth.mfa",
     "allauth.headless",
     "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
     "corsheaders",
     "django_json_widget",
 ]
@@ -280,6 +281,20 @@ ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False
 ACCOUNT_SESSION_REMEMBER = None
 ACCOUNT_PASSWORD_RESET_BY_CODE_ENABLED = False
+
+### ALLAUTH SOCIALACCOUNT
+
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": ["email", "profile"],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+        "OAUTH_PKCE_ENABLED": True,
+        "EMAIL_AUTHENTICATION": True,
+    }
+}
 
 
 ### ALLAUTH MFA

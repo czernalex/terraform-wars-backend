@@ -1,4 +1,5 @@
 from allauth.mfa.admin import Authenticator
+from allauth.socialaccount.admin import SocialApp
 from django.contrib import admin
 from unfold.contrib.filters.admin import AutocompleteSelectFilter, ChoicesDropdownFilter, RangeDateFilter
 
@@ -6,6 +7,7 @@ from main.apps.core.admin import BaseModelAdmin
 
 
 admin.site.unregister(Authenticator)
+admin.site.unregister(SocialApp)
 
 
 @admin.register(Authenticator)
@@ -29,3 +31,8 @@ class AuthenticatorAdmin(BaseModelAdmin):
         "user__email",
     )
     autocomplete_fields = ("user",)
+
+
+@admin.register(SocialApp)
+class SocialAppAdmin(BaseModelAdmin):
+    readonly_fields = ("id",)
