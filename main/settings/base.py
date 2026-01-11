@@ -317,6 +317,7 @@ HEADLESS_FRONTEND_URLS = {
     "account_reset_password": FRONTEND_BASE_URL + "/auth/password-reset",
     "account_reset_password_from_key": FRONTEND_BASE_URL + "/auth/password-reset/{key}",
     "account_signup": FRONTEND_BASE_URL + "/auth/sign-up",
+    "socialaccount_login_error": FRONTEND_BASE_URL + "/auth/provider-callback",
 }
 
 
