@@ -1,5 +1,5 @@
 from allauth.mfa.admin import Authenticator
-from allauth.socialaccount.admin import SocialApp
+from allauth.socialaccount.admin import SocialApp, SocialAccount
 from django.contrib import admin
 from unfold.contrib.filters.admin import AutocompleteSelectFilter, ChoicesDropdownFilter, RangeDateFilter
 
@@ -8,6 +8,7 @@ from main.apps.core.admin import BaseModelAdmin
 
 admin.site.unregister(Authenticator)
 admin.site.unregister(SocialApp)
+admin.site.unregister(SocialAccount)
 
 
 @admin.register(Authenticator)
@@ -36,3 +37,25 @@ class AuthenticatorAdmin(BaseModelAdmin):
 @admin.register(SocialApp)
 class SocialAppAdmin(BaseModelAdmin):
     readonly_fields = ("id",)
+    list_display = (
+        "provider",
+        "name",
+    )
+    search_fields = (
+        "id",
+        "provider",
+        "provider_id",
+        "name",
+    )
+
+
+@admin.register(SocialAccount)
+class SocialAccountAdmin(BaseModelAdmin):
+    readonly_fields = ("id",)
+    list_display = (
+        "user",
+        "provider",
+        "uid",
+    )
+    list_select_related = ("user",)
+    autocomplete_fields = ("user",)

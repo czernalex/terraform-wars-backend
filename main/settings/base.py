@@ -523,6 +523,18 @@ UNFOLD = {
                         "link": reverse_lazy("admin:mfa_authenticator_changelist"),
                         "permission": lambda request: request.user.has_perm("allauth_mfa.view_authenticator"),
                     },
+                    {
+                        "title": _("Social Account Providers"),
+                        "icon": "settings_applications",
+                        "link": reverse_lazy("admin:socialaccount_socialapp_changelist"),
+                        "permission": lambda request: request.user.has_perm("allauth.view_socialapp"),
+                    },
+                    {
+                        "title": _("Social Accounts"),
+                        "icon": "connect_without_contact",
+                        "link": reverse_lazy("admin:socialaccount_socialaccount_changelist"),
+                        "permission": lambda request: request.user.has_perm("allauth.view_socialaccount"),
+                    },
                 ],
             },
             {
