@@ -287,14 +287,20 @@ ACCOUNT_PASSWORD_RESET_BY_CODE_ENABLED = False
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
-        "SCOPE": ["email", "profile"],
+        "SCOPE": [
+            "email",
+            "profile",
+            "https://www.googleapis.com/auth/cloud-platform",
+        ],
         "AUTH_PARAMS": {
-            "access_type": "online",
+            "access_type": "offline",
         },
         "OAUTH_PKCE_ENABLED": True,
         "EMAIL_AUTHENTICATION": True,
     }
 }
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
+SOCIALACCOUNT_STORE_TOKENS = True
 
 
 ### ALLAUTH MFA
@@ -534,6 +540,12 @@ UNFOLD = {
                         "icon": "connect_without_contact",
                         "link": reverse_lazy("admin:socialaccount_socialaccount_changelist"),
                         "permission": lambda request: request.user.has_perm("allauth.view_socialaccount"),
+                    },
+                    {
+                        "title": _("Social Tokens"),
+                        "icon": "token",
+                        "link": reverse_lazy("admin:socialaccount_socialtoken_changelist"),
+                        "permission": lambda request: request.user.has_perm("allauth.view_socialtoken"),
                     },
                 ],
             },
