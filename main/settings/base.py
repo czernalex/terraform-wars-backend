@@ -561,12 +561,6 @@ UNFOLD = {
                         "permission": lambda request: request.user.has_perm("tutorials.view_provider"),
                     },
                     {
-                        "title": _("Provider Projects"),
-                        "icon": "folder_supervised",
-                        "link": reverse_lazy("admin:tutorials_providerproject_changelist"),
-                        "permission": lambda request: request.user.has_perm("tutorials.view_providerproject"),
-                    },
-                    {
                         "title": _("Tutorials"),
                         "icon": "code_blocks",
                         "link": reverse_lazy("admin:tutorials_tutorial_changelist"),
@@ -589,6 +583,12 @@ UNFOLD = {
                         "icon": "shoppingmode",
                         "link": reverse_lazy("admin:tutorials_tutorialtag_changelist"),
                         "permission": lambda request: request.user.has_perm("tutorials.view_tutorialtag"),
+                    },
+                    {
+                        "title": _("Tutorial Projects"),
+                        "icon": "folder_supervised",
+                        "link": reverse_lazy("admin:tutorials_tutorialproject_changelist"),
+                        "permission": lambda request: request.user.has_perm("tutorials.view_tutorialproject"),
                     },
                 ],
             },

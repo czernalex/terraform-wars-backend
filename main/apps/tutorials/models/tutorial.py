@@ -1,10 +1,11 @@
 from typing import override
 
+from django.contrib.postgres.indexes import GinIndex
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from main.apps.core.models import AbstractUUIDModel
-from main.apps.tutorials.enums import Difficulty
+from main.apps.tutorials.enums import Difficulty, TutorialStatus
 from main.apps.tutorials.models.provider import Provider
 from main.apps.tutorials.managers import TutorialQuerySet
 from main.apps.tutorials.models.tutorial_tag import TutorialTag
@@ -17,14 +18,18 @@ class Tutorial(AbstractUUIDModel):
     title = models.CharField(_("Title"), max_length=255)
     slug = models.SlugField(_("Slug"), unique=True)
     description = models.TextField(_("Description"))
+    status = models.CharField(_("Status"), max_length=255, choices=TutorialStatus.choices, default=TutorialStatus.DRAFT)
     difficulty = models.CharField(
         _("Difficulty"), max_length=255, choices=Difficulty.choices, default=Difficulty.BEGINNER
     )
     tags = models.ManyToManyField(TutorialTag, related_name="tutorials", blank=True)
 
+    config_data = models.JSONField(_("Config data"), default=dict)
+
     objects = TutorialQuerySet.as_manager()
 
     class Meta:
+        indexes = [GinIndex(fields=["config_data"])]
         verbose_name = _("Tutorial")
         verbose_name_plural = _("Tutorials")
         ordering = ("-created_at",)

@@ -51,7 +51,7 @@ def get_tutorial_detail(
     tutorial_slug: str,
 ) -> Tutorial:
     tutorial_retrieval_service = injector.get(TutorialRetrievalService)
-    return tutorial_retrieval_service.get_tutorial_detail(tutorial_slug)
+    return tutorial_retrieval_service.get_tutorial_detail_by_slug(tutorial_slug)
 
 
 @tutorials_router.get(

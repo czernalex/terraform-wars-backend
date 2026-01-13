@@ -2,7 +2,7 @@ from django.conf import settings
 from injector import Binder, Module, singleton, provider
 from google.cloud import tasks_v2
 
-from main.apps.google_cloud_tasks.services.create_http_task_service import CreateHttpTaskService
+from main.apps.google_cloud_tasks.services.cloud_task_create_service import CloudTaskCreateService
 
 
 class GoogleCloudTasksModule(Module):
@@ -11,8 +11,8 @@ class GoogleCloudTasksModule(Module):
 
     @provider
     @singleton
-    def provide_create_http_task_service(self, client: tasks_v2.CloudTasksClient) -> CreateHttpTaskService:
-        return CreateHttpTaskService(
+    def provide_cloud_task_create_service(self, client: tasks_v2.CloudTasksClient) -> CloudTaskCreateService:
+        return CloudTaskCreateService(
             client,
             settings.GCP_PROJECT_ID,
             settings.GCP_LOCATION,

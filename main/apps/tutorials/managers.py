@@ -4,7 +4,18 @@ from django.db import models
 
 
 if TYPE_CHECKING:
-    from main.apps.tutorials.models import Tutorial, TutorialStep, TutorialStepSubmission, TutorialTag
+    from main.apps.tutorials.models import (
+        Provider,
+        Tutorial,
+        TutorialStep,
+        TutorialStepSubmission,
+        TutorialTag,
+        TutorialProject,
+    )
+
+
+class ProviderQuerySet(models.QuerySet["Provider"]):
+    pass
 
 
 class TutorialQuerySet(models.QuerySet["Tutorial"]):
@@ -21,4 +32,8 @@ class TutorialStepSubmissionQuerySet(models.QuerySet["TutorialStepSubmission"]):
 
 
 class TutorialTagQuerySet(models.QuerySet["TutorialTag"]):
+    pass
+
+
+class TutorialProjectQuerySet(models.QuerySet["TutorialProject"]):
     pass

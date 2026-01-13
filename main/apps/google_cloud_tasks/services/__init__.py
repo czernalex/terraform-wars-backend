@@ -1,3 +1,3 @@
-from main.apps.google_cloud_tasks.services.create_http_task_service import CreateHttpTaskService
+from main.apps.google_cloud_tasks.services.cloud_task_create_service import CloudTaskCreateService
 
-__all__ = ("CreateHttpTaskService",)
+__all__ = ("CloudTaskCreateService",)

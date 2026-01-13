@@ -2,8 +2,16 @@ from typing import Annotated, Optional
 from uuid import UUID
 from ninja import Field, FilterLookup, FilterSchema, ModelSchema, Schema
 
-from main.apps.tutorials.enums import Difficulty
-from main.apps.tutorials.models import Provider, Tutorial, TutorialStep, TutorialStepSubmission, TutorialTag
+from main.apps.tutorials.enums import Difficulty, TutorialStatus
+from main.apps.tutorials.models import (
+    Provider,
+    Tutorial,
+    TutorialProject,
+    TutorialStep,
+    TutorialStepSubmission,
+    TutorialTag,
+)
+from main.apps.users.schemas import UserDetailSchema
 
 
 class ProviderSchema(ModelSchema):
@@ -36,6 +44,7 @@ class TutorialListFilterSchema(FilterSchema):
     search: Annotated[
         Optional[str], FilterLookup(["title__icontains", "description__icontains", "provider__name__icontains"])
     ] = None
+    status: Optional[TutorialStatus] = None
     difficulty: Optional[Difficulty] = None
     provider_id: Optional[UUID] = None
     tag_ids: Annotated[Optional[list[UUID]], FilterLookup(["tags__id__in"])] = None
@@ -94,6 +103,20 @@ class TutorialDetailSchema(ModelSchema):
     @staticmethod
     def resolve_author_username(obj: Tutorial) -> Optional[str]:
         return obj.author.username if obj.author else None
+
+
+class CreateTutorialProjectSchema(Schema):
+    tutorial_id: UUID
+
+
+class TutorialProjectDetailSchema(ModelSchema):
+    id: UUID
+    tutorial: TutorialDetailSchema
+    user: UserDetailSchema
+
+    class Meta:
+        model = TutorialProject
+        fields = ["config_data"]
 
 
 class TutorialStepListSchema(ModelSchema):

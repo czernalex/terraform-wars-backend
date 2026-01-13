@@ -14,10 +14,15 @@ class TutorialRetrievalService:
     ) -> models.QuerySet[Tutorial]:
         return Tutorial.objects.select_related(*select_related_fields).prefetch_related(*prefetch_related_fields)
 
-    def _get_tutorial_for_read(self, tutorial_slug: str) -> Tutorial:
+    def _get_tutorial_for_read_by_slug(self, tutorial_slug: str) -> Tutorial:
         return self._get_tutorial_queryset(
             select_related_fields=["author", "provider"], prefetch_related_fields=["tags"]
         ).get(slug=tutorial_slug)
+
+    def _get_tutorial_for_read_by_id(self, tutorial_id: UUID) -> Tutorial:
+        return self._get_tutorial_queryset(
+            select_related_fields=["author", "provider"], prefetch_related_fields=["tags"]
+        ).get(id=tutorial_id)
 
     @transaction.atomic
     def _get_tutorial_for_update(self, tutorial_id: UUID) -> Tutorial:
@@ -32,8 +37,14 @@ class TutorialRetrievalService:
             self._get_tutorial_queryset(select_related_fields=["provider"], prefetch_related_fields=["tags"]).all()
         )
 
-    def get_tutorial_detail(self, tutorial_slug: str) -> Tutorial:
+    def get_tutorial_detail_by_slug(self, tutorial_slug: str) -> Tutorial:
         try:
-            return self._get_tutorial_for_read(tutorial_slug)
+            return self._get_tutorial_for_read_by_slug(tutorial_slug)
+        except Tutorial.DoesNotExist:
+            raise NotFoundError(_("Tutorial not found"))
+
+    def get_tutorial_detail_by_id(self, tutorial_id: UUID) -> Tutorial:
+        try:
+            return self._get_tutorial_for_read_by_id(tutorial_id)
         except Tutorial.DoesNotExist:
             raise NotFoundError(_("Tutorial not found"))

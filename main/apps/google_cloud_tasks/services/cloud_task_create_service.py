@@ -8,7 +8,7 @@ from google.cloud import tasks_v2
 from google.protobuf import duration_pb2, timestamp_pb2
 
 
-class CreateHttpTaskService:
+class CloudTaskCreateService:
     @inject
     def __init__(
         self,

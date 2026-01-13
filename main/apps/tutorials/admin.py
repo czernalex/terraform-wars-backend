@@ -10,23 +10,24 @@ from unfold.contrib.filters.admin import (
 from main.apps.core.admin import BaseModelAdmin
 from main.apps.tutorials.models import (
     Provider,
-    ProviderProject,
     Tutorial,
     TutorialStep,
     TutorialStepSubmission,
     TutorialTag,
+    TutorialProject,
 )
 
 
 @admin.register(Provider)
 class ProviderAdmin(BaseModelAdmin):
-    list_display = ("name", "website_url", "created_at", "updated_at")
+    list_display = ("name", "provider_id", "website_url", "created_at", "updated_at")
     list_filter = (
         ("created_at", RangeDateFilter),
         ("updated_at", RangeDateFilter),
     )
     search_fields = (
         "id",
+        "provider_id",
         "slug",
         "name",
         "description",
@@ -36,47 +37,14 @@ class ProviderAdmin(BaseModelAdmin):
         "slug": ("name",),
     }
     fieldsets = (
-        (_("Provider information"), {"fields": ("name", "slug", "description", "website_url")}),
-        (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
-    )
-
-
-@admin.register(ProviderProject)
-class ProviderProjectAdmin(BaseModelAdmin):
-    list_display = (
-        "provider",
-        "user",
-        "created_at",
-        "updated_at",
-    )
-    list_filter = (
-        ("provider", AutocompleteSelectFilter),
-        ("user", AutocompleteSelectFilter),
-    )
-    list_select_related = (
-        "provider",
-        "user",
-    )
-    search_fields = (
-        "id",
-        "provider__id",
-        "provider__name",
-        "user__id",
-        "user__email",
-    )
-    autocomplete_fields = (
-        "provider",
-        "user",
-    )
-    fieldsets = (
-        (_("Provider project information"), {"fields": ("provider", "user")}),
+        (_("Provider information"), {"fields": ("name", "slug", "provider_id", "description", "website_url")}),
         (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
     )
 
 
 @admin.register(Tutorial)
 class TutorialAdmin(BaseModelAdmin):
-    list_display = ("title", "author", "provider", "difficulty", "created_at", "updated_at")
+    list_display = ("title", "author", "provider", "status", "difficulty", "created_at", "updated_at")
     list_select_related = (
         "author",
         "provider",
@@ -87,6 +55,7 @@ class TutorialAdmin(BaseModelAdmin):
         ("author", AutocompleteSelectFilter),
         ("provider", AutocompleteSelectFilter),
         ("tags", AutocompleteSelectMultipleFilter),
+        ("status", ChoicesDropdownFilter),
         ("difficulty", ChoicesDropdownFilter),
     )
     search_fields = (
@@ -115,7 +84,9 @@ class TutorialAdmin(BaseModelAdmin):
                     "title",
                     "slug",
                     "description",
+                    "status",
                     "difficulty",
+                    "config_data",
                 )
             },
         ),
@@ -216,5 +187,31 @@ class TutorialTagAdmin(BaseModelAdmin):
     }
     fieldsets = (
         (_("Tutorial tag information"), {"fields": ("name", "slug")}),
+        (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
+    )
+
+
+@admin.register(TutorialProject)
+class TutorialProjectAdmin(BaseModelAdmin):
+    list_display = ("tutorial", "user", "status", "created_at", "updated_at")
+    list_select_related = ("tutorial", "user")
+    list_filter = (
+        ("created_at", RangeDateFilter),
+        ("updated_at", RangeDateFilter),
+        ("tutorial", AutocompleteSelectFilter),
+        ("tutorial__provider", AutocompleteSelectFilter),
+        ("user", AutocompleteSelectFilter),
+        ("status", ChoicesDropdownFilter),
+    )
+    search_fields = (
+        "id",
+        "tutorial__id",
+        "tutorial__title",
+        "user__id",
+        "user__email",
+    )
+    autocomplete_fields = ("tutorial", "user")
+    fieldsets = (
+        (_("Tutorial project information"), {"fields": ("tutorial", "user", "status", "config_data")}),
         (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
     )
