@@ -18,6 +18,6 @@ class GCPProjectDeleteService:
         operation.result()
 
     def delete(self, credentials: Credentials, project_name: str) -> None:
-        client = self._get_projects_client(credentials, project_name)
+        client = self._get_projects_client(credentials)
         self._delete_project(client, project_name)
         logger.info(f"Successfully deleted project: {project_name}")

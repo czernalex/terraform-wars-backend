@@ -1,11 +1,12 @@
 import logging
 from abc import ABC, abstractmethod
-from typing import override
+from typing import Optional, override
 
 from allauth.socialaccount.models import SocialApp, SocialToken
 from injector import inject
 from django.conf import settings
 from django.utils.translation import gettext as _
+from google.cloud.resourcemanager_v3 import types
 from ninja.errors import ValidationError
 
 from main.apps.api_auth.services import SocialAppRetrievalService, SocialTokenRetrievalService
@@ -110,6 +111,7 @@ class GCPTutorialProjectConfigurator(TutorialProjectConfigurator):
     @override
     def configure(self, tutorial_project: TutorialProject) -> None:
         social_token = self._get_social_token(tutorial_project)
+        project: Optional[types.Project] = None
         social_app = self._get_social_app()
         try:
             credentials = self._gcp_credentials_service.get_credentials(
@@ -128,7 +130,7 @@ class GCPTutorialProjectConfigurator(TutorialProjectConfigurator):
             )
             self._gcp_project_iam_role_grant_service.grant_role_to_service_account(
                 credentials,
-                project.name,
+                project.project_id,
                 service_account_email,
                 "roles/serviceusage.serviceUsageAdmin",
             )
