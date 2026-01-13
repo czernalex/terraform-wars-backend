@@ -10,10 +10,13 @@ from main.apps.tutorials.services import (
     TutorialTagRetrievalService,
     TutorialStepRetrievalService,
     TutorialProjectCreateService,
+    GCPProjectDeleteService,
     TutorialStepSubmissionService,
     TutorialProjectConfiguratorFactory,
     DefaultTutorialProjectConfiguratorFactory,
     GCPTutorialProjectConfigurator,
+    GCPServiceEnableService,
+    GCPProjectIamRoleGrantService,
 )
 
 
@@ -29,5 +32,8 @@ class TutorialsModule(Module):
         binder.bind(TutorialProjectConfiguratorFactory, to=DefaultTutorialProjectConfiguratorFactory, scope=singleton)
         binder.bind(GCPCredentialsService, to=GCPCredentialsService, scope=singleton)
         binder.bind(GCPProjectCreateService, to=GCPProjectCreateService, scope=singleton)
+        binder.bind(GCPProjectDeleteService, to=GCPProjectDeleteService, scope=singleton)
         binder.bind(GCPServiceAccountCreateService, to=GCPServiceAccountCreateService, scope=singleton)
         binder.bind(GCPServiceAccountImpersonationService, to=GCPServiceAccountImpersonationService, scope=singleton)
+        binder.bind(GCPServiceEnableService, to=GCPServiceEnableService, scope=singleton)
+        binder.bind(GCPProjectIamRoleGrantService, to=GCPProjectIamRoleGrantService, scope=singleton)

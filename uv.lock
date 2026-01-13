@@ -490,6 +490,22 @@ wheels = [
 ]
 
 [[package]]
+name = "google-cloud-service-usage"
+version = "1.14.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "google-api-core", extra = ["grpc"] },
+    { name = "google-auth" },
+    { name = "grpcio" },
+    { name = "proto-plus" },
+    { name = "protobuf" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/db/e1/1f68d99cc88233685bcf7e27de77c7e4f957ae8dfb0323f073c59971f3b1/google_cloud_service_usage-1.14.0.tar.gz", hash = "sha256:83dea5f1785188a01b901e1768c47fb4da58fd017792c4a263457e1fb5b03eec", size = 66177, upload-time = "2025-10-20T14:57:13.857Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fb/19/42853648a8cc886561ec8fb8f25e62bce0239919ee0f9b42fb6bfeaf3016/google_cloud_service_usage-1.14.0-py3-none-any.whl", hash = "sha256:0f38d2482ff4fd56bd3e290f1ff4405cfb2c145e945d696fe9b87018a4a8bf31", size = 64103, upload-time = "2025-10-20T14:54:00.271Z" },
+]
+
+[[package]]
 name = "google-cloud-storage"
 version = "3.5.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1107,6 +1123,7 @@ dependencies = [
     { name = "google-auth" },
     { name = "google-cloud-iam" },
     { name = "google-cloud-resource-manager" },
+    { name = "google-cloud-service-usage" },
     { name = "google-cloud-tasks" },
     { name = "gunicorn" },
     { name = "injector" },
@@ -1140,6 +1157,7 @@ requires-dist = [
     { name = "google-auth", specifier = ">=2.43.0" },
     { name = "google-cloud-iam", specifier = ">=2.20.0" },
     { name = "google-cloud-resource-manager", specifier = ">=1.15.0" },
+    { name = "google-cloud-service-usage", specifier = ">=1.14.0" },
     { name = "google-cloud-tasks", specifier = ">=2.20.0" },
     { name = "gunicorn", specifier = ">=23.0.0" },
     { name = "injector", specifier = ">=0.23.0" },

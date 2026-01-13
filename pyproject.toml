@@ -16,6 +16,7 @@ dependencies = [
   "google-auth>=2.43.0",
   "google-cloud-iam>=2.20.0",
   "google-cloud-resource-manager>=1.15.0",
+  "google-cloud-service-usage>=1.14.0",
   "google-cloud-tasks>=2.20.0",
   "gunicorn>=23.0.0",
   "injector>=0.23.0",

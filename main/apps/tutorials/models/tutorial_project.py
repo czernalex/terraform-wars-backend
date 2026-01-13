@@ -9,6 +9,10 @@ from main.apps.tutorials.models import Tutorial
 from main.apps.users.models import User
 
 
+def tf_state_file_path(instance: "TutorialProject", _: str) -> str:
+    return f"users/{instance.user_id}/tutorials/{instance.tutorial.id}/projects/terraform.tfstate"
+
+
 class TutorialProject(AbstractUUIDModel):
     tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE, related_name="projects")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="projects")
@@ -17,6 +21,8 @@ class TutorialProject(AbstractUUIDModel):
         _("Status"), max_length=255, choices=TutorialProjectStatus.choices, default=TutorialProjectStatus.CREATED
     )
     config_data = models.JSONField(_("Config data"), default=dict)
+
+    tf_state_file = models.FileField(_("Terraform state file"), upload_to=tf_state_file_path, null=True, blank=True)
 
     objects = TutorialProjectQuerySet.as_manager()
 

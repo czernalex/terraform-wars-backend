@@ -1,0 +1,31 @@
+import logging
+
+from google.cloud import service_usage_v1
+from google.oauth2.credentials import Credentials
+
+
+logger = logging.getLogger(__name__)
+
+
+class GCPServiceEnableService:
+    def _get_service_usage_client(self, credentials: Credentials) -> service_usage_v1.ServiceUsageClient:
+        return service_usage_v1.ServiceUsageClient(credentials=credentials)
+
+    def _batch_enable_services(
+        self, client: service_usage_v1.ServiceUsageClient, project_name: str, service_ids: list[str]
+    ) -> service_usage_v1.BatchEnableServicesResponse:
+        create_request = service_usage_v1.BatchEnableServicesRequest(
+            parent=project_name,
+            service_ids=service_ids,
+        )
+        logger.info(f"Enabling services: {service_ids.join(', ')} for project: {project_name}")
+        operation = client.batch_enable_services(request=create_request)
+        return operation.result()
+
+    def enable(
+        self, credentials: Credentials, project_name: str, service_ids: list[str]
+    ) -> service_usage_v1.BatchEnableServicesResponse:
+        client = self._get_service_usage_client(credentials)
+        result = self._batch_enable_services(client, project_name, service_ids)
+        logger.info(f"Services: {service_ids.join(', ')} enabled successfully for project: {project_name}")
+        return result

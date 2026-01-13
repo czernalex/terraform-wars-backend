@@ -12,9 +12,11 @@ from main.apps.tutorials.services.tutorial_project_configurator_factory import (
 )
 from main.apps.tutorials.services.gcp_credentials_service import GCPCredentialsService
 from main.apps.tutorials.services.gcp_project_create_service import GCPProjectCreateService
+from main.apps.tutorials.services.gcp_project_delete_service import GCPProjectDeleteService
 from main.apps.tutorials.services.gcp_service_account_create_service import GCPServiceAccountCreateService
 from main.apps.tutorials.services.gcp_service_account_impersonation_service import GCPServiceAccountImpersonationService
-
+from main.apps.tutorials.services.gcp_service_enable_service import GCPServiceEnableService
+from main.apps.tutorials.services.gcp_project_iam_role_grant_service import GCPProjectIamRoleGrantService
 
 __all__ = (
     "ProviderRetrievalService",
@@ -29,6 +31,9 @@ __all__ = (
     "DefaultTutorialProjectConfiguratorFactory",
     "GCPCredentialsService",
     "GCPProjectCreateService",
+    "GCPProjectDeleteService",
     "GCPServiceAccountCreateService",
     "GCPServiceAccountImpersonationService",
+    "GCPServiceEnableService",
+    "GCPProjectIamRoleGrantService",
 )
