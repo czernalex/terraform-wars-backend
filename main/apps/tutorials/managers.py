@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING, Self
+from uuid import UUID
 
 from django.db import models
 
@@ -36,4 +37,8 @@ class TutorialTagQuerySet(models.QuerySet["TutorialTag"]):
 
 
 class TutorialProjectQuerySet(models.QuerySet["TutorialProject"]):
-    pass
+    def for_user(self, user_id: UUID) -> Self:
+        return self.filter(user_id=user_id)
+
+    def for_tutorial(self, tutorial_id: UUID) -> Self:
+        return self.filter(tutorial_id=tutorial_id)

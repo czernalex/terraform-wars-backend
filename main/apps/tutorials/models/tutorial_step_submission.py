@@ -5,11 +5,13 @@ from django.utils.translation import gettext_lazy as _
 
 from main.apps.core.models import AbstractUUIDModel
 from main.apps.tutorials.managers import TutorialStepSubmissionQuerySet
+from main.apps.tutorials.models.tutorial_project import TutorialProject
 from main.apps.tutorials.models.tutorial_step import TutorialStep
 from main.apps.users.models.user import User
 
 
 class TutorialStepSubmission(AbstractUUIDModel):
+    tutorial_project = models.ForeignKey(TutorialProject, on_delete=models.CASCADE, related_name="submissions")
     tutorial_step = models.ForeignKey(TutorialStep, on_delete=models.CASCADE, related_name="submissions")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="submissions")
 

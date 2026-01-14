@@ -1,4 +1,5 @@
 import logging
+from typing import Sequence
 
 from google.cloud import resourcemanager_v3
 from google.iam.v1 import iam_policy_pb2, policy_pb2
@@ -48,24 +49,26 @@ class GCPProjectIamRoleGrantService:
         credentials: Credentials,
         project_id: str,
         service_account_email: str,
-        role: str,
+        roles: Sequence[str],
     ) -> None:
         """
         Grants a project-level role to a service account.
         """
+        # TODO: Refactor this to bind multiple roles to the policy at once
         client = self._get_projects_client(credentials)
         member = f"serviceAccount:{service_account_email}"
 
         policy = client.get_iam_policy(request=iam_policy_pb2.GetIamPolicyRequest(resource=f"projects/{project_id}"))
 
-        policy = self._ensure_role_binding(
-            policy=policy,
-            role=role,
-            member=member,
-            project_id=project_id,
-        )
+        for role in roles:
+            policy = self._ensure_role_binding(
+                policy=policy,
+                role=role,
+                member=member,
+                project_id=project_id,
+            )
 
         client.set_iam_policy(
             request=iam_policy_pb2.SetIamPolicyRequest(resource=f"projects/{project_id}", policy=policy)
         )
-        logger.info(f"Successfully granted {role} to {member} on {project_id}")
+        logger.info(f"Successfully granted {len(roles)} roles to {member} on {project_id}")

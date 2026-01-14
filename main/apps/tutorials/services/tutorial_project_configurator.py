@@ -115,7 +115,9 @@ class GCPTutorialProjectConfigurator(TutorialProjectConfigurator):
         social_app = self._get_social_app()
         try:
             credentials = self._gcp_credentials_service.get_credentials(
-                social_token, social_app, settings.SOCIALACCOUNT_PROVIDERS[self.get_provider_id()]["SCOPE"]
+                social_token,
+                social_app,
+                settings.SOCIALACCOUNT_PROVIDERS[self.get_provider_id()]["SCOPE"],
             )
             project = self._gcp_project_create_service.create(credentials, tutorial_project)
             self._gcp_service_enable_service.enable(credentials, project.name, self.BOOTSTRAP_APIS)

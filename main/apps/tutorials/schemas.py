@@ -2,7 +2,7 @@ from typing import Annotated, Optional
 from uuid import UUID
 from ninja import Field, FilterLookup, FilterSchema, ModelSchema, Schema
 
-from main.apps.tutorials.enums import Difficulty, TutorialStatus
+from main.apps.tutorials.enums import Difficulty, TutorialProjectStatus, TutorialStatus
 from main.apps.tutorials.models import (
     Provider,
     Tutorial,
@@ -105,14 +105,33 @@ class TutorialDetailSchema(ModelSchema):
         return obj.author.username if obj.author else None
 
 
+class TutorialProjectListFilterSchema(FilterSchema):
+    status: Optional[TutorialProjectStatus] = None
+    provider_id: Optional[UUID] = None
+
+
 class CreateTutorialProjectSchema(Schema):
     tutorial_id: UUID
+
+
+class TutorialProjectListSchema(ModelSchema):
+    id: UUID
+    tutorial: TutorialDetailSchema
+    user_id: UUID = Field(alias="user.id")
+    status: TutorialProjectStatus
+
+    class Meta:
+        model = TutorialProject
+        fields = [
+            "config_data",
+        ]
 
 
 class TutorialProjectDetailSchema(ModelSchema):
     id: UUID
     tutorial: TutorialDetailSchema
     user: UserDetailSchema
+    status: TutorialProjectStatus
 
     class Meta:
         model = TutorialProject
@@ -152,6 +171,10 @@ class TutorialStepDetailSchema(ModelSchema):
 
 class CreateTutorialStepSubmissionSchema(Schema):
     tutorial_step_id: UUID
+    code: str
+
+
+class UpdateTutorialStepSubmissionSchema(Schema):
     code: str
 
 

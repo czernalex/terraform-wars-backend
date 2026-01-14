@@ -19,9 +19,3 @@ def create_tutorial_step_submission_execution(
     tutorial_step_submission_id: UUID,
 ) -> None:
     return None
-
-
-# create google cloud project
-# create service account
-# allow our service account to impersonate the user's service account
-# store the terraform state to gcs bucket

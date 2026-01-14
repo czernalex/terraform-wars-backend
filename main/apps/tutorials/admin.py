@@ -212,6 +212,17 @@ class TutorialProjectAdmin(BaseModelAdmin):
     )
     autocomplete_fields = ("tutorial", "user")
     fieldsets = (
-        (_("Tutorial project information"), {"fields": ("tutorial", "user", "status", "config_data")}),
+        (
+            _("Tutorial project information"),
+            {
+                "fields": (
+                    "tutorial",
+                    "user",
+                    "status",
+                    "config_data",
+                    "tf_state_file",
+                )
+            },
+        ),
         (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
     )

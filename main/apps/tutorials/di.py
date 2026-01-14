@@ -1,11 +1,15 @@
 from injector import Binder, Module, singleton
 
 from main.apps.tutorials.services import (
+    DefaultTutorialProjectResourcesDestroyServiceFactory,
     GCPCredentialsService,
     GCPProjectCreateService,
     GCPServiceAccountCreateService,
     GCPServiceAccountImpersonationService,
+    GCPTutorialProjectResourcesDestroyService,
     ProviderRetrievalService,
+    TutorialProjectDeleteService,
+    TutorialProjectResourcesDestroyServiceFactory,
     TutorialRetrievalService,
     TutorialTagRetrievalService,
     TutorialStepRetrievalService,
@@ -27,6 +31,7 @@ class TutorialsModule(Module):
         binder.bind(TutorialTagRetrievalService, to=TutorialTagRetrievalService, scope=singleton)
         binder.bind(TutorialStepRetrievalService, to=TutorialStepRetrievalService, scope=singleton)
         binder.bind(TutorialProjectCreateService, to=TutorialProjectCreateService, scope=singleton)
+        binder.bind(TutorialProjectDeleteService, to=TutorialProjectDeleteService, scope=singleton)
         binder.bind(TutorialStepSubmissionService, to=TutorialStepSubmissionService, scope=singleton)
         binder.bind(GCPTutorialProjectConfigurator, to=GCPTutorialProjectConfigurator, scope=singleton)
         binder.bind(TutorialProjectConfiguratorFactory, to=DefaultTutorialProjectConfiguratorFactory, scope=singleton)
@@ -37,3 +42,11 @@ class TutorialsModule(Module):
         binder.bind(GCPServiceAccountImpersonationService, to=GCPServiceAccountImpersonationService, scope=singleton)
         binder.bind(GCPServiceEnableService, to=GCPServiceEnableService, scope=singleton)
         binder.bind(GCPProjectIamRoleGrantService, to=GCPProjectIamRoleGrantService, scope=singleton)
+        binder.bind(
+            GCPTutorialProjectResourcesDestroyService, to=GCPTutorialProjectResourcesDestroyService, scope=singleton
+        )
+        binder.bind(
+            TutorialProjectResourcesDestroyServiceFactory,
+            to=DefaultTutorialProjectResourcesDestroyServiceFactory,
+            scope=singleton,
+        )
