@@ -17,9 +17,8 @@ class GCPServiceAccountCreateService:
     def _get_iam_client(self, credentials: Credentials) -> iam_admin_v1.IAMClient:
         return iam_admin_v1.IAMClient(credentials=credentials)
 
-    def _create_service_account(self, credentials: Credentials, project_id: str) -> types.ServiceAccount:
+    def _create_service_account(self, client: iam_admin_v1.IAMClient, project_id: str) -> types.ServiceAccount:
         service_account_id = self._generate_service_account_id()
-        client = self._get_iam_client(credentials)
         create_request = iam_admin_v1.CreateServiceAccountRequest(
             name=f"projects/{project_id}",
             account_id=service_account_id,
@@ -35,7 +34,8 @@ class GCPServiceAccountCreateService:
         return service_account
 
     def create(self, credentials: Credentials, project_id: str, tutorial_project: TutorialProject) -> str:
-        service_account = self._create_service_account(credentials, project_id)
+        client = self._get_iam_client(credentials)
+        service_account = self._create_service_account(client, project_id)
         tutorial_project.config_data["gcp_service_account_email"] = service_account.email
         tutorial_project.config_data["gcp_service_account_id"] = service_account.name
         tutorial_project.save()
