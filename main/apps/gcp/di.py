@@ -34,7 +34,7 @@ class GCPModule(Module):
         return GCPCloudTaskCreateService(
             client,
             settings.GCP_PROJECT_ID,
-            settings.GCP_LOCATION,
+            settings.GCP_REGION,
             settings.GCP_SERVICE_ACCOUNT_EMAIL,
             settings.TASK_API_BASE_URL,
         )

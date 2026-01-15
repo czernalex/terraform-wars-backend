@@ -14,20 +14,20 @@ class GCPCloudTaskCreateService:
         self,
         client: tasks_v2.CloudTasksClient,
         gcp_project_id: str,
-        gcp_location: str,
+        gcp_region: str,
         gcp_service_account_email: str,
         gcp_audience: str,
     ):
         self._client = client
         self._gcp_project_id = gcp_project_id
-        self._gcp_location = gcp_location
+        self._gcp_region = gcp_region
         self._gcp_service_account_email = gcp_service_account_email
         self._gcp_audience = gcp_audience
 
     def _create_http_task_name(self, queue_id: str, task_id: Optional[str]) -> Optional[str]:
         if not task_id:
             return None
-        return self._client.task_path(self._gcp_project_id, self._gcp_location, queue_id, task_id)
+        return self._client.task_path(self._gcp_project_id, self._gcp_region, queue_id, task_id)
 
     def _construct_http_task(
         self,
@@ -83,7 +83,7 @@ class GCPCloudTaskCreateService:
             tasks_v2.CreateTaskRequest(
                 parent=self._client.queue_path(
                     self._gcp_project_id,
-                    self._gcp_location,
+                    self._gcp_region,
                     queue_id,
                 ),
                 task=task,
