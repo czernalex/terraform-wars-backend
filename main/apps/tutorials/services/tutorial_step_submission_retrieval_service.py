@@ -30,6 +30,6 @@ class TutorialStepSubmissionRetrievalService:
 
     def get_detail_by_id(self, tutorial_step_submission_id: UUID) -> TutorialStepSubmission:
         try:
-            self._get_for_read_by_id(tutorial_step_submission_id)
+            return self._get_for_read_by_id(tutorial_step_submission_id)
         except TutorialStepSubmission.DoesNotExist:
             raise NotFoundError(_("Tutorial step submission not found"))
