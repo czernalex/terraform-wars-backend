@@ -11,8 +11,10 @@ class GoogleProviderExecutorEnvironmentConfigurator(ExecutorEnvironmentConfigura
             run_v2.EnvVar(name="USER_ID", value=tutorial_step_submission.user_id),
             run_v2.EnvVar(name="TUTORIAL_ID", value=tutorial_project.tutorial_id),
             run_v2.EnvVar(name="TUTORIAL_PROJECT_ID", value=tutorial_project.id),
+            run_v2.EnvVar(name="TUTORIAL_STEP_SUBMISSION_ID", value=tutorial_step_submission.id),
             run_v2.EnvVar(name="GCP_PROJECT_ID", value=tutorial_project.config_data["gcp_project_id"]),
             run_v2.EnvVar(
                 name="GCP_SERVICE_ACCOUNT_EMAIL", value=tutorial_project.config_data["gcp_service_account_email"]
             ),
+            run_v2.EnvVar(name="TF_CODE", value=tutorial_step_submission.code),
         ]
