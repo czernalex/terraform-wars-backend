@@ -54,7 +54,6 @@ class GCPProjectIamRoleGrantService:
         """
         Grants a project-level role to a service account.
         """
-        # TODO: Refactor this to bind multiple roles to the policy at once
         client = self._get_projects_client(credentials)
         member = f"serviceAccount:{service_account_email}"
 

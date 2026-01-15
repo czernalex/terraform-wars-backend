@@ -1,4 +1,5 @@
 from typing import override
+from uuid import UUID
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -10,6 +11,8 @@ from main.apps.tutorials.models.tutorial import Tutorial
 
 class TutorialStep(AbstractUUIDModel):
     tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE, related_name="steps")
+    tutorial_id: UUID
+
     title = models.CharField(_("Title"), max_length=255)
     slug = models.SlugField(_("Slug"), unique=True)
 

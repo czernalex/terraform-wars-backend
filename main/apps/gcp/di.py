@@ -1,6 +1,6 @@
 from django.conf import settings
 from injector import Binder, Module, singleton, provider
-from google.cloud import tasks_v2
+from google.cloud import tasks_v2, run_v2
 
 from main.apps.gcp.services import (
     GCPCloudTaskCreateService,
@@ -18,6 +18,7 @@ from main.apps.gcp.services import (
 class GCPModule(Module):
     def configure(self, binder: Binder) -> None:
         binder.bind(tasks_v2.CloudTasksClient, to=tasks_v2.CloudTasksClient, scope=singleton)
+        binder.bind(run_v2.JobsClient, to=run_v2.JobsClient, scope=singleton)
         binder.bind(GCPCredentialsCreateService, to=GCPCredentialsCreateService, scope=singleton)
         binder.bind(GCPProjectCreateService, to=GCPProjectCreateService, scope=singleton)
         binder.bind(GCPProjectDeleteService, to=GCPProjectDeleteService, scope=singleton)

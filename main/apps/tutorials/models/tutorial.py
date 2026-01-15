@@ -1,4 +1,5 @@
 from typing import override
+from uuid import UUID
 
 from django.contrib.postgres.indexes import GinIndex
 from django.db import models
@@ -14,7 +15,10 @@ from main.apps.users.models import User
 
 class Tutorial(AbstractUUIDModel):
     provider = models.ForeignKey(Provider, on_delete=models.PROTECT, related_name="tutorials")
+    provider_id: UUID
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="tutorials")
+    author_id: UUID
+
     title = models.CharField(_("Title"), max_length=255)
     slug = models.SlugField(_("Slug"), unique=True)
     description = models.TextField(_("Description"))

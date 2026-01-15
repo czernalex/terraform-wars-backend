@@ -26,6 +26,7 @@ class TutorialProjectCreateService:
         tutorial_project_configurator_factory: TutorialProjectConfiguratorFactory,
     ):
         self._tutorial_retrieval_service = tutorial_retrieval_service
+        self._tutorial_project_retrieval_service = tutorial_project_retrieval_service
         self._tutorial_project_configurator_factory = tutorial_project_configurator_factory
 
     @transaction.atomic
@@ -39,6 +40,18 @@ class TutorialProjectCreateService:
                     {
                         "loc": ["tutorial_id"],
                         "msg": _("Tutorial not found"),
+                        "type": "value_error",
+                    }
+                ]
+            )
+
+        if self._tutorial_project_retrieval_service.try_find_by_tutorial_and_user_id(tutorial.id, user.id):
+            raise ValidationError(
+                [
+                    {
+                        "loc": ["tutorial_project"],
+                        "msg": _("Tutorial project for tutorial %(tutorial_id)s already exists")
+                        % {"tutorial_id": tutorial.id},
                         "type": "value_error",
                     }
                 ]

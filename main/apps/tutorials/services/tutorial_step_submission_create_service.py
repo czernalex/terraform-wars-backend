@@ -57,7 +57,8 @@ class TutorialStepSubmissionCreateService:
                 [
                     {
                         "loc": ["tutorial_project"],
-                        "msg": _("Tutorial project not found"),
+                        "msg": _("Tutorial project for tutorial %(tutorial_id)s not found")
+                        % {"tutorial_id": tutorial_step.tutorial_id},
                         "type": "value_error",
                     }
                 ]
