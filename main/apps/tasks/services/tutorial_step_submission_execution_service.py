@@ -35,7 +35,7 @@ class TutorialStepSubmissionExecutionService:
         self._gcp_cloud_run_job_invoke_service.invoke(
             job_name=settings.GCP_TERRAFORM_EXECUTOR_JOB_NAME,
             job_container_name="app-prodction-1",
-            job_container_args=["--provider", tutorial_step_submission.provider_id],
+            job_container_args=[tutorial_step_submission.provider_id],
             job_container_env_vars=environment_configurator.configure(tutorial_step_submission),
         )
         logger.info(f"Execution job for tutorial step submission: {tutorial_step_submission.id} invoked successfully")

@@ -26,7 +26,6 @@ class GCPModule(Module):
         binder.bind(GCPServiceAccountImpersonationService, to=GCPServiceAccountImpersonationService, scope=singleton)
         binder.bind(GCPServiceEnableService, to=GCPServiceEnableService, scope=singleton)
         binder.bind(GCPProjectIamRoleGrantService, to=GCPProjectIamRoleGrantService, scope=singleton)
-        binder.bind(GCPCloudRunJobInvokeService, to=GCPCloudRunJobInvokeService, scope=singleton)
 
     @provider
     @singleton
@@ -37,4 +36,13 @@ class GCPModule(Module):
             settings.GCP_REGION,
             settings.GCP_SERVICE_ACCOUNT_EMAIL,
             settings.TASK_API_BASE_URL,
+        )
+
+    @provider
+    @singleton
+    def provide_gcp_cloud_run_job_invoke_service(self, client: run_v2.JobsClient) -> GCPCloudRunJobInvokeService:
+        return GCPCloudRunJobInvokeService(
+            client,
+            settings.GCP_PROJECT_ID,
+            settings.GCP_REGION,
         )
