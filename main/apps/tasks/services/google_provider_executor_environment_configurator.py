@@ -9,10 +9,10 @@ class GoogleProviderExecutorEnvironmentConfigurator(ExecutorEnvironmentConfigura
     def configure(self, tutorial_step_submission: TutorialStepSubmission) -> list[run_v2.EnvVar]:
         tutorial_project = tutorial_step_submission.tutorial_project
         return [
-            run_v2.EnvVar(name="USER_ID", value=tutorial_step_submission.user_id),
-            run_v2.EnvVar(name="TUTORIAL_ID", value=tutorial_project.tutorial_id),
-            run_v2.EnvVar(name="TUTORIAL_PROJECT_ID", value=tutorial_project.id),
-            run_v2.EnvVar(name="TUTORIAL_STEP_SUBMISSION_ID", value=tutorial_step_submission.id),
+            run_v2.EnvVar(name="USER_ID", value=str(tutorial_step_submission.user_id)),
+            run_v2.EnvVar(name="TUTORIAL_ID", value=str(tutorial_project.tutorial_id)),
+            run_v2.EnvVar(name="TUTORIAL_PROJECT_ID", value=str(tutorial_project.id)),
+            run_v2.EnvVar(name="TUTORIAL_STEP_SUBMISSION_ID", value=str(tutorial_step_submission.id)),
             run_v2.EnvVar(name="GCP_TF_STATE_BUCKET_NAME", value=settings.GCS_BUCKET_NAME),
             run_v2.EnvVar(name="GCP_PROJECT_ID", value=tutorial_project.config_data["gcp_project_id"]),
             run_v2.EnvVar(
