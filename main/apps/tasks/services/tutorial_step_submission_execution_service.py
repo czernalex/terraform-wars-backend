@@ -34,7 +34,7 @@ class TutorialStepSubmissionExecutionService:
         logger.info(f"Invoking execution job for tutorial step submission: {tutorial_step_submission.id}")
         self._gcp_cloud_run_job_invoke_service.invoke(
             job_name=settings.GCP_TERRAFORM_EXECUTOR_JOB_NAME,
-            job_container_name="terraform-wars-executor",
+            job_container_name="app-prodction-1",
             job_container_args=["--provider", tutorial_step_submission.provider_id],
             job_container_env_vars=environment_configurator.configure(tutorial_step_submission),
         )
