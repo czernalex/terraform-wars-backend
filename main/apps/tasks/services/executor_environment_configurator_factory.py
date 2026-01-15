@@ -3,7 +3,7 @@ from typing import override
 
 from injector import inject
 
-from main.apps.tasks.services import ExecutorEnvironmentConfigurator
+from main.apps.tasks.services.executor_environment_configurator import ExecutorEnvironmentConfigurator
 from main.apps.tutorials.models.tutorial_step_submission import TutorialStepSubmission
 from main.apps.tasks.services.google_provider_executor_environment_configurator import (
     GoogleProviderExecutorEnvironmentConfigurator,
