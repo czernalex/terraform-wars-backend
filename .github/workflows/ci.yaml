@@ -174,7 +174,7 @@ jobs:
             GCP_PROJECT_ID=${{ vars.GCP_PROJECT_ID }}
             GCP_LOCATION=${{ vars.GCP_LOCATION }}
             GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID=terraform-wars-tutorial-submission-tasks-production-queue
-            GCP_STORAGE_BUCKET_NAME=terraform-wars-storage-production
+            GCP_STORAGE_BUCKET_NAME=terraform-wars-backend-production
             GCP_SERVICE_ACCOUNT_EMAIL=twa-be-cloudrun-runtime-sa@terraform-wars-dev.iam.gserviceaccount.com
             GCP_TERRAFORM_EXECUTOR_SERVICE_ACCOUNT_EMAIL=twa-tf-executor-sa@terraform-wars-dev.iam.gserviceaccount.com
           secrets: |-
@@ -209,7 +209,7 @@ jobs:
             GCP_PROJECT_ID=${{ vars.GCP_PROJECT_ID }}
             GCP_LOCATION=${{ vars.GCP_LOCATION }}
             GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID=terraform-wars-tutorial-submission-tasks-production-queue
-            GCP_STORAGE_BUCKET_NAME=terraform-wars-storage-production
+            GCP_STORAGE_BUCKET_NAME=terraform-wars-backend-production
             GCP_SERVICE_ACCOUNT_EMAIL=twa-be-cloudrun-runtime-sa@terraform-wars-dev.iam.gserviceaccount.com
             GCP_TERRAFORM_EXECUTOR_SERVICE_ACCOUNT_EMAIL=twa-tf-executor-sa@terraform-wars-dev.iam.gserviceaccount.com
           secrets: |-
