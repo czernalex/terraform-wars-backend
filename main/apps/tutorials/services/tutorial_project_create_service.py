@@ -9,6 +9,7 @@ from main.apps.core.exceptions import NotFoundError
 from main.apps.tutorials.models import TutorialProject
 from main.apps.tutorials.schemas import CreateTutorialProjectSchema
 from main.apps.tutorials.services.tutorial_project_configurator_factory import TutorialProjectConfiguratorFactory
+from main.apps.tutorials.services.tutorial_project_retrieval_service import TutorialProjectRetrievalService
 from main.apps.tutorials.services.tutorial_retrieval_service import TutorialRetrievalService
 from main.apps.users.models import User
 
@@ -21,6 +22,7 @@ class TutorialProjectCreateService:
     def __init__(
         self,
         tutorial_retrieval_service: TutorialRetrievalService,
+        tutorial_project_retrieval_service: TutorialProjectRetrievalService,
         tutorial_project_configurator_factory: TutorialProjectConfiguratorFactory,
     ):
         self._tutorial_retrieval_service = tutorial_retrieval_service

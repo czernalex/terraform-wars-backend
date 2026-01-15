@@ -16,7 +16,7 @@ class TestUserUpdateService:
             last_name="Doe",
         )
         service = injector.get(UserUpdateService)
-        updated_user = service.update_user(user.id, data)
+        updated_user = service.update(user.id, data)
 
         assert updated_user.username == data.username
         assert updated_user.first_name == data.first_name
