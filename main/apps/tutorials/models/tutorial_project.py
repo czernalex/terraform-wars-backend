@@ -1,3 +1,4 @@
+from uuid import UUID
 from django.db import models
 from django.contrib.postgres.indexes import GinIndex
 from django.utils.translation import gettext_lazy as _
@@ -10,13 +11,14 @@ from main.apps.users.models import User
 
 
 def tf_state_file_path(instance: "TutorialProject", _: str) -> str:
-    return f"users/{instance.user_id}/tutorials/{instance.tutorial.id}/projects/terraform.tfstate"
+    return f"users/{instance.user_id}/tutorials/{instance.tutorial_id}/projects/{instance.id}/terraform.tfstate"
 
 
 class TutorialProject(AbstractUUIDModel):
     tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE, related_name="projects")
+    tutorial_id: UUID
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="projects")
-
+    user_id: UUID
     status = models.CharField(
         _("Status"), max_length=255, choices=TutorialProjectStatus.choices, default=TutorialProjectStatus.CREATED
     )

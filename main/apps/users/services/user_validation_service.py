@@ -11,5 +11,6 @@ class UserValidationService:
         if not username:
             return
 
+        # FIXME: Move this logic to the retrieval service
         if User.objects.for_username(username).exclude(id=user_id).exists():
             raise ValueError(_("Username is already taken"))

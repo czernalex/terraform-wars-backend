@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class SocialAccountRetrievalService:
-    def get_social_account_detail(self, user: User, provider: str) -> SocialAccount:
+    def get_detail(self, user: User, provider: str) -> SocialAccount:
         try:
             return SocialAccount.objects.filter(user=user).get(provider=provider)
         except SocialAccount.DoesNotExist:

@@ -8,7 +8,7 @@ from google.cloud import tasks_v2
 from google.protobuf import duration_pb2, timestamp_pb2
 
 
-class CloudTaskCreateService:
+class GCPCloudTaskCreateService:
     @inject
     def __init__(
         self,
@@ -24,7 +24,7 @@ class CloudTaskCreateService:
         self._gcp_service_account_email = gcp_service_account_email
         self._gcp_audience = gcp_audience
 
-    def _construct_http_task_name(self, queue_id: str, task_id: Optional[str]) -> Optional[str]:
+    def _create_http_task_name(self, queue_id: str, task_id: Optional[str]) -> Optional[str]:
         if not task_id:
             return None
         return self._client.task_path(self._gcp_project_id, self._gcp_location, queue_id, task_id)
@@ -50,7 +50,7 @@ class CloudTaskCreateService:
                     service_account_email=self._gcp_service_account_email, audience=self._gcp_audience
                 ),
             ),
-            name=self._construct_http_task_name(queue_id, task_id),
+            name=self._create_http_task_name(queue_id, task_id),
         )
 
         # Convert to an absolute Protobuf Timestamp

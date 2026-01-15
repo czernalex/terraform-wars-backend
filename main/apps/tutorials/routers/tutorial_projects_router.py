@@ -36,7 +36,7 @@ def get_tutorial_project_list(
     request: AuthedHttpRequest, filters: Query[TutorialProjectListFilterSchema]
 ) -> models.QuerySet[TutorialProject]:
     tutorial_project_retrieval_service = injector.get(TutorialProjectRetrievalService)
-    return tutorial_project_retrieval_service.get_tutorial_project_list(request.user, filters)
+    return tutorial_project_retrieval_service.get_list(request.user, filters)
 
 
 @tutorial_projects_router.post(
@@ -47,7 +47,7 @@ def get_tutorial_project_list(
 )
 def create_tutorial_project(request: AuthedHttpRequest, data: CreateTutorialProjectSchema) -> TutorialProject:
     tutorial_project_create_service = injector.get(TutorialProjectCreateService)
-    return tutorial_project_create_service.create_tutorial_project(request.user, data)
+    return tutorial_project_create_service.create(request.user, data)
 
 
 @tutorial_projects_router.get(
@@ -61,7 +61,7 @@ def create_tutorial_project(request: AuthedHttpRequest, data: CreateTutorialProj
 )
 def get_tutorial_project_detail(request: AuthedHttpRequest, tutorial_project_id: UUID) -> TutorialProject:
     tutorial_project_retrieval_service = injector.get(TutorialProjectRetrievalService)
-    return tutorial_project_retrieval_service.get_tutorial_project_detail_by_id(request.user, tutorial_project_id)
+    return tutorial_project_retrieval_service.get_detail_by_id(request.user, tutorial_project_id)
 
 
 @tutorial_projects_router.delete(
@@ -75,7 +75,7 @@ def get_tutorial_project_detail(request: AuthedHttpRequest, tutorial_project_id:
 )
 def delete_tutorial_project(request: AuthedHttpRequest, tutorial_project_id: UUID) -> None:
     tutorial_project_delete_service = injector.get(TutorialProjectDeleteService)
-    return tutorial_project_delete_service.delete_tutorial_project(request.user, tutorial_project_id)
+    return tutorial_project_delete_service.delete(request.user, tutorial_project_id)
 
 
 @tutorial_projects_router.delete(
@@ -89,4 +89,4 @@ def delete_tutorial_project(request: AuthedHttpRequest, tutorial_project_id: UUI
 )
 def delete_tutorial_project_resources(request: AuthedHttpRequest, tutorial_project_id: UUID) -> None:
     tutorial_project_delete_service = injector.get(TutorialProjectDeleteService)
-    return tutorial_project_delete_service.destroy_tutorial_project_resources(request.user, tutorial_project_id)
+    return tutorial_project_delete_service.destroy_resources(request.user, tutorial_project_id)

@@ -154,6 +154,33 @@ jobs:
           image: ${{ env.IMAGE_URI }}
           project_id: ${{ vars.GCP_PROJECT_ID }}
           region: ${{ vars.GCP_REGION }}
+          env_vars: |-
+            DJANGO_SETTINGS_MODULE=main.settings.production
+            BASE_DOMAIN=api.app.terraformwars.com
+            DB_NAME=terraform-wars
+            DB_USER=terraform-wars
+            DB_HOST=/cloudsql/terraform-wars-dev:europe-west3:terraform-wars-db
+            DB_PORT=5432
+            SESSION_COOKIE_DOMAIN=.app.terraformwars.com
+            CSRF_COOKIE_DOMAIN=.app.terraformwars.com
+            CSRF_TRUSTED_ORIGINS=https://api.app.terraformwars.com,https://www.api.app.terraformwars.com,https://app.terraformwars.com,https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app
+            CORS_ALLOWED_ORIGINS=https://api.app.terraformwars.com,https://www.api.app.terraformwars.com,https://app.terraformwars.com,https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app
+            ALLOWED_HOSTS=localhost,127.0.0.1,terraform-wars-task-worker-production-436901077292.europe-west3.run.app
+            EMAIL_HOST=smtp-relay.brevo.com
+            EMAIL_HOST_USER=9f9939001@smtp-brevo.com
+            EMAIL_PORT=587
+            TASK_API_BASE_URL=https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app
+            GCP_PROJECT_ID=${{ vars.GCP_PROJECT_ID }}
+            GCP_LOCATION=${{ vars.GCP_LOCATION }}
+            GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID=terraform-wars-tutorial-submission-tasks-production-queue
+            GCP_STORAGE_BUCKET_NAME=terraform-wars-storage-production
+            GCP_SERVICE_ACCOUNT_EMAIL=twa-be-cloudrun-runtime-sa@terraform-wars-dev.iam.gserviceaccount.com
+            GCP_TERRAFORM_EXECUTOR_SERVICE_ACCOUNT_EMAIL=twa-tf-executor-sa@terraform-wars-dev.iam.gserviceaccount.com
+          secrets: |-
+            SECRET_KEY=TW_BE_SECRET_KEY:latest
+            DB_PASSWORD=TW_BE_DB_PASSWORD:latest
+            SENTRY_DSN=TW_BE_SENTRY_DSN:latest
+            EMAIL_HOST_PASSWORD=TW_BE_EMAIL_HOST_PASSWORD:latest
 
       - name: Deploy Backend Server to Google Cloud Run
         uses: google-github-actions/deploy-cloudrun@v3
@@ -162,6 +189,33 @@ jobs:
           image: ${{ env.IMAGE_URI }}
           project_id: ${{ vars.GCP_PROJECT_ID }}
           region: ${{ vars.GCP_REGION }}
+          env_vars: |-
+            DJANGO_SETTINGS_MODULE=main.settings.production
+            BASE_DOMAIN=api.app.terraformwars.com
+            DB_NAME=terraform-wars
+            DB_USER=terraform-wars
+            DB_HOST=/cloudsql/terraform-wars-dev:europe-west3:terraform-wars-db
+            DB_PORT=5432
+            SESSION_COOKIE_DOMAIN=.app.terraformwars.com
+            CSRF_COOKIE_DOMAIN=.app.terraformwars.com
+            CSRF_TRUSTED_ORIGINS=https://api.app.terraformwars.com,https://www.api.app.terraformwars.com,https://app.terraformwars.com
+            CORS_ALLOWED_ORIGINS=https://api.app.terraformwars.com,https://www.api.app.terraformwars.com,https://app.terraformwars.com
+            ALLOWED_HOSTS=localhost,127.0.0.1,localhost,127.0.0.1,api.app.terraformwars.com,www.api.app.terraformwars.com
+            EMAIL_HOST=smtp-relay.brevo.com
+            EMAIL_HOST_USER=9f9939001@smtp-brevo.com
+            EMAIL_PORT=587
+            TASK_API_BASE_URL=https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app
+            GCP_PROJECT_ID=${{ vars.GCP_PROJECT_ID }}
+            GCP_LOCATION=${{ vars.GCP_LOCATION }}
+            GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID=terraform-wars-tutorial-submission-tasks-production-queue
+            GCP_STORAGE_BUCKET_NAME=terraform-wars-storage-production
+            GCP_SERVICE_ACCOUNT_EMAIL=twa-be-cloudrun-runtime-sa@terraform-wars-dev.iam.gserviceaccount.com
+            GCP_TERRAFORM_EXECUTOR_SERVICE_ACCOUNT_EMAIL=twa-tf-executor-sa@terraform-wars-dev.iam.gserviceaccount.com
+          secrets: |-
+            SECRET_KEY=TW_BE_SECRET_KEY:latest
+            DB_PASSWORD=TW_BE_DB_PASSWORD:latest
+            SENTRY_DSN=TW_BE_SENTRY_DSN:latest
+            EMAIL_HOST_PASSWORD=TW_BE_EMAIL_HOST_PASSWORD:latest
 
   sentry-release:
     runs-on: ubuntu-latest

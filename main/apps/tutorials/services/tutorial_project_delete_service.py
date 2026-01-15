@@ -25,14 +25,12 @@ class TutorialProjectDeleteService:
         self._tutorial_project_resources_destroy_service_factory = tutorial_project_resources_destroy_service_factory
 
     @transaction.atomic
-    def delete_tutorial_project(self, user: User, tutorial_project_id: UUID) -> None:
+    def delete(self, user: User, tutorial_project_id: UUID) -> None:
         raise NotImplementedError("Not implemented yet")
 
     @transaction.atomic
-    def destroy_tutorial_project_resources(self, user: User, tutorial_project_id: UUID) -> None:
-        tutorial_project = self._tutorial_project_retrieval_service.get_tutorial_project_for_update_by_id(
-            user, tutorial_project_id
-        )
+    def destroy_resources(self, user: User, tutorial_project_id: UUID) -> None:
+        tutorial_project = self._tutorial_project_retrieval_service.get_for_update_by_id(user, tutorial_project_id)
         tutorial_project_resources_destroy_service = (
             self._tutorial_project_resources_destroy_service_factory.get_service(tutorial_project)
         )

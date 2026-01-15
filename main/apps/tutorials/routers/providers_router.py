@@ -23,4 +23,4 @@ def get_provider_list(
     request: AuthedHttpRequest,
 ) -> models.QuerySet[Provider]:
     provider_retrieval_service = injector.get(ProviderRetrievalService)
-    return provider_retrieval_service.get_provider_list()
+    return provider_retrieval_service.get_list()

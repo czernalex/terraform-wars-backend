@@ -27,9 +27,9 @@ class TutorialProjectCreateService:
         self._tutorial_project_configurator_factory = tutorial_project_configurator_factory
 
     @transaction.atomic
-    def create_tutorial_project(self, user: User, data: CreateTutorialProjectSchema) -> TutorialProject:
+    def create(self, user: User, data: CreateTutorialProjectSchema) -> TutorialProject:
         try:
-            tutorial = self._tutorial_retrieval_service.get_tutorial_detail_by_id(data.tutorial_id)
+            tutorial = self._tutorial_retrieval_service.get_detail_by_id(data.tutorial_id)
         except NotFoundError:
             logger.warning(f"Tutorial: {data.tutorial_id} not found")
             raise ValidationError(

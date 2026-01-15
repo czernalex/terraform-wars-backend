@@ -4,8 +4,10 @@ from typing import override
 from injector import inject
 
 from main.apps.tutorials.models import TutorialProject
-from main.apps.tutorials.services.tutorial_project_resources_destroy_service import (
+from main.apps.tutorials.services.gcp_tutorial_project_resources_destroy_service import (
     GCPTutorialProjectResourcesDestroyService,
+)
+from main.apps.tutorials.services.tutorial_project_resources_destroy_service import (
     TutorialProjectResourcesDestroyService,
 )
 

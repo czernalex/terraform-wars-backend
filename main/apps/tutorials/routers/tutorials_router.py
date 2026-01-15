@@ -34,7 +34,7 @@ def get_tutorial_list(
     filters: Query[TutorialListFilterSchema],
 ) -> models.QuerySet[Tutorial]:
     tutorial_retrieval_service = injector.get(TutorialRetrievalService)
-    return tutorial_retrieval_service.get_tutorial_list(filters)
+    return tutorial_retrieval_service.get_list(filters)
 
 
 @tutorials_router.get(
@@ -51,7 +51,7 @@ def get_tutorial_detail(
     tutorial_slug: str,
 ) -> Tutorial:
     tutorial_retrieval_service = injector.get(TutorialRetrievalService)
-    return tutorial_retrieval_service.get_tutorial_detail_by_slug(tutorial_slug)
+    return tutorial_retrieval_service.get_detail_by_slug(tutorial_slug)
 
 
 @tutorials_router.get(
@@ -65,7 +65,7 @@ def get_tutorial_step_list(
     tutorial_slug: str,
 ) -> models.QuerySet[TutorialStepListSchema]:
     tutorial_step_retrieval_service = injector.get(TutorialStepRetrievalService)
-    return tutorial_step_retrieval_service.get_tutorial_step_list(tutorial_slug)
+    return tutorial_step_retrieval_service.get_list(tutorial_slug)
 
 
 @tutorials_router.get(
@@ -80,4 +80,4 @@ def get_tutorial_step_detail(
     tutorial_step_slug: str,
 ) -> TutorialStep:
     tutorial_step_retrieval_service = injector.get(TutorialStepRetrievalService)
-    return tutorial_step_retrieval_service.get_tutorial_step_detail_by_slug(tutorial_slug, tutorial_step_slug)
+    return tutorial_step_retrieval_service.get_detail_by_slug(tutorial_slug, tutorial_step_slug)

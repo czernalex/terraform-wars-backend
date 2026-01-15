@@ -38,10 +38,10 @@ class UserDeleteService:
         return user
 
     @transaction.atomic
-    def delete_user(self, user_id: UUID) -> None:
+    def delete(self, user_id: UUID) -> None:
         logger.info(f"Deleting user: {user_id}")
         try:
-            user = self._user_retrieval_service.get_user_for_update(user_id)
+            user = self._user_retrieval_service.get_for_update_by_id(user_id)
         except User.DoesNotExist:
             logger.warning(f"User: {user_id} not found")
             raise NotFoundError(_("User not found"))

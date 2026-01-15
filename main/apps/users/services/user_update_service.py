@@ -47,10 +47,10 @@ class UserUpdateService:
         return user
 
     @transaction.atomic
-    def update_user(self, user_id: UUID, data: UserUpdateSchema) -> User:
+    def update(self, user_id: UUID, data: UserUpdateSchema) -> User:
         logger.info(f"Updating user: {user_id}, data: {data}")
         try:
-            user = self._user_retrieval_service.get_user_for_update(user_id)
+            user = self._user_retrieval_service.get_for_update_by_id(user_id)
         except User.DoesNotExist:
             logger.warning(f"User: {user_id} not found")
             raise NotFoundError(_("User not found"))

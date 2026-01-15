@@ -23,4 +23,4 @@ def get_tutorial_tag_list(
     request: AuthedHttpRequest,
 ) -> models.QuerySet[TutorialTag]:
     tutorial_tag_retrieval_service = injector.get(TutorialTagRetrievalService)
-    return tutorial_tag_retrieval_service.get_tutorial_tag_list()
+    return tutorial_tag_retrieval_service.get_list()

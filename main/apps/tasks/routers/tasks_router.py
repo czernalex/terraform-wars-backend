@@ -1,7 +1,10 @@
 from http import HTTPStatus
 from uuid import UUID
+
 from ninja import Router
 
+from main.apps.tutorials.services import TutorialStepSubmissionRetrievalService
+from main.di import injector
 from main.apps.core.types import AuthedHttpRequest
 
 
@@ -18,4 +21,5 @@ def create_tutorial_step_submission_execution(
     request: AuthedHttpRequest,
     tutorial_step_submission_id: UUID,
 ) -> None:
-    return None
+    tutorial_step_submission_retrieval_service = injector.get(TutorialStepSubmissionRetrievalService)
+    tutorial_step_submission = tutorial_step_submission_retrieval_service.get_detail_by_id(tutorial_step_submission_id)

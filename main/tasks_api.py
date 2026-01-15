@@ -15,7 +15,7 @@ root_tasks_api_router = TerraformWarsAPI(
     urls_namespace="terraform-wars-tasks-api",
     version="0.0.1",
     description=(
-        "Internal RPC API for triggering Terraform Wars background tasks."
+        "Internal RPC API for triggering Terraform Wars background tasks. Authentication is managed by Google Cloud IAM."
         "<br>"
         "<br>"
         "<a href='/api/docs' class='btn'>API Docs</a>"

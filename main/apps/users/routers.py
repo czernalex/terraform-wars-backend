@@ -31,7 +31,7 @@ def get_me(request: AuthedHttpRequest) -> User:
 )
 def update_me(request: AuthedHttpRequest, data: UserUpdateSchema) -> User:
     user_update_service = injector.get(UserUpdateService)
-    return user_update_service.update_user(request.user.id, data)
+    return user_update_service.update(request.user.id, data)
 
 
 @users_router.delete(
@@ -42,4 +42,4 @@ def update_me(request: AuthedHttpRequest, data: UserUpdateSchema) -> User:
 )
 def delete_me(request: AuthedHttpRequest) -> None:
     user_delete_service = injector.get(UserDeleteService)
-    return user_delete_service.delete_user(request.user.id)
+    return user_delete_service.delete(request.user.id)

@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class SocialAppRetrievalService:
-    def get_social_app_detail(self, provider: str) -> SocialApp:
+    def get_detail(self, provider: str) -> SocialApp:
         try:
             return SocialApp.objects.get(provider=provider)
         except SocialApp.DoesNotExist:

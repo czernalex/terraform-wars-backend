@@ -43,7 +43,7 @@ SECRET_KEY = secrets.SECRET_KEY
 INSTALLED_APPS = [
     "main.apps.api_auth",
     "main.apps.core",
-    "main.apps.google_cloud_tasks",
+    "main.apps.gcp",
     "main.apps.tasks",
     "main.apps.tutorials",
     "main.apps.users",
@@ -196,6 +196,7 @@ TASK_API_BASE_URL = config("TASK_API_BASE_URL")
 GCP_PROJECT_ID = config("GCP_PROJECT_ID")
 GCP_LOCATION = config("GCP_LOCATION")
 GCP_SERVICE_ACCOUNT_EMAIL = config("GCP_SERVICE_ACCOUNT_EMAIL")
+GCP_TERRAFORM_EXECUTOR_SERVICE_ACCOUNT_EMAIL = config("GCP_TERRAFORM_EXECUTOR_SERVICE_ACCOUNT_EMAIL")
 GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID = config("GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID")
 
 
