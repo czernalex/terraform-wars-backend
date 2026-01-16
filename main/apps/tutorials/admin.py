@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db import models
+from django.http import HttpRequest
 from django.utils.translation import gettext as _
 from unfold.contrib.filters.admin import (
     AutocompleteSelectFilter,
@@ -6,13 +8,13 @@ from unfold.contrib.filters.admin import (
     ChoicesDropdownFilter,
     RangeDateFilter,
 )
+from unfold.contrib.forms.widgets import WysiwygWidget
 
 from main.apps.core.admin import BaseModelAdmin
 from main.apps.tutorials.models import (
     Provider,
     Tutorial,
-    TutorialStep,
-    TutorialStepSubmission,
+    TutorialSubmission,
     TutorialTag,
     TutorialProject,
 )
@@ -75,6 +77,10 @@ class TutorialAdmin(BaseModelAdmin):
         "slug": ("title",),
     }
     filter_horizontal = ("tags",)
+    wysiwyg_fields = (
+        "description",
+        "assignment",
+    )
     fieldsets = (
         (
             _("Tutorial information"),
@@ -84,10 +90,23 @@ class TutorialAdmin(BaseModelAdmin):
                     "title",
                     "slug",
                     "description",
+                    "assignment",
                     "status",
                     "difficulty",
-                    "config_data",
                 )
+            },
+        ),
+        (
+            _("Configuration"),
+            {
+                "classes": [
+                    "tab",
+                ],
+                "fields": (
+                    "config_data",
+                    "validation_script",
+                    "code_template",
+                ),
             },
         ),
         (
@@ -119,54 +138,15 @@ class TutorialAdmin(BaseModelAdmin):
         ),
     )
 
+    def formfield_for_dbfield(self, db_field: models.Field, request: HttpRequest, **kwargs) -> models.Field | None:
+        if isinstance(db_field, models.TextField) and db_field.name in self.wysiwyg_fields:
+            kwargs["widget"] = WysiwygWidget
 
-@admin.register(TutorialStep)
-class TutorialStepAdmin(BaseModelAdmin):
-    list_display = (
-        "title",
-        "tutorial",
-        "order",
-        "created_at",
-        "updated_at",
-    )
-    list_select_related = ("tutorial",)
-    list_filter = (
-        ("created_at", RangeDateFilter),
-        ("updated_at", RangeDateFilter),
-        ("tutorial", AutocompleteSelectFilter),
-    )
-    search_fields = (
-        "id",
-        "tutorial__id",
-        "tutorial__title",
-        "title",
-        "description",
-    )
-    autocomplete_fields = ("tutorial",)
-    prepopulated_fields = {
-        "slug": ("title",),
-    }
-    fieldsets = (
-        (
-            _("Tutorial step information"),
-            {
-                "fields": (
-                    "tutorial",
-                    "title",
-                    "slug",
-                    "description",
-                    "assignment",
-                    "order",
-                    "code_skeleton",
-                )
-            },
-        ),
-        (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
-    )
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
 
-@admin.register(TutorialStepSubmission)
-class TutorialStepSubmissionAdmin(BaseModelAdmin):
+@admin.register(TutorialSubmission)
+class TutorialSubmissionAdmin(BaseModelAdmin):
     pass
 
 

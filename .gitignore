@@ -17,3 +17,5 @@ local.py
 .coverage
 htmlcov/
 .idea
+
+infra/

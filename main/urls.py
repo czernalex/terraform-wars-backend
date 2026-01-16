@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.urls import include, path
 
 from main.api import root_api_router
-from main.tasks_api import root_tasks_api_router
+from main.internal_api import root_internal_api_router
 
 
 def trigger_error(_: HttpRequest) -> HttpResponse:
@@ -19,7 +19,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("_allauth/", include("allauth.headless.urls")),
     path("api/", root_api_router.urls),
-    path("tasks-api/", root_tasks_api_router.urls),
+    path("_internal-api/", root_internal_api_router.urls),
     path("admin/", admin.site.urls),
 ]
 

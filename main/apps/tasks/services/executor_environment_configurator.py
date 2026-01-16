@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from google.cloud import run_v2
 
-from main.apps.tutorials.models.tutorial_step_submission import TutorialStepSubmission
+from main.apps.tutorials.models.tutorial_submission import TutorialSubmission
 
 
 class ExecutorEnvironmentConfigurator(ABC):
@@ -12,5 +12,5 @@ class ExecutorEnvironmentConfigurator(ABC):
     """
 
     @abstractmethod
-    def configure(self, tutorial_step_submission: TutorialStepSubmission) -> list[run_v2.EnvVar]:
+    def configure(self, tutorial_submission: TutorialSubmission) -> list[run_v2.EnvVar]:
         pass

@@ -37,8 +37,5 @@ class GCPProjectCreateService:
     def create(self, credentials: Credentials, tutorial_project: TutorialProject) -> types.Project:
         client = self._get_projects_client(credentials)
         project = self._create_project(client, tutorial_project)
-        tutorial_project.config_data["gcp_project_id"] = project.project_id
-        tutorial_project.config_data["gcp_project_name"] = project.name
-        tutorial_project.save()
         logger.info(f"Project: {project.project_id} created successfully for tutorial project: {tutorial_project.id}")
         return project

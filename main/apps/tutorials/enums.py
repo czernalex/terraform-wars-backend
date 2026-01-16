@@ -4,6 +4,7 @@ from django.utils.translation import gettext as _
 
 class TutorialStatus(models.TextChoices):
     DRAFT = "draft", _("Draft")
+    REVIEW = "review", _("Review")
     PUBLISHED = "published", _("Published")
     ARCHIVED = "archived", _("Archived")
 
@@ -17,6 +18,5 @@ class Difficulty(models.TextChoices):
 
 class TutorialProjectStatus(models.TextChoices):
     CREATED = "created", _("Created")
-    IN_PROGRESS = "in_progress", _("In progress")
-    COMPLETED = "completed", _("Completed")
-    FAILED = "failed", _("Failed")
+    CONFIGURED = "configured", _("Configured")
+    ERROR = "error", _("Error")

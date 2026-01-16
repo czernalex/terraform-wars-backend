@@ -22,13 +22,33 @@ class Tutorial(AbstractUUIDModel):
     title = models.CharField(_("Title"), max_length=255)
     slug = models.SlugField(_("Slug"), unique=True)
     description = models.TextField(_("Description"))
-    status = models.CharField(_("Status"), max_length=255, choices=TutorialStatus.choices, default=TutorialStatus.DRAFT)
-    difficulty = models.CharField(
-        _("Difficulty"), max_length=255, choices=Difficulty.choices, default=Difficulty.BEGINNER
-    )
+    assignment = models.TextField(_("Assignment"))
     tags = models.ManyToManyField(TutorialTag, related_name="tutorials", blank=True)
+    status = models.CharField(
+        _("Status"),
+        max_length=255,
+        choices=TutorialStatus.choices,
+        default=TutorialStatus.DRAFT,
+    )
+    difficulty = models.CharField(
+        _("Difficulty"),
+        max_length=255,
+        choices=Difficulty.choices,
+        default=Difficulty.BEGINNER,
+    )
 
     config_data = models.JSONField(_("Config data"), default=dict)
+
+    validation_script = models.TextField(
+        _("Validation script"),
+        help_text=_("Validates resources managed by the terraform code"),
+    )
+    code_template = models.TextField(
+        _("Code template"),
+        blank=True,
+        default="",
+        help_text=_("What the user will see when they start the tutorial"),
+    )
 
     objects = TutorialQuerySet.as_manager()
 
@@ -40,4 +60,4 @@ class Tutorial(AbstractUUIDModel):
 
     @override
     def __str__(self) -> str:
-        return self.title
+        return f"[{self.provider.provider_id}] - {self.title}"

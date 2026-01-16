@@ -4,7 +4,7 @@ from typing import override
 from injector import inject
 
 from main.apps.tasks.services.executor_environment_configurator import ExecutorEnvironmentConfigurator
-from main.apps.tutorials.models.tutorial_step_submission import TutorialStepSubmission
+from main.apps.tutorials.models.tutorial_submission import TutorialSubmission
 from main.apps.tasks.services.google_provider_executor_environment_configurator import (
     GoogleProviderExecutorEnvironmentConfigurator,
 )
@@ -12,7 +12,7 @@ from main.apps.tasks.services.google_provider_executor_environment_configurator 
 
 class ExecutorEnvironmentConfiguratorFactory(ABC):
     @abstractmethod
-    def get_configurator(self, tutorial_step_submission: TutorialStepSubmission) -> ExecutorEnvironmentConfigurator:
+    def get_configurator(self, tutorial_submission: TutorialSubmission) -> ExecutorEnvironmentConfigurator:
         pass
 
 
@@ -26,8 +26,8 @@ class DefaultExecutorEnvironmentConfiguratorFactory(ExecutorEnvironmentConfigura
         }
 
     @override
-    def get_configurator(self, tutorial_step_submission: TutorialStepSubmission) -> ExecutorEnvironmentConfigurator:
+    def get_configurator(self, tutorial_submission: TutorialSubmission) -> ExecutorEnvironmentConfigurator:
         try:
-            return self._configurators_map[tutorial_step_submission.provider_id]
+            return self._configurators_map[tutorial_submission.provider_id]
         except KeyError:
-            raise NotImplementedError(f"No configurator found for provider: {tutorial_step_submission.provider_id}")
+            raise NotImplementedError(f"No configurator found for provider: {tutorial_submission.provider_id}")

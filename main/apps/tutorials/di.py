@@ -7,14 +7,16 @@ from main.apps.tutorials.services import (
     ProviderRetrievalService,
     TutorialProjectDeleteService,
     TutorialProjectResourcesDestroyServiceFactory,
+    TutorialProjectUpdateConfigDataService,
     TutorialRetrievalService,
-    TutorialStepSubmissionRetrievalService,
+    TutorialSubmissionRetrievalService,
     TutorialTagRetrievalService,
-    TutorialStepRetrievalService,
     TutorialProjectCreateService,
-    TutorialStepSubmissionCreateService,
+    TutorialSubmissionCreateService,
     TutorialProjectConfiguratorFactory,
     DefaultTutorialProjectConfiguratorFactory,
+    TutorialValidationService,
+    TutorialProjectValidationService,
 )
 
 
@@ -23,10 +25,10 @@ class TutorialsModule(Module):
         binder.bind(ProviderRetrievalService, to=ProviderRetrievalService, scope=singleton)
         binder.bind(TutorialRetrievalService, to=TutorialRetrievalService, scope=singleton)
         binder.bind(TutorialTagRetrievalService, to=TutorialTagRetrievalService, scope=singleton)
-        binder.bind(TutorialStepRetrievalService, to=TutorialStepRetrievalService, scope=singleton)
+        binder.bind(TutorialSubmissionRetrievalService, to=TutorialSubmissionRetrievalService, scope=singleton)
         binder.bind(TutorialProjectCreateService, to=TutorialProjectCreateService, scope=singleton)
         binder.bind(TutorialProjectDeleteService, to=TutorialProjectDeleteService, scope=singleton)
-        binder.bind(TutorialStepSubmissionCreateService, to=TutorialStepSubmissionCreateService, scope=singleton)
+        binder.bind(TutorialSubmissionCreateService, to=TutorialSubmissionCreateService, scope=singleton)
         binder.bind(GCPTutorialProjectConfigurator, to=GCPTutorialProjectConfigurator, scope=singleton)
         binder.bind(
             GCPTutorialProjectResourcesDestroyService, to=GCPTutorialProjectResourcesDestroyService, scope=singleton
@@ -37,4 +39,6 @@ class TutorialsModule(Module):
             to=DefaultTutorialProjectResourcesDestroyServiceFactory,
             scope=singleton,
         )
-        binder.bind(TutorialStepSubmissionRetrievalService, to=TutorialStepSubmissionRetrievalService, scope=singleton)
+        binder.bind(TutorialProjectUpdateConfigDataService, to=TutorialProjectUpdateConfigDataService, scope=singleton)
+        binder.bind(TutorialValidationService, to=TutorialValidationService, scope=singleton)
+        binder.bind(TutorialProjectValidationService, to=TutorialProjectValidationService, scope=singleton)

@@ -1,3 +1,4 @@
+from typing import Sequence
 from uuid import UUID
 
 from django.db import models, transaction
@@ -10,7 +11,7 @@ from main.apps.tutorials.schemas import TutorialListFilterSchema
 
 class TutorialRetrievalService:
     def _get_queryset(
-        self, select_related_fields: list[str] = [], prefetch_related_fields: list[str] = []
+        self, select_related_fields: Sequence[str] = [], prefetch_related_fields: Sequence[str | models.Prefetch] = []
     ) -> models.QuerySet[Tutorial]:
         return Tutorial.objects.select_related(*select_related_fields).prefetch_related(*prefetch_related_fields)
 

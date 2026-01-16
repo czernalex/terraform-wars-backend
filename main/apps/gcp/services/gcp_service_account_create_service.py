@@ -4,8 +4,6 @@ from google.cloud import iam_admin_v1
 from google.cloud.iam_admin_v1 import types
 from google.oauth2.credentials import Credentials
 
-from main.apps.tutorials.models import TutorialProject
-
 
 logger = logging.getLogger(__name__)
 
@@ -33,11 +31,8 @@ class GCPServiceAccountCreateService:
         )
         return service_account
 
-    def create(self, credentials: Credentials, project_id: str, tutorial_project: TutorialProject) -> str:
+    def create(self, credentials: Credentials, project_id: str) -> types.ServiceAccount:
         client = self._get_iam_client(credentials)
         service_account = self._create_service_account(client, project_id)
-        tutorial_project.config_data["gcp_service_account_email"] = service_account.email
-        tutorial_project.config_data["gcp_service_account_id"] = service_account.name
-        tutorial_project.save()
         logger.info(f"Service account: {service_account.email} created successfully for project: {project_id}")
-        return service_account.email
+        return service_account

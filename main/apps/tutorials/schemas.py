@@ -7,8 +7,7 @@ from main.apps.tutorials.models import (
     Provider,
     Tutorial,
     TutorialProject,
-    TutorialStep,
-    TutorialStepSubmission,
+    TutorialSubmission,
     TutorialTag,
 )
 from main.apps.users.schemas import UserDetailSchema
@@ -92,6 +91,9 @@ class TutorialDetailSchema(ModelSchema):
             "title",
             "slug",
             "description",
+            "assignment",
+            "config_data",
+            "code_template",
             "created_at",
             "updated_at",
         ]
@@ -135,54 +137,25 @@ class TutorialProjectDetailSchema(ModelSchema):
 
     class Meta:
         model = TutorialProject
-        fields = ["config_data"]
+        fields = [
+            "config_data",
+        ]
 
 
-class TutorialStepListSchema(ModelSchema):
-    id: UUID
+class CreateTutorialSubmissionSchema(Schema):
     tutorial_id: UUID
-    tutorial_slug: str = Field(alias="tutorial.slug")
-
-    class Meta:
-        model = TutorialStep
-        fields = [
-            "title",
-            "slug",
-            "description",
-            "order",
-        ]
-
-
-class TutorialStepDetailSchema(ModelSchema):
-    id: UUID
-    tutorial: TutorialDetailSchema
-
-    class Meta:
-        model = TutorialStep
-        fields = [
-            "title",
-            "slug",
-            "description",
-            "assignment",
-            "code_skeleton",
-            "order",
-        ]
-
-
-class CreateTutorialStepSubmissionSchema(Schema):
-    tutorial_step_id: UUID
     code: str
 
 
-class UpdateTutorialStepSubmissionSchema(Schema):
+class UpdateTutorialSubmissionSchema(Schema):
     code: str
 
 
-class TutorialStepSubmissionDetailSchema(ModelSchema):
+class TutorialSubmissionDetailSchema(ModelSchema):
     id: UUID
 
     class Meta:
-        model = TutorialStepSubmission
+        model = TutorialSubmission
         fields = [
             "code",
         ]

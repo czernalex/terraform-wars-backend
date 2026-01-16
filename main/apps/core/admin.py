@@ -3,7 +3,7 @@ from django.contrib.postgres.fields import ArrayField
 from django_json_widget.widgets import JSONEditorWidget
 
 from unfold.admin import ModelAdmin
-from unfold.contrib.forms.widgets import ArrayWidget, WysiwygWidget
+from unfold.contrib.forms.widgets import ArrayWidget
 
 
 class BaseModelAdmin(ModelAdmin):
@@ -17,7 +17,6 @@ class BaseModelAdmin(ModelAdmin):
             "widget": ArrayWidget,
         },
         models.JSONField: {"widget": JSONEditorWidget},
-        models.TextField: {"widget": WysiwygWidget},
     }
 
     compressed_fields = True

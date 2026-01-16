@@ -10,12 +10,12 @@ from main.apps.tasks.routers import tasks_router
 from main.terraform_wars_api import TerraformWarsAPI
 
 
-root_tasks_api_router = TerraformWarsAPI(
-    title="Terraform Wars Tasks API",
-    urls_namespace="terraform-wars-tasks-api",
+root_internal_api_router = TerraformWarsAPI(
+    title="Terraform Wars Internal API",
+    urls_namespace="terraform-wars-internal-api",
     version="0.0.1",
     description=(
-        "Internal RPC API for triggering Terraform Wars background tasks. Authentication is managed by Google Cloud IAM."
+        "Internal RPC API for triggering Terraform Wars background tasks and other internal operations. Authentication is managed by Google Cloud IAM."
         "<br>"
         "<br>"
         "<a href='/api/docs' class='btn'>API Docs</a>"
@@ -26,6 +26,7 @@ root_tasks_api_router = TerraformWarsAPI(
     docs_decorator=staff_member_required if not settings.DEBUG else None,
     servers=[
         {"url": "http://localhost:8080", "description": "Local development server"},
+        {"url": "https://api.app.terraformwars.com", "description": "Production server"},
         {
             "url": "https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app",
             "description": "Production task worker server",
@@ -44,22 +45,22 @@ root_tasks_api_router = TerraformWarsAPI(
 # Attach exception handlers
 
 
-@root_tasks_api_router.exception_handler(ForbiddenError)
+@root_internal_api_router.exception_handler(ForbiddenError)
 def handle_forbidden_error(request: HttpRequest, exc: ForbiddenError) -> HttpResponse:
-    return root_tasks_api_router.create_response(
+    return root_internal_api_router.create_response(
         request,
         data=ForbiddenErrorSchema(detail=str(exc)),
         status=HTTPStatus.FORBIDDEN,
     )
 
 
-@root_tasks_api_router.exception_handler(NotFoundError)
+@root_internal_api_router.exception_handler(NotFoundError)
 def handle_not_found_error(request: HttpRequest, exc: NotFoundError) -> HttpResponse:
-    return root_tasks_api_router.create_response(
+    return root_internal_api_router.create_response(
         request,
         data=NotFoundErrorSchema(detail=str(exc)),
         status=HTTPStatus.NOT_FOUND,
     )
 
 
-root_tasks_api_router.add_router("/tasks", tasks_router, tags=["tasks"])
+root_internal_api_router.add_router("/tasks", tasks_router, tags=["tasks"])

@@ -8,8 +8,7 @@ if TYPE_CHECKING:
     from main.apps.tutorials.models import (
         Provider,
         Tutorial,
-        TutorialStep,
-        TutorialStepSubmission,
+        TutorialSubmission,
         TutorialTag,
         TutorialProject,
     )
@@ -23,12 +22,7 @@ class TutorialQuerySet(models.QuerySet["Tutorial"]):
     pass
 
 
-class TutorialStepQuerySet(models.QuerySet["TutorialStep"]):
-    def for_tutorial(self, tutorial_slug: str) -> Self:
-        return self.filter(tutorial__slug=tutorial_slug)
-
-
-class TutorialStepSubmissionQuerySet(models.QuerySet["TutorialStepSubmission"]):
+class TutorialSubmissionQuerySet(models.QuerySet["TutorialSubmission"]):
     pass
 
 
