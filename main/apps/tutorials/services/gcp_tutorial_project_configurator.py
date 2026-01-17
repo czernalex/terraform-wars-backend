@@ -37,7 +37,7 @@ class GCPTutorialProjectConfigurator(TutorialProjectConfigurator):
     - Enable required APIs (specified by the tutorial) in the GCP project
     """
 
-    BOOTSTRAP_APIS = [
+    DEFAULT_PROJECT_APIS = [
         "cloudresourcemanager.googleapis.com",
         "serviceusage.googleapis.com",
         "iam.googleapis.com",
@@ -80,6 +80,9 @@ class GCPTutorialProjectConfigurator(TutorialProjectConfigurator):
             raise ValueError(_("Refresh token is missing"))
         return social_token
 
+    def _get_project_apis(self, tutorial_project: TutorialProject) -> list[str]:
+        return list(set(self.DEFAULT_PROJECT_APIS + tutorial_project.tutorial.config_data.get("GCP_PROJECT_APIS", [])))
+
     @override
     def configure(self, tutorial_project: TutorialProject) -> TutorialProject:
         social_token = self._get_social_token(tutorial_project)
@@ -93,7 +96,7 @@ class GCPTutorialProjectConfigurator(TutorialProjectConfigurator):
                 settings.SOCIALACCOUNT_PROVIDERS[self.get_provider_id()]["SCOPE"],
             )
             project = self._gcp_project_create_service.create(credentials, tutorial_project)
-            self._gcp_service_enable_service.enable(credentials, project.name, self.BOOTSTRAP_APIS)
+            self._gcp_service_enable_service.enable(credentials, project.name, self._get_project_apis(tutorial_project))
             service_account: ServiceAccount = self._gcp_service_account_create_service.create(
                 credentials, project.project_id, tutorial_project
             )

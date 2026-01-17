@@ -465,8 +465,8 @@ UNFOLD = {
         },
         {
             "icon": "api",
-            "title": _("Tasks API Docs"),
-            "link": reverse_lazy("terraform-wars-tasks-api:openapi-view"),
+            "title": _("Internal API Docs"),
+            "link": reverse_lazy("terraform-wars-internal-api:openapi-view"),
         },
         {
             "icon": "key",
