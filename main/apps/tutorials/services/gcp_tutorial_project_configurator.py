@@ -104,7 +104,10 @@ class GCPTutorialProjectConfigurator(TutorialProjectConfigurator):
                 credentials,
                 project.project_id,
                 service_account.email,
-                settings.GCP_TERRAFORM_EXECUTOR_SERVICE_ACCOUNT_EMAIL,
+                [
+                    settings.GCP_TERRAFORM_EXECUTOR_SERVICE_ACCOUNT_EMAIL,
+                    settings.GCP_TERRAFORM_VALIDATOR_SERVICE_ACCOUNT_EMAIL,
+                ],
             )
             # Granting this role enables terrafrorm to enable APIs in the project
             self._gcp_project_iam_role_grant_service.grant_role_to_service_account(

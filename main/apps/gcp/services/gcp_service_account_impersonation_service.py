@@ -1,4 +1,5 @@
 import logging
+from typing import Iterable
 
 from google.cloud import iam_admin_v1
 from google.iam.v1 import iam_policy_pb2, policy_pb2
@@ -43,15 +44,17 @@ class GCPServiceAccountImpersonationService:
         credentials: Credentials,
         user_project_id: str,
         user_service_account_email: str,
-        tw_executor_service_account_email: str,
+        tw_service_accounts_emails: Iterable[str],
     ) -> None:
         client = self._get_iam_client(credentials)
 
         resource = f"projects/{user_project_id}/serviceAccounts/{user_service_account_email}"
-        member = f"serviceAccount:{tw_executor_service_account_email}"
-
-        logger.info(f"Granting {self.ROLE} role to {member} on {resource}")
         policy = client.get_iam_policy(request=iam_policy_pb2.GetIamPolicyRequest(resource=resource))
-        policy = self._update_iam_policy(policy, resource, member)
+
+        for tw_service_account_email in tw_service_accounts_emails:
+            member = f"serviceAccount:{tw_service_account_email}"
+            logger.info(f"Granting {self.ROLE} role to {member} on {resource}")
+            policy = self._update_iam_policy(policy, resource, member)
+
         client.set_iam_policy(request=iam_policy_pb2.SetIamPolicyRequest(resource=resource, policy=policy))
-        logger.info(f"Successfully granted {self.ROLE} role to {member} on {resource}")
+        logger.info(f"Successfully granted {self.ROLE} role to {', '.join(tw_service_accounts_emails)} on {resource}")
