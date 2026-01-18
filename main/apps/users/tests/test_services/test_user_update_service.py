@@ -1,3 +1,4 @@
+from ninja.errors import ValidationError
 import pytest
 from model_bakery import baker
 
@@ -21,3 +22,10 @@ class TestUserUpdateService:
         assert updated_user.username == data.username
         assert updated_user.first_name == data.first_name
         assert updated_user.last_name == data.last_name
+
+    def test_update_user_with_occupied_username(self):
+        user = baker.make_recipe("main.apps.users.tests.active_user")
+        baker.make_recipe("main.apps.users.tests.active_user", username="john.doe")
+        service = injector.get(UserUpdateService)
+        with pytest.raises(ValidationError):
+            service.update(user.id, UserUpdateSchema(username="john.doe", first_name="John", last_name="Doe"))

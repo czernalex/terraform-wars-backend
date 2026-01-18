@@ -2,9 +2,13 @@ from injector import Binder, Module, singleton
 
 from main.apps.tasks.services import (
     DefaultExecutorEnvironmentConfiguratorFactory,
+    DefaultValidatorEnvironmentConfiguratorFactory,
     ExecutorEnvironmentConfiguratorFactory,
+    GoogleProviderValidatorEnvironmentConfigurator,
     TutorialSubmissionExecuteService,
     GoogleProviderExecutorEnvironmentConfigurator,
+    TutorialSubmissionValidateService,
+    ValidatorEnvironmentConfiguratorFactory,
 )
 
 
@@ -19,3 +23,12 @@ class TasksModule(Module):
             to=GoogleProviderExecutorEnvironmentConfigurator,
             scope=singleton,
         )
+        binder.bind(
+            ValidatorEnvironmentConfiguratorFactory, to=DefaultValidatorEnvironmentConfiguratorFactory, scope=singleton
+        )
+        binder.bind(
+            GoogleProviderValidatorEnvironmentConfigurator,
+            to=GoogleProviderValidatorEnvironmentConfigurator,
+            scope=singleton,
+        )
+        binder.bind(TutorialSubmissionValidateService, to=TutorialSubmissionValidateService, scope=singleton)
