@@ -26,13 +26,9 @@ class GCPServiceAccountCreateService:
             ),
         )
         service_account = client.create_service_account(request=create_request)
-        logger.info(
-            f"Service account: {service_account_id} created successfully in google cloud for project: {project_id}"
-        )
+        logger.info(f"Service account: {service_account.email} created successfully for project: {project_id}")
         return service_account
 
     def create(self, credentials: Credentials, project_id: str) -> types.ServiceAccount:
         client = self._get_iam_client(credentials)
-        service_account = self._create_service_account(client, project_id)
-        logger.info(f"Service account: {service_account.email} created successfully for project: {project_id}")
-        return service_account
+        return self._create_service_account(client, project_id)

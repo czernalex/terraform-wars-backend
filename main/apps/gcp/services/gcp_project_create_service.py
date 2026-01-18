@@ -21,8 +21,6 @@ class GCPProjectCreateService:
     def _create_project(
         self, client: resourcemanager_v3.ProjectsClient, tutorial_project: TutorialProject
     ) -> types.Project:
-        # TODO: This is a long blocking operation, it would be definitely better to run it in a background task
-        # or asynchronously, to avoid blocking the worker thread
         project_id = self._generate_project_id(tutorial_project)
         create_request = resourcemanager_v3.CreateProjectRequest(
             project=resourcemanager_v3.Project(
@@ -32,10 +30,10 @@ class GCPProjectCreateService:
         )
         logger.info(f"Creating project: {project_id} for tutorial project: {tutorial_project.id}")
         operation = client.create_project(request=create_request)
-        return operation.result()
+        project = operation.result()
+        logger.info(f"Project: {project.project_id} created successfully for tutorial project: {tutorial_project.id}")
+        return project
 
     def create(self, credentials: Credentials, tutorial_project: TutorialProject) -> types.Project:
         client = self._get_projects_client(credentials)
-        project = self._create_project(client, tutorial_project)
-        logger.info(f"Project: {project.project_id} created successfully for tutorial project: {tutorial_project.id}")
-        return project
+        return self._create_project(client, tutorial_project)

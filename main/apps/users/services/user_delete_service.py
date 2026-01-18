@@ -3,10 +3,8 @@ from uuid import UUID
 
 from allauth.account.models import EmailAddress
 from django.db import transaction
-from django.utils.translation import gettext as _
 from injector import inject
 
-from main.apps.core.exceptions import NotFoundError
 from main.apps.users.models import User
 from main.apps.users.services.user_retrieval_service import UserRetrievalService
 
@@ -20,6 +18,7 @@ class UserDeleteService:
         self._user_retrieval_service = user_retrieval_service
 
     def _delete_user_email_addresses(self, user: User) -> None:
+        # FIXME: Breaks SRP, move to a separate service
         EmailAddress.objects.filter(user=user).delete()
 
     def _anonymize_user(self, user: User) -> User:
@@ -40,12 +39,7 @@ class UserDeleteService:
     @transaction.atomic
     def delete(self, user_id: UUID) -> None:
         logger.info(f"Deleting user: {user_id}")
-        try:
-            user = self._user_retrieval_service.get_for_update_by_id(user_id)
-        except User.DoesNotExist:
-            logger.warning(f"User: {user_id} not found")
-            raise NotFoundError(_("User not found"))
-
+        user = self._user_retrieval_service.get_for_update_by_id(user_id)
         user = self._anonymize_user(user)
         user = self._deactivate_user(user)
         user.save()

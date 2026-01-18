@@ -26,7 +26,6 @@ class GCPCloudRunJobInvokeService:
         job_container_env_vars: MutableSequence[run_v2.EnvVar],
     ) -> run_v2.Job:
         logger.info(f"Invoking Cloud Run Job: {job_name}")
-
         run_job_request = run_v2.RunJobRequest(
             name=self._create_job_name(job_name),
             overrides=run_v2.RunJobRequest.Overrides(
@@ -39,10 +38,8 @@ class GCPCloudRunJobInvokeService:
                 ],
             ),
         )
-
         operation = self._client.run_job(request=run_job_request)
         operation.result()
-
         logger.info(f"Cloud Run Job: {job_name} invoked successfully")
 
     def invoke(

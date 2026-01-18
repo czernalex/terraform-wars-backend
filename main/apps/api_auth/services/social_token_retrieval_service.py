@@ -18,7 +18,7 @@ class SocialTokenRetrievalService:
         self._social_account_retrieval_service = social_account_retrieval_service
 
     def get_detail(self, user: User, provider: str) -> SocialToken:
-        social_account = self._social_account_retrieval_service.get_social_account_detail(user, provider)
+        social_account = self._social_account_retrieval_service.get_detail(user, provider)
         try:
             return SocialToken.objects.filter(account=social_account).get()
         except SocialToken.DoesNotExist:

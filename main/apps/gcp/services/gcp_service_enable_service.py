@@ -21,12 +21,12 @@ class GCPServiceEnableService:
         )
         logger.info(f"Enabling services: {', '.join(service_ids)} for project: {project_name}")
         operation = client.batch_enable_services(request=create_request)
-        return operation.result()
+        result = operation.result()
+        logger.info(f"Services: {', '.join(service_ids)} enabled successfully for project: {project_name}")
+        return result
 
     def enable(
         self, credentials: Credentials, project_name: str, service_ids: MutableSequence[str]
     ) -> service_usage_v1.BatchEnableServicesResponse:
         client = self._get_service_usage_client(credentials)
-        result = self._batch_enable_services(client, project_name, service_ids)
-        logger.info(f"Services: {', '.join(service_ids)} enabled successfully for project: {project_name}")
-        return result
+        return self._batch_enable_services(client, project_name, service_ids)

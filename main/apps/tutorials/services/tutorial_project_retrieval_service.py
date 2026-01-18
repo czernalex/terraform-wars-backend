@@ -5,7 +5,6 @@ from django.db import models, transaction
 from django.utils.translation import gettext as _
 
 from main.apps.core.exceptions import NotFoundError
-from main.apps.tutorials.enums import TutorialProjectStatus
 from main.apps.tutorials.schemas import TutorialProjectListFilterSchema
 from main.apps.users.models import User
 from main.apps.tutorials.models import TutorialProject
@@ -80,6 +79,3 @@ class TutorialProjectRetrievalService:
             .for_tutorial(tutorial_id)
             .first()
         )
-
-    def accepts_submissions(self, tutorial_project: TutorialProject) -> bool:
-        return tutorial_project.status == TutorialProjectStatus.CONFIGURED

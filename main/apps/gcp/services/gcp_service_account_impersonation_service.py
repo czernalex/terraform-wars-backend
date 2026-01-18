@@ -44,12 +44,13 @@ class GCPServiceAccountImpersonationService:
         user_project_id: str,
         user_service_account_email: str,
         tw_executor_service_account_email: str,
-    ):
+    ) -> None:
         client = self._get_iam_client(credentials)
 
         resource = f"projects/{user_project_id}/serviceAccounts/{user_service_account_email}"
         member = f"serviceAccount:{tw_executor_service_account_email}"
 
+        logger.info(f"Granting {self.ROLE} role to {member} on {resource}")
         policy = client.get_iam_policy(request=iam_policy_pb2.GetIamPolicyRequest(resource=resource))
         policy = self._update_iam_policy(policy, resource, member)
         client.set_iam_policy(request=iam_policy_pb2.SetIamPolicyRequest(resource=resource, policy=policy))

@@ -57,6 +57,8 @@ class GCPProjectIamRoleGrantService:
         client = self._get_projects_client(credentials)
         member = f"serviceAccount:{service_account_email}"
 
+        logger.info(f"Granting {len(roles)} roles to {member} on {project_id}")
+
         policy = client.get_iam_policy(request=iam_policy_pb2.GetIamPolicyRequest(resource=f"projects/{project_id}"))
 
         for role in roles:

@@ -14,7 +14,7 @@ from main.apps.tutorials.services import TutorialSubmissionRetrievalService
 logger = logging.getLogger(__name__)
 
 
-class TutorialSubmissionExecutionService:
+class TutorialSubmissionExecuteService:
     @inject
     def __init__(
         self,

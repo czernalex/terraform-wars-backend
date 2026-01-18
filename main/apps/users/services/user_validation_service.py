@@ -2,15 +2,26 @@ from typing import Optional
 from uuid import UUID
 
 from django.utils.translation import gettext as _
+from ninja.errors import ValidationError
 
-from main.apps.users.models import User
+from main.apps.users.services.user_retrieval_service import UserRetrievalService
 
 
 class UserValidationService:
+    def __init__(self, user_retrieval_service: UserRetrievalService):
+        self._user_retrieval_service = user_retrieval_service
+
     def validate_username(self, username: Optional[str], user_id: Optional[UUID] = None) -> None:
         if not username:
             return
 
-        # FIXME: Move this logic to the retrieval service
-        if User.objects.for_username(username).exclude(id=user_id).exists():
-            raise ValueError(_("Username is already taken"))
+        if self._user_retrieval_service.find_by_username(username, user_id):
+            raise ValidationError(
+                [
+                    {
+                        "loc": ["username"],
+                        "msg": _("Username is already taken"),
+                        "type": "value_error",
+                    }
+                ]
+            )

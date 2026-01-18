@@ -200,7 +200,6 @@ class TutorialProjectAdmin(BaseModelAdmin):
                     "user",
                     "status",
                     "config_data",
-                    "tf_state_file",
                 )
             },
         ),
