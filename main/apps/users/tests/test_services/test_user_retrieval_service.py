@@ -10,7 +10,7 @@ class TestUserRetrievalService:
     def test_get_user_for_read(self):
         user = baker.make_recipe("main.apps.users.tests.active_user")
         service = injector.get(UserRetrievalService)
-        assert service.get_for_read_by_id(user.id) == user
+        assert service.get_detail_by_id(user.id) == user
 
     def test_get_user_for_update(self):
         user = baker.make_recipe("main.apps.users.tests.active_user")

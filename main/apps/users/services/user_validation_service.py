@@ -2,12 +2,14 @@ from typing import Optional
 from uuid import UUID
 
 from django.utils.translation import gettext as _
+from injector import inject
 from ninja.errors import ValidationError
 
 from main.apps.users.services.user_retrieval_service import UserRetrievalService
 
 
 class UserValidationService:
+    @inject
     def __init__(self, user_retrieval_service: UserRetrievalService):
         self._user_retrieval_service = user_retrieval_service
 

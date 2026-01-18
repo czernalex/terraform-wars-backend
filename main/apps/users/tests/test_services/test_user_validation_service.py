@@ -1,3 +1,4 @@
+from ninja.errors import ValidationError
 import pytest
 from model_bakery import baker
 
@@ -10,7 +11,7 @@ class TestUserValidationService:
     def test_validate_username_already_taken(self):
         baker.make_recipe("main.apps.users.tests.active_user", username="test")
         service = injector.get(UserValidationService)
-        with pytest.raises(ValueError):
+        with pytest.raises(ValidationError):
             service.validate_username("test")
 
     def test_validate_username_update(self):
