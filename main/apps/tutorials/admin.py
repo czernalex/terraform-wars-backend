@@ -12,36 +12,10 @@ from unfold.contrib.forms.widgets import WysiwygWidget
 
 from main.apps.core.admin import BaseModelAdmin
 from main.apps.tutorials.models import (
-    Provider,
     Tutorial,
     TutorialSubmission,
     TutorialTag,
-    TutorialProject,
 )
-
-
-@admin.register(Provider)
-class ProviderAdmin(BaseModelAdmin):
-    list_display = ("name", "provider_id", "website_url", "created_at", "updated_at")
-    list_filter = (
-        ("created_at", RangeDateFilter),
-        ("updated_at", RangeDateFilter),
-    )
-    search_fields = (
-        "id",
-        "provider_id",
-        "slug",
-        "name",
-        "description",
-        "website_url",
-    )
-    prepopulated_fields = {
-        "slug": ("name",),
-    }
-    fieldsets = (
-        (_("Provider information"), {"fields": ("name", "slug", "provider_id", "description", "website_url")}),
-        (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
-    )
 
 
 @admin.register(Tutorial)
@@ -167,41 +141,5 @@ class TutorialTagAdmin(BaseModelAdmin):
     }
     fieldsets = (
         (_("Tutorial tag information"), {"fields": ("name", "slug")}),
-        (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
-    )
-
-
-@admin.register(TutorialProject)
-class TutorialProjectAdmin(BaseModelAdmin):
-    list_display = ("tutorial", "user", "status", "created_at", "updated_at")
-    list_select_related = ("tutorial", "user")
-    list_filter = (
-        ("created_at", RangeDateFilter),
-        ("updated_at", RangeDateFilter),
-        ("tutorial", AutocompleteSelectFilter),
-        ("tutorial__provider", AutocompleteSelectFilter),
-        ("user", AutocompleteSelectFilter),
-        ("status", ChoicesDropdownFilter),
-    )
-    search_fields = (
-        "id",
-        "tutorial__id",
-        "tutorial__title",
-        "user__id",
-        "user__email",
-    )
-    autocomplete_fields = ("tutorial", "user")
-    fieldsets = (
-        (
-            _("Tutorial project information"),
-            {
-                "fields": (
-                    "tutorial",
-                    "user",
-                    "status",
-                    "config_data",
-                )
-            },
-        ),
         (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
     )

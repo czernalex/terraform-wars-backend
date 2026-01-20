@@ -81,7 +81,7 @@ jobs:
           CORS_ALLOWED_ORIGINS: http://127.0.0.1:8080,http://localhost:8080,http://127.0.0.1:4200,http://localhost:4200
           ALLOWED_HOSTS: localhost,127.0.0.1
           SECURE_SSL_REDIRECT: False
-          TASK_API_BASE_URL: http://localhost:8080
+          INTERNAL_API_BASE_URL: http://localhost:8080
           GCP_PROJECT_ID: ''
           GCP_REGION: ''
           GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID: ''
@@ -171,7 +171,7 @@ jobs:
             EMAIL_HOST=smtp-relay.brevo.com
             EMAIL_HOST_USER=9f9939001@smtp-brevo.com
             EMAIL_PORT=587
-            TASK_API_BASE_URL=https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app
+            INTERNAL_API_BASE_URL=https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app
             GCP_PROJECT_ID=${{ vars.GCP_PROJECT_ID }}
             GCP_REGION=${{ vars.GCP_REGION }}
             GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID=terraform-wars-tutorial-submission-tasks-production-queue
@@ -207,7 +207,7 @@ jobs:
             EMAIL_HOST=smtp-relay.brevo.com
             EMAIL_HOST_USER=9f9939001@smtp-brevo.com
             EMAIL_PORT=587
-            TASK_API_BASE_URL=https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app
+            INTERNAL_API_BASE_URL=https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app
             GCP_PROJECT_ID=${{ vars.GCP_PROJECT_ID }}
             GCP_REGION=${{ vars.GCP_REGION }}
             GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID=terraform-wars-tutorial-submission-tasks-production-queue

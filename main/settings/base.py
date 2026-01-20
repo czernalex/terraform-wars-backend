@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     "main.apps.api_auth",
     "main.apps.core",
     "main.apps.gcp",
+    "main.apps.providers",
+    "main.apps.jobs",
     "main.apps.tasks",
     "main.apps.tutorials",
     "main.apps.users",
@@ -134,6 +136,7 @@ DATABASES = {
         "PASSWORD": secrets.DB_PASSWORD,
         "HOST": config("DB_HOST"),
         "PORT": config("DB_PORT"),
+        # "CONN_MAX_AGE": 0,  # Set if running under asgi application
     }
 }
 
@@ -192,15 +195,24 @@ LOCALE_PATHS = [
 
 # Google Cloud
 
-TASK_API_BASE_URL = config("TASK_API_BASE_URL")
+INTERNAL_API_BASE_URL = config("INTERNAL_API_BASE_URL")
 GCP_PROJECT_ID = config("GCP_PROJECT_ID")
 GCP_REGION = config("GCP_REGION")
 GCP_SERVICE_ACCOUNT_EMAIL = config("GCP_SERVICE_ACCOUNT_EMAIL")
 GCP_TERRAFORM_EXECUTOR_SERVICE_ACCOUNT_EMAIL = config("GCP_TERRAFORM_EXECUTOR_SERVICE_ACCOUNT_EMAIL")
 GCP_TERRAFORM_VALIDATOR_SERVICE_ACCOUNT_EMAIL = config("GCP_TERRAFORM_VALIDATOR_SERVICE_ACCOUNT_EMAIL")
-GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID = config("GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID")
+GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID = config(
+    "GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID", default="terraform-wars-tutorial-submission-tasks-production-queue"
+)
+GCP_TASKS_PROVIDER_USER_PROJECT_CONFIGURATION_QUEUE_ID = config(
+    "GCP_TASKS_PROVIDER_USER_PROJECT_CONFIGURATION_QUEUE_ID",
+    default="terraform-wars-provider-user-projects-configuration-tasks-production-queue",
+)
 GCP_TERRAFORM_EXECUTOR_JOB_NAME = config("GCP_TERRAFORM_EXECUTOR_JOB_NAME", "terraform-wars-executor-production-job")
 GCP_TERRAFORM_VALIDATOR_JOB_NAME = config("GCP_TERRAFORM_VALIDATOR_JOB_NAME", "terraform-wars-validator-production-job")
+
+USE_GCP_DEFAULT_CREDENTIALS = config("USE_GCP_DEFAULT_CREDENTIALS", cast=bool, default=True)
+GCP_SERVICE_ACCOUNT_SECRET_KEY = config("GCP_SERVICE_ACCOUNT_SECRET_KEY", default=None)
 
 
 # Static files (CSS, JavaScript, Images)
@@ -554,16 +566,29 @@ UNFOLD = {
                 ],
             },
             {
-                "title": _("Tutorials"),
+                "title": _("Providers"),
                 "separator": True,
                 "collapsible": True,
                 "items": [
                     {
                         "title": _("Providers"),
                         "icon": "cloud",
-                        "link": reverse_lazy("admin:tutorials_provider_changelist"),
-                        "permission": lambda request: request.user.has_perm("tutorials.view_provider"),
+                        "link": reverse_lazy("admin:providers_provider_changelist"),
+                        "permission": lambda request: request.user.has_perm("providers.view_provider"),
                     },
+                    {
+                        "title": _("Provider User Projects"),
+                        "icon": "network_node",
+                        "link": reverse_lazy("admin:providers_provideruserproject_changelist"),
+                        "permission": lambda request: request.user.has_perm("providers.view_provideruserproject"),
+                    },
+                ],
+            },
+            {
+                "title": _("Tutorials"),
+                "separator": True,
+                "collapsible": True,
+                "items": [
                     {
                         "title": _("Tutorials"),
                         "icon": "code_blocks",
@@ -571,14 +596,8 @@ UNFOLD = {
                         "permission": lambda request: request.user.has_perm("tutorials.view_tutorial"),
                     },
                     {
-                        "title": _("Tutorial Projects"),
-                        "icon": "folder_supervised",
-                        "link": reverse_lazy("admin:tutorials_tutorialproject_changelist"),
-                        "permission": lambda request: request.user.has_perm("tutorials.view_tutorialproject"),
-                    },
-                    {
                         "title": _("Submissions"),
-                        "icon": "data_object",
+                        "icon": "deployed_code",
                         "link": reverse_lazy("admin:tutorials_tutorialsubmission_changelist"),
                         "permission": lambda request: request.user.has_perm("tutorials.view_tutorialsubmission"),
                     },

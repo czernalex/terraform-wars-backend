@@ -9,11 +9,10 @@ from ninja.throttling import AnonRateThrottle, AuthRateThrottle
 from main.apps.api_auth.routers import auth_router
 from main.apps.core.exceptions import ForbiddenError, NotFoundError
 from main.apps.core.schemas import ForbiddenErrorSchema, NotFoundErrorSchema
+from main.apps.providers.routers import providers_router, provider_user_projects_router
 from main.apps.tutorials.routers import (
-    providers_router,
     tutorial_tags_router,
     tutorials_router,
-    tutorial_projects_router,
     tutorial_submissions_router,
 )
 from main.apps.users.routers import users_router
@@ -32,7 +31,7 @@ root_api_router = TerraformWarsAPI(
         f"<a href='{settings.BASE_URL}/_allauth/openapi.html' target='_blank'>here</a>."
         "<br>"
         "<br>"
-        "<a href='/tasks-api/docs' class='btn'>Tasks API Docs</a>"
+        "<a href='/_internal-api/docs' class='btn'>Internal API Docs</a>"
         "<br>"
         "<br>"
         "<a href='/admin' class='btn'>Administration</a>"
@@ -80,8 +79,8 @@ def handle_not_found_error(request: HttpRequest, exc: NotFoundError) -> HttpResp
 
 root_api_router.add_router("/auth", auth_router, tags=["auth"])
 root_api_router.add_router("/providers", providers_router, tags=["providers"])
+root_api_router.add_router("/provider-user-projects", provider_user_projects_router, tags=["provider-user-projects"])
 root_api_router.add_router("/submissions", tutorial_submissions_router, tags=["submissions"])
 root_api_router.add_router("/tutorials", tutorials_router, tags=["tutorials"])
-root_api_router.add_router("/tutorial-projects", tutorial_projects_router, tags=["tutorial-projects"])
 root_api_router.add_router("/tutorial-tags", tutorial_tags_router, tags=["tutorial-tags"])
 root_api_router.add_router("/users", users_router, tags=["users"])

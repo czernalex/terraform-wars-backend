@@ -6,6 +6,7 @@ from django.http import HttpRequest, HttpResponse
 
 from main.apps.core.exceptions import ForbiddenError, NotFoundError
 from main.apps.core.schemas import ForbiddenErrorSchema, NotFoundErrorSchema
+from main.apps.jobs.routers import jobs_router
 from main.apps.tasks.routers import tasks_router
 from main.terraform_wars_api import TerraformWarsAPI
 
@@ -63,4 +64,5 @@ def handle_not_found_error(request: HttpRequest, exc: NotFoundError) -> HttpResp
     )
 
 
+root_internal_api_router.add_router("/jobs", jobs_router, tags=["jobs"])
 root_internal_api_router.add_router("/tasks", tasks_router, tags=["tasks"])

@@ -2,7 +2,7 @@ import logging
 from typing import MutableSequence
 
 from google.cloud import service_usage_v1
-from google.oauth2.credentials import Credentials
+from google.auth.credentials import Credentials
 
 
 logger = logging.getLogger(__name__)

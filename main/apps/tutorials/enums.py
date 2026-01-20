@@ -14,9 +14,3 @@ class Difficulty(models.TextChoices):
     INTERMEDIATE = "intermediate", _("Intermediate")
     ADVANCED = "advanced", _("Advanced")
     EXPERT = "expert", _("Expert")
-
-
-class TutorialProjectStatus(models.TextChoices):
-    CREATED = "created", _("Created")
-    CONFIGURED = "configured", _("Configured")
-    ERROR = "error", _("Error")

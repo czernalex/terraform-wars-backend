@@ -49,4 +49,4 @@ class GCPCloudRunJobInvokeService:
         job_container_args: MutableSequence[str],
         job_container_env_vars: MutableSequence[run_v2.EnvVar],
     ) -> None:
-        self._run_job(job_name, job_container_name, job_container_args, job_container_env_vars)
+        return self._run_job(job_name, job_container_name, job_container_args, job_container_env_vars)

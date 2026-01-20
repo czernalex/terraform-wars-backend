@@ -6,8 +6,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from main.apps.core.models import AbstractUUIDModel
+from main.apps.providers.models.provider import Provider
 from main.apps.tutorials.enums import Difficulty, TutorialStatus
-from main.apps.tutorials.models.provider import Provider
 from main.apps.tutorials.managers import TutorialQuerySet
 from main.apps.tutorials.models.tutorial_tag import TutorialTag
 from main.apps.users.models import User

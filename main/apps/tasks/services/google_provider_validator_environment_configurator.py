@@ -16,8 +16,9 @@ class GoogleProviderValidatorEnvironmentConfigurator(ValidatorEnvironmentConfigu
             run_v2.EnvVar(name="TUTORIAL_PROJECT_ID", value=str(tutorial_project.id)),
             run_v2.EnvVar(name="TUTORIAL_SUBMISSION_ID", value=str(tutorial_submission.id)),
             run_v2.EnvVar(name="VALIDATION_SCRIPT_CODE", value=tutorial_submission.tutorial.validation_script),
-            run_v2.EnvVar(name="GCP_PROJECT_ID", value=tutorial_project.config_data["gcp_project_id"]),
+            run_v2.EnvVar(name="GOOGLE_PROJECT", value=tutorial_project.config_data["gcp_project_id"]),
             run_v2.EnvVar(
-                name="GCP_SERVICE_ACCOUNT_EMAIL", value=tutorial_project.config_data["gcp_service_account_email"]
+                name="GOOGLE_IMPERSONATE_SERVICE_ACCOUNT",
+                value=tutorial_project.config_data["gcp_service_account_email"],
             ),
         ]

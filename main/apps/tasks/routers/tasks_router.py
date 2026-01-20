@@ -4,6 +4,8 @@ from uuid import UUID
 from django.http import HttpRequest
 from ninja import Router
 
+from main.apps.providers.schemas import ConfigureProviderUserProjectSchema
+from main.apps.providers.services import ProviderUserProjectConfigureService
 from main.apps.tasks.services import TutorialSubmissionExecuteService, TutorialSubmissionValidateService
 from main.di import injector
 
@@ -12,6 +14,19 @@ tasks_router = Router()
 
 
 # TODO: We should return a response schema which will allow us to track the status of the execution and validation processes
+
+
+@tasks_router.post(
+    "/provider-user-projects/{provider_user_project_id}/configuration/",
+    url_name="provider_user_project_configuration_list",
+    response={HTTPStatus.ACCEPTED: None},
+    description="Verify a provider user project configuration",
+)
+def configure_provider_user_project(
+    request: HttpRequest, provider_user_project_id: UUID, data: ConfigureProviderUserProjectSchema
+) -> None:
+    provider_user_project_configure_service = injector.get(ProviderUserProjectConfigureService)
+    provider_user_project_configure_service.configure(data.user_id, provider_user_project_id)
 
 
 @tasks_router.post(
