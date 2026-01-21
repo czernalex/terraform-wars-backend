@@ -24,15 +24,14 @@ class ProviderSchema(ModelSchema):
 
 
 class ProviderProjectSchema(Schema):
-    project_id: Optional[str]
-    project_name: Optional[str]
+    project_id: str
+    project_number: str
     display_name: Optional[str]
     parent_name: Optional[str]
 
 
 class ProviderDetailSchema(ModelSchema):
     id: UUID
-    projects: list[ProviderProjectSchema]
 
     class Meta:
         model = Provider
@@ -42,20 +41,12 @@ class ProviderDetailSchema(ModelSchema):
             "description",
             "website_url",
             "setup_instructions",
+            "setup_script_instructions",
             "setup_script",
+            "setup_checklist",
             "created_at",
             "updated_at",
         ]
-
-    @staticmethod
-    def resolve_projects(provider: Provider, context: dict) -> list[ProviderProjectSchema]:
-        from main.di import injector
-        from main.apps.providers.services import ProviderProjectListServiceFactory
-
-        user_id = context["request"].user.id
-        factory = injector.get(ProviderProjectListServiceFactory)
-        provider_project_list_service = factory.get_service(provider)
-        return provider_project_list_service.get_list(user_id)
 
 
 class ProviderUserProjectListFilterSchema(FilterSchema):
@@ -78,20 +69,11 @@ class ProviderUserProjectListFilterSchema(FilterSchema):
     )
 
 
-class GCPProviderUserProjectConfigDataSchema(Schema):
-    gcp_project_id: str
-    gcp_project_name: str
-    gcp_service_account_email: str
-
-
 class CreateProviderUserProjectSchema(Schema):
     provider_id: UUID
     project_id: str = Field(..., min_length=1, max_length=255)
-    name: str = Field(..., min_length=1, max_length=255)
-    description: Optional[str]
-    config_data: (
-        GCPProviderUserProjectConfigDataSchema  # When other providers are supported, they will be added as union type
-    )
+    project_number: str = Field(..., min_length=1, max_length=255)
+    display_name: Optional[str] = Field(..., min_length=1, max_length=255)
 
 
 class UpdateProviderUserProjectSchema(Schema):
@@ -109,6 +91,7 @@ class ProviderUserProjectListSchema(ModelSchema):
     id: UUID
     provider: ProviderSchema
     user_id: UUID
+    status: ProviderUserProjectStatus
 
     class Meta:
         model = ProviderUserProject
@@ -127,5 +110,8 @@ class ProviderUserProjectDetailSchema(ModelSchema):
     class Meta:
         model = ProviderUserProject
         fields = [
+            "project_id",
+            "name",
+            "description",
             "config_data",
         ]

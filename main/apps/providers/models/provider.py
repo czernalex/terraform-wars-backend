@@ -1,5 +1,6 @@
 from typing import override
 
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -22,11 +23,20 @@ class Provider(AbstractUUIDModel):
         blank=True,
         default="",
     )
+    setup_script_instructions = models.TextField(
+        _("Setup script instructions"),
+        help_text=_("Instructions on how to setup the Provider Project using the setup script"),
+        blank=True,
+        default="",
+    )
     setup_script = models.TextField(
         _("Setup script"),
         help_text=_("Script that utilizes the provider CLI to setup the Provider Project"),
         blank=True,
         default="",
+    )
+    setup_checklist = ArrayField(
+        models.CharField(max_length=512), default=list, help_text=_("Checklist of steps to setup the Provider Project")
     )
 
     objects = ProviderQuerySet.as_manager()

@@ -18,7 +18,7 @@ class DefaultProviderProjectListServiceFactory(ProviderProjectListServiceFactory
     @inject
     def __init__(self, gcp_project_list_service: GCPProjectListService):
         self._services_map = {
-            "google": gcp_project_list_service,
+            gcp_project_list_service.get_provider_id(): gcp_project_list_service,
         }
 
     @override

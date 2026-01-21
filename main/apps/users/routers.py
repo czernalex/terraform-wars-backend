@@ -43,3 +43,18 @@ def update_me(request: AuthedHttpRequest, data: UserUpdateSchema) -> User:
 def delete_me(request: AuthedHttpRequest) -> None:
     user_delete_service = injector.get(UserDeleteService)
     return user_delete_service.delete(request.user.id)
+
+
+# @users_router.get(
+#     "/me/notifications/",
+#     url_name="user_notification_list",
+#     response={HTTPStatus.OK: None},
+#     description="Get the authenticated user notifications",
+# )
+# async def stream_user_notifications(request: AuthedHttpRequest) -> User:
+#     response = StreamingHttpResponse(
+#         content_type="text/event-stream",
+#     )
+#     response["Cache-control"] = "no-cache"
+#     response["X-Accel-Buffering"] = "no"
+#     return response

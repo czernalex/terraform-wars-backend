@@ -4,7 +4,7 @@ from main.apps.providers.models import Provider
 from main.apps.providers.schemas import CreateProviderUserProjectSchema
 
 
-class ProviderUserProjectConfigDataValidationService(ABC):
+class ProviderUserProjectConfigDataFormatterService(ABC):
     @abstractmethod
-    def validate(self, provider: Provider, data: CreateProviderUserProjectSchema) -> None:
+    def format(self, provider: Provider, data: CreateProviderUserProjectSchema) -> dict[str, str]:
         pass

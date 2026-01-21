@@ -2,14 +2,14 @@ from injector import Binder, Module, singleton
 
 from main.apps.providers.services import (
     DefaultProviderProjectListServiceFactory,
-    DefaultProviderUserProjectConfigDataValidationServiceFactory,
+    DefaultProviderUserProjectConfigDataFormatterServiceFactory,
     DefaultProviderUserProjectConfiguratorFactory,
     GCPProjectListService,
-    GCPProviderUserProjectConfigDataValidationService,
+    GCPProviderUserProjectConfigDataFormatterService,
     GCPProviderUserProjectConfigurator,
     ProviderProjectListServiceFactory,
     ProviderRetrievalService,
-    ProviderUserProjectConfigDataValidationServiceFactory,
+    ProviderUserProjectConfigDataFormatterServiceFactory,
     ProviderUserProjectConfiguratorFactory,
     ProviderUserProjectCreateService,
     ProviderUserProjectDeleteService,
@@ -32,13 +32,13 @@ class ProvidersModule(Module):
         binder.bind(ProviderUserProjectValidationService, to=ProviderUserProjectValidationService, scope=singleton)
         binder.bind(ProviderUserProjectConfigureService, to=ProviderUserProjectConfigureService, scope=singleton)
         binder.bind(
-            GCPProviderUserProjectConfigDataValidationService,
-            to=GCPProviderUserProjectConfigDataValidationService,
+            GCPProviderUserProjectConfigDataFormatterService,
+            to=GCPProviderUserProjectConfigDataFormatterService,
             scope=singleton,
         )
         binder.bind(
-            ProviderUserProjectConfigDataValidationServiceFactory,
-            to=DefaultProviderUserProjectConfigDataValidationServiceFactory,
+            ProviderUserProjectConfigDataFormatterServiceFactory,
+            to=DefaultProviderUserProjectConfigDataFormatterServiceFactory,
             scope=singleton,
         )
         binder.bind(ProviderUserProjectUpdateService, to=ProviderUserProjectUpdateService, scope=singleton)

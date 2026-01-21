@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.db import models
 from django.http import HttpRequest
 from django.contrib import admin
@@ -38,15 +40,29 @@ class ProviderAdmin(BaseModelAdmin):
                     "description",
                     "website_url",
                     "setup_instructions",
+                    "setup_script_instructions",
                     "setup_script",
+                    "setup_checklist",
                 )
             },
         ),
-        (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
+        (
+            _("Audit info"),
+            {
+                "fields": (
+                    "id",
+                    "created_at",
+                    "updated_at",
+                )
+            },
+        ),
     )
-    wysiwyg_fields = ("setup_instructions",)
+    wysiwyg_fields = (
+        "setup_instructions",
+        "setup_script_instructions",
+    )
 
-    def formfield_for_dbfield(self, db_field: models.Field, request: HttpRequest, **kwargs) -> models.Field | None:
+    def formfield_for_dbfield(self, db_field: models.Field, request: HttpRequest, **kwargs) -> Optional[models.Field]:
         if isinstance(db_field, models.TextField) and db_field.name in self.wysiwyg_fields:
             kwargs["widget"] = WysiwygWidget
 
