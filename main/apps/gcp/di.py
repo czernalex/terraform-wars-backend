@@ -5,6 +5,7 @@ from google.cloud import tasks_v2, run_v2
 from main.apps.gcp.services import (
     GCPCloudTaskCreateService,
     GCPOAuth2CredentialsCreateService,
+    GCPProjectBillingInfoGetService,
     GCPProjectSearchService,
     GCPServiceAccountImpersonationService,
     GCPServiceEnableService,
@@ -22,6 +23,7 @@ class GCPModule(Module):
         binder.bind(GCPServiceEnableService, to=GCPServiceEnableService, scope=singleton)
         binder.bind(GCPProjectIamRoleGrantService, to=GCPProjectIamRoleGrantService, scope=singleton)
         binder.bind(GCPProjectSearchService, to=GCPProjectSearchService, scope=singleton)
+        binder.bind(GCPProjectBillingInfoGetService, to=GCPProjectBillingInfoGetService, scope=singleton)
 
     @provider
     @singleton

@@ -10,6 +10,7 @@ from main.apps.gcp.services import (
     GCPProjectIamRoleGrantService,
     GCPServiceAccountImpersonationService,
     GCPServiceEnableService,
+    GCPProjectBillingInfoGetService,
 )
 from main.apps.providers.models import ProviderUserProject
 from main.apps.providers.services.provider_user_project_configurator import ProviderUserProjectConfigurator
@@ -36,11 +37,13 @@ class GCPProviderUserProjectConfigurator(ProviderUserProjectConfigurator):
         gcp_service_enable_service: GCPServiceEnableService,
         gcp_service_account_impersonation_service: GCPServiceAccountImpersonationService,
         gcp_project_iam_role_grant_service: GCPProjectIamRoleGrantService,
+        gcp_project_billing_info_get_service: GCPProjectBillingInfoGetService,
     ):
         self._gcp_impersonated_credentials_create_service = gcp_impersonated_credentials_create_service
         self._gcp_service_enable_service = gcp_service_enable_service
         self._gcp_service_account_impersonation_service = gcp_service_account_impersonation_service
         self._gcp_project_iam_role_grant_service = gcp_project_iam_role_grant_service
+        self._gcp_project_billing_info_get_service = gcp_project_billing_info_get_service
 
     def _get_default_project_apis(self) -> list[str]:
         return self.DEFAULT_PROJECT_APIS
@@ -93,6 +96,10 @@ class GCPProviderUserProjectConfigurator(ProviderUserProjectConfigurator):
                 provider_user_project.config_data["gcp_project_id"],
                 provider_user_project.config_data["gcp_service_account_email"],
                 "roles/serviceusage.serviceUsageAdmin",
+            )
+            billing_info = self._gcp_project_billing_info_get_service.get(
+                credentials,
+                provider_user_project.config_data["gcp_project_id"],
             )
         except Exception as error:
             return self._handle_error(provider_user_project, error)

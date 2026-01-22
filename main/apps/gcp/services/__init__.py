@@ -6,6 +6,7 @@ from main.apps.gcp.services.gcp_service_enable_service import GCPServiceEnableSe
 from main.apps.gcp.services.gcp_project_iam_role_grant_service import GCPProjectIamRoleGrantService
 from main.apps.gcp.services.gcp_cloud_run_job_invoke_service import GCPCloudRunJobInvokeService
 from main.apps.gcp.services.gcp_project_search_service import GCPProjectSearchService
+from main.apps.gcp.services.gcp_project_billing_info_get_service import GCPProjectBillingInfoGetService
 
 __all__ = (
     "GCPOAuth2CredentialsCreateService",
@@ -16,4 +17,5 @@ __all__ = (
     "GCPCloudRunJobInvokeService",
     "GCPCloudTaskCreateService",
     "GCPProjectSearchService",
+    "GCPProjectBillingInfoGetService",
 )
