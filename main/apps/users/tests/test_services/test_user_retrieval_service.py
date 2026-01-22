@@ -32,8 +32,8 @@ class TestUserRetrievalService:
     def test_find_by_username(self):
         user = baker.make_recipe("main.apps.users.tests.active_user", username="test")
         service = injector.get(UserRetrievalService)
-        assert service.find_by_username("test") == user
+        assert service.try_find_by_username("test") == user
 
     def test_find_by_username_not_found(self):
         service = injector.get(UserRetrievalService)
-        assert service.find_by_username("test") is None
+        assert service.try_find_by_username("test") is None

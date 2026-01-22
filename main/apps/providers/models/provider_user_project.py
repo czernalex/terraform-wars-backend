@@ -37,6 +37,11 @@ class ProviderUserProject(AbstractUUIDModel):
     objects = ProviderUserProjectQuerySet.as_manager()
 
     class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["provider_id", "user_id", "project_id"], name="unique_provider_user_project_project_id"
+            ),
+        ]
         indexes = [GinIndex(fields=["config_data"])]
         verbose_name = _("Provider User Project")
         verbose_name_plural = _("Provider User Projects")

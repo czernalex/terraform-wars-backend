@@ -4,7 +4,7 @@ from django.db import models
 from django.http import HttpRequest
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from unfold.contrib.filters.admin import AutocompleteSelectFilter, RangeDateFilter
+from unfold.contrib.filters.admin import AutocompleteSelectFilter, ChoicesDropdownFilter, RangeDateFilter
 from unfold.contrib.forms.widgets import WysiwygWidget
 
 from main.apps.core.admin import BaseModelAdmin
@@ -81,13 +81,16 @@ class ProviderUserProjectAdmin(BaseModelAdmin):
         "created_at",
         "updated_at",
     )
-    list_select_related = ("provider", "user")
+    list_select_related = (
+        "provider",
+        "user",
+    )
     list_filter = (
         ("created_at", RangeDateFilter),
         ("updated_at", RangeDateFilter),
         ("provider", AutocompleteSelectFilter),
         ("user", AutocompleteSelectFilter),
-        ("status", AutocompleteSelectFilter),
+        ("status", ChoicesDropdownFilter),
     )
     search_fields = (
         "id",
@@ -100,7 +103,10 @@ class ProviderUserProjectAdmin(BaseModelAdmin):
         "name",
         "description",
     )
-    autocomplete_fields = ("provider", "user")
+    autocomplete_fields = (
+        "provider",
+        "user",
+    )
     fieldsets = (
         (
             _("Provider user project information"),

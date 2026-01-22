@@ -3,9 +3,7 @@ from typing import override
 
 from django.conf import settings
 from django.db import transaction
-from django.utils.translation import gettext as _
 from injector import inject
-from ninja.errors import ValidationError
 
 from main.apps.gcp.services import (
     GCPImpersonatedCredentialsCreateService,
@@ -51,7 +49,16 @@ class GCPProviderUserProjectConfigurator(ProviderUserProjectConfigurator):
     def get_provider_id(self) -> str:
         return self.PROVIDER_ID
 
-    # def _handle_error()
+    def _handle_error(self, provider_user_project: ProviderUserProject, error: Exception) -> None:
+        # Failing silently is ok here, because cloud scheduler will run this job again
+        logger.warning(
+            "Error occured while configuring GCP project for provider user project: %(provider_user_project_id)s. Error: %(error)s",
+            {
+                "provider_user_project_id": provider_user_project.id,
+                "error": str(error),
+            },
+            exc_info=True,
+        )
 
     @override
     @transaction.atomic
@@ -88,23 +95,7 @@ class GCPProviderUserProjectConfigurator(ProviderUserProjectConfigurator):
                 "roles/serviceusage.serviceUsageAdmin",
             )
         except Exception as error:
-            logger.error(
-                "Error occured while configuring GCP project for provider user project: %(provider_user_project_id)s. Error: %(error)s",
-                {
-                    "provider_user_project_id": provider_user_project.id,
-                    "error": str(error),
-                },
-                exc_info=True,
-            )
-            raise ValidationError(
-                [
-                    {
-                        "loc": ["provider_user_project"],
-                        "msg": _("Error while configuring GCP project %(error)s") % {"error": str(error)},
-                        "type": "system_error",
-                    }
-                ]
-            ) from error
+            return self._handle_error(provider_user_project, error)
 
         logger.info(
             "GCP project configured successfully for provider user project: %(provider_user_project_id)s",

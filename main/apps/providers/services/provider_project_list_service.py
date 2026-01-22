@@ -10,7 +10,8 @@ from ninja.errors import ValidationError
 from main.apps.api_auth.services import SocialAppRetrievalService, SocialTokenRetrievalService
 from main.apps.core.exceptions import NotFoundError
 from main.apps.providers.models import Provider
-from main.apps.providers.schemas import ProviderProjectSchema
+from main.apps.providers.schemas import ProviderProjectSchema, ProviderUserProjectListFilterSchema
+from main.apps.providers.services.provider_user_project_retrieval_service import ProviderUserProjectRetrievalService
 
 
 logger = logging.getLogger(__name__)
@@ -22,9 +23,11 @@ class ProviderProjectListService(ABC):
         self,
         social_app_retrieval_service: SocialAppRetrievalService,
         social_token_retrieval_service: SocialTokenRetrievalService,
+        provider_user_project_retrieval_service: ProviderUserProjectRetrievalService,
     ):
         self._social_app_retrieval_service = social_app_retrieval_service
         self._social_token_retrieval_service = social_token_retrieval_service
+        self._provider_user_project_retrieval_service = provider_user_project_retrieval_service
 
     def _get_social_app(self) -> SocialApp:
         try:
@@ -52,7 +55,10 @@ class ProviderProjectListService(ABC):
                 [
                     {
                         "loc": ["social_token"],
-                        "msg": _("Your account is not linked to %(provider)s") % {"provider": self.get_provider_id()},
+                        "msg": _(
+                            "Your account is not linked to %(provider)s provider. Connect your account and try again."
+                        )
+                        % {"provider": self.get_provider_id()},
                         "type": "value_error",
                     }
                 ]
@@ -88,4 +94,7 @@ class ProviderProjectListService(ABC):
     def get_list(self, user_id: UUID, provider: Provider) -> list[ProviderProjectSchema]:
         social_app = self._get_social_app()
         social_token = self._get_social_token(user_id)
-        return self._list_projects(social_app, social_token)
+        provider_user_projects = self._provider_user_project_retrieval_service.get_list(
+            ProviderUserProjectListFilterSchema(user_id=user_id, provider_id=provider.id)
+        )
+        return self._list_projects(social_app, social_token, provider_user_projects)

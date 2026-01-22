@@ -17,7 +17,7 @@ class UserValidationService:
         if not username:
             return
 
-        if self._user_retrieval_service.find_by_username(username, user_id):
+        if self._user_retrieval_service.try_find_by_username(username, user_id):
             raise ValidationError(
                 [
                     {

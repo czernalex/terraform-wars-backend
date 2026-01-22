@@ -36,7 +36,7 @@ class UserRetrievalService:
             logger.warning(f"User: {user_id} not found")
             raise NotFoundError(_("User not found"))
 
-    def find_by_username(self, username: str, exclude_user_id: Optional[UUID] = None) -> Optional[User]:
+    def try_find_by_username(self, username: str, exclude_user_id: Optional[UUID] = None) -> Optional[User]:
         qs = self._get_queryset().for_username(username)
         if exclude_user_id:
             qs = qs.exclude(id=exclude_user_id)
