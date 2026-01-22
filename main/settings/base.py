@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "main.apps.gcp",
     "main.apps.providers",
     "main.apps.jobs",
+    "main.apps.notifications",
     "main.apps.tasks",
     "main.apps.tutorials",
     "main.apps.users",
@@ -136,9 +137,11 @@ DATABASES = {
         "PASSWORD": secrets.DB_PASSWORD,
         "HOST": config("DB_HOST"),
         "PORT": config("DB_PORT"),
-        # "CONN_MAX_AGE": 0,  # Set if running under asgi application
     }
 }
+
+if os.environ.get("ASGI_APPLICATION") is not None:
+    DATABASES["default"]["CONN_MAX_AGE"] = 0
 
 ATOMIC_REQUESTS = False
 AUTOCOMMIT = True
@@ -479,6 +482,11 @@ UNFOLD = {
         },
         {
             "icon": "api",
+            "title": _("Events API Docs"),
+            "link": reverse_lazy("terraform-wars-events-api:openapi-view"),
+        },
+        {
+            "icon": "api",
             "title": _("Internal API Docs"),
             "link": reverse_lazy("terraform-wars-internal-api:openapi-view"),
         },
@@ -606,6 +614,19 @@ UNFOLD = {
                         "icon": "shoppingmode",
                         "link": reverse_lazy("admin:tutorials_tutorialtag_changelist"),
                         "permission": lambda request: request.user.has_perm("tutorials.view_tutorialtag"),
+                    },
+                ],
+            },
+            {
+                "title": _("Notifications"),
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _("Notifications"),
+                        "icon": "notifications",
+                        "link": reverse_lazy("admin:notifications_notification_changelist"),
+                        "permission": lambda request: request.user.has_perm("notifications.view_notification"),
                     },
                 ],
             },

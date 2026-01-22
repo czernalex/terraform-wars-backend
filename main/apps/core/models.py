@@ -12,7 +12,18 @@ class UUIDExtractTimestamp(models.Func):
     output_field = models.DateTimeField()
 
 
-class AbstractUUIDModel(models.Model):
+class AbstractTimestampedModel(models.Model):
+    created_at = models.DateTimeField(_("Created"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated"), auto_now=True)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self) -> str:
+        return str(self.id)
+
+
+class AbstractUUIDModel(AbstractTimestampedModel):
     id = models.UUIDField(_("ID"), primary_key=True, default=UUIDv7(), editable=False)
 
     creation_time = models.GeneratedField(
@@ -20,8 +31,6 @@ class AbstractUUIDModel(models.Model):
         output_field=models.DateTimeField(),
         db_persist=True,
     )
-    created_at = models.DateTimeField(_("Created"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("Updated"), auto_now=True)
 
     class Meta:
         abstract = True
