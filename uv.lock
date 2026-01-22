@@ -455,6 +455,23 @@ wheels = [
 ]
 
 [[package]]
+name = "google-cloud-billing"
+version = "1.18.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "google-api-core", extra = ["grpc"] },
+    { name = "google-auth" },
+    { name = "grpc-google-iam-v1" },
+    { name = "grpcio" },
+    { name = "proto-plus" },
+    { name = "protobuf" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/04/b6/a75a0bce72b9064a8e7ef011aadebc7ae9a0d9bf378f9f815d020de02c9d/google_cloud_billing-1.18.0.tar.gz", hash = "sha256:20682047285e9dadb31eaa824f86defbdd600bcf837d7195187b9044dd27b1f9", size = 132508, upload-time = "2026-01-15T13:15:09.776Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/24/f2/d2c16b062c969a377ac1f23430643a0ff9280211e986fd83a6a5893b44a3/google_cloud_billing-1.18.0-py3-none-any.whl", hash = "sha256:1e80710538eb5070f4b04815de38492ac1a45d3ea4a4986001357dcf4cef24f0", size = 117999, upload-time = "2026-01-09T14:53:33.366Z" },
+]
+
+[[package]]
 name = "google-cloud-core"
 version = "2.5.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1159,6 +1176,7 @@ dependencies = [
     { name = "django-storages", extra = ["google"] },
     { name = "django-unfold" },
     { name = "google-auth" },
+    { name = "google-cloud-billing" },
     { name = "google-cloud-iam" },
     { name = "google-cloud-resource-manager" },
     { name = "google-cloud-run" },
@@ -1196,6 +1214,7 @@ requires-dist = [
     { name = "django-storages", extras = ["google"], specifier = ">=1.14.6" },
     { name = "django-unfold", specifier = ">=0.71.0" },
     { name = "google-auth", specifier = ">=2.43.0" },
+    { name = "google-cloud-billing", specifier = ">=1.18.0" },
     { name = "google-cloud-iam", specifier = ">=2.20.0" },
     { name = "google-cloud-resource-manager", specifier = ">=1.15.0" },
     { name = "google-cloud-run", specifier = ">=0.13.0" },
