@@ -94,6 +94,7 @@ class ProviderUserProjectListSchema(ModelSchema):
     provider: ProviderSchema
     user_id: UUID
     status: ProviderUserProjectStatus
+    configuration_attempts: int
     project_id: str
     name: Optional[str]
     description: Optional[str]
@@ -107,6 +108,8 @@ class ProviderUserProjectDetailSchema(ModelSchema):
     id: UUID
     provider: ProviderSchema
     user: UserDetailSchema
+    status: ProviderUserProjectStatus
+    configuration_attempts: int
     project_id: str
     name: Optional[str]
     description: Optional[str]
