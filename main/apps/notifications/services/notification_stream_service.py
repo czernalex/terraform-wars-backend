@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from datetime import timedelta
-from typing import AsyncIterator
+from typing import AsyncIterator, Optional
 
 from django.utils import timezone
 from injector import inject
@@ -28,14 +28,24 @@ class NotificationStreamService:
         self.notification_update_service = notification_update_service
         self.notification_event_builder = notification_event_builder
 
-    async def stream(self, user: User) -> AsyncIterator[str]:
+    def try_cast_last_event_id(self, last_event_id: Optional[str]) -> Optional[int]:
+        if last_event_id:
+            try:
+                return int(last_event_id)
+            except ValueError:
+                logger.warning(f"Invalid last event ID: {last_event_id}")
+                return
+
+    async def stream(self, user: User, last_event_id: Optional[str] = None) -> AsyncIterator[str]:
+        last_event_id = self.try_cast_last_event_id(last_event_id)
         while True:
             now = timezone.now()
             notifications = self.notification_retrieval_service.get_list(
                 NotificationListFilterSchema(
                     user_id=user.id,
                     dispatched=False,
-                    created_at=now - timedelta(seconds=10),
+                    last_event_id=last_event_id,
+                    created_at=now - timedelta(seconds=10) if last_event_id is None else None,
                 )
             )
             async for notification in notifications:

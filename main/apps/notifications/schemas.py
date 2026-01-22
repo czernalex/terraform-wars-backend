@@ -10,6 +10,7 @@ from main.apps.notifications.enums import NotificationLevel
 class NotificationListFilterSchema(FilterSchema):
     user_id: Optional[UUID] = None
     dispatched: Optional[bool] = None
+    last_event_id: Annotated[Optional[int], FilterLookup("id__gt")] = None
     created_at: Annotated[Optional[datetime], FilterLookup("created_at__gte")] = None
 
 
