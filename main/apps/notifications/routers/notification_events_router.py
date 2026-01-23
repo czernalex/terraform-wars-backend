@@ -8,10 +8,12 @@ from main.apps.core.types import AuthedHttpRequest
 from main.apps.notifications.services import NotificationStreamService
 
 
-notifications_router = Router()
+notification_events_router = Router()
 
 
-@notifications_router.get(
+# Somehow django ninja does not support editing default response schema using
+# openapi_extra. This is a workaround to provide example schema in openapi documentation.
+@notification_events_router.get(
     "/",
     url_name="notification_list",
     response={HTTPStatus.BAD_REQUEST: None},

@@ -13,6 +13,7 @@ class Provider(AbstractUUIDModel):
         _("Provider ID"), max_length=255, help_text=_("Should match Allauth SocialApp provider")
     )
     name = models.CharField(_("Name"), max_length=255)
+    short_name = models.CharField(_("Short Name"), max_length=16, blank=True, default="")
     slug = models.SlugField(_("Slug"), unique=True)
     description = models.TextField(_("Description"))
     website_url = models.URLField(_("Website URL"))

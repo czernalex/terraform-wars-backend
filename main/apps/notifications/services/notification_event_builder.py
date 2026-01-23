@@ -9,4 +9,4 @@ class NotificationEventBuilder:
             text=notification.text,
             level=notification.level,
         )
-        return f"event: notification\nid:{notification.id}\ndata:{event.model_dump_json()}\n\n"
+        return f"event: message\nid: {notification.id}\ndata: {event.model_dump_json()}\n\n"

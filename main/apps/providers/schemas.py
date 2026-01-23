@@ -10,6 +10,7 @@ from main.apps.users.schemas import UserDetailSchema
 
 class ProviderSchema(ModelSchema):
     id: UUID
+    short_name: str
 
     class Meta:
         model = Provider
@@ -33,6 +34,7 @@ class ProviderProjectSchema(Schema):
 
 class ProviderDetailSchema(ModelSchema):
     id: UUID
+    short_name: str
     setup_instructions: Optional[str]
     setup_script_instructions: Optional[str]
     setup_script: Optional[str]

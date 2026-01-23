@@ -13,7 +13,7 @@ from main.apps.providers.models import Provider, ProviderUserProject
 
 @admin.register(Provider)  # noqa: F821
 class ProviderAdmin(BaseModelAdmin):
-    list_display = ("name", "provider_id", "website_url", "created_at", "updated_at")
+    list_display = ("name", "short_name", "provider_id", "website_url", "created_at", "updated_at")
     list_filter = (
         ("created_at", RangeDateFilter),
         ("updated_at", RangeDateFilter),
@@ -23,6 +23,7 @@ class ProviderAdmin(BaseModelAdmin):
         "provider_id",
         "slug",
         "name",
+        "short_name",
         "description",
         "website_url",
     )
@@ -35,6 +36,7 @@ class ProviderAdmin(BaseModelAdmin):
             {
                 "fields": (
                     "name",
+                    "short_name",
                     "slug",
                     "provider_id",
                     "description",

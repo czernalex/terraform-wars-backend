@@ -2,6 +2,7 @@ import asyncio
 import logging
 from datetime import timedelta
 from typing import AsyncIterator, Optional
+from uuid import UUID
 
 from django.utils import timezone
 from injector import inject
@@ -10,7 +11,6 @@ from main.apps.notifications.schemas import NotificationListFilterSchema
 from main.apps.notifications.services.notification_retrieval_service import NotificationRetrievalService
 from main.apps.notifications.services.notification_update_service import NotificationUpdateService
 from main.apps.notifications.services.notification_event_builder import NotificationEventBuilder
-from main.apps.users.models import User
 
 
 logger = logging.getLogger(__name__)
@@ -36,13 +36,13 @@ class NotificationStreamService:
                 logger.warning(f"Invalid last event ID: {last_event_id}")
                 return
 
-    async def stream(self, user: User, last_event_id: Optional[str] = None) -> AsyncIterator[str]:
+    async def stream(self, user_id: UUID, last_event_id: Optional[str] = None) -> AsyncIterator[str]:
         last_event_id = self.try_cast_last_event_id(last_event_id)
         while True:
             now = timezone.now()
             notifications = self.notification_retrieval_service.get_list(
                 NotificationListFilterSchema(
-                    user_id=user.id,
+                    user_id=user_id,
                     dispatched=False,
                     last_event_id=last_event_id,
                     created_at=now - timedelta(seconds=10) if last_event_id is None else None,
@@ -53,4 +53,4 @@ class NotificationStreamService:
                 await self.notification_update_service.mark_as_dispatched(notification)
 
             # FIXME: Remove this polling pattern, instead think of event driven approach
-            await asyncio.sleep(1)
+            await asyncio.sleep(5)
