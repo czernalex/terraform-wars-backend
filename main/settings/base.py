@@ -24,7 +24,7 @@ ENVIRONMENT = config("ENVIRONMENT", default="production")
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 BASE_PROTOCOL = config("BASE_PROTOCOL", default="https")
-BASE_DOMAIN = config("BASE_DOMAIN")
+BASE_DOMAIN = config("BASE_DOMAIN", "api.app.terraformwars.com")
 BASE_URL = f"{BASE_PROTOCOL}://{BASE_DOMAIN}"
 
 FRONTEND_BASE_URL = config("FRONTEND_BASE_URL", default="https://app.terraformwars.com")
@@ -132,11 +132,11 @@ WSGI_APPLICATION = "main.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DB_NAME"),
-        "USER": config("DB_USER"),
+        "NAME": config("DB_NAME", "terraform-wars"),
+        "USER": config("DB_USER", "terraform-wars"),
         "PASSWORD": secrets.DB_PASSWORD,
         "HOST": config("DB_HOST"),
-        "PORT": config("DB_PORT"),
+        "PORT": config("DB_PORT", 5432),
     }
 }
 
@@ -198,12 +198,20 @@ LOCALE_PATHS = [
 
 # Google Cloud
 
-INTERNAL_API_BASE_URL = config("INTERNAL_API_BASE_URL")
+INTERNAL_API_BASE_URL = config(
+    "INTERNAL_API_BASE_URL", "https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app"
+)
 GCP_PROJECT_ID = config("GCP_PROJECT_ID")
 GCP_REGION = config("GCP_REGION")
-GCP_SERVICE_ACCOUNT_EMAIL = config("GCP_SERVICE_ACCOUNT_EMAIL")
-GCP_TERRAFORM_EXECUTOR_SERVICE_ACCOUNT_EMAIL = config("GCP_TERRAFORM_EXECUTOR_SERVICE_ACCOUNT_EMAIL")
-GCP_TERRAFORM_VALIDATOR_SERVICE_ACCOUNT_EMAIL = config("GCP_TERRAFORM_VALIDATOR_SERVICE_ACCOUNT_EMAIL")
+GCP_SERVICE_ACCOUNT_EMAIL = config(
+    "GCP_SERVICE_ACCOUNT_EMAIL", "twa-be-cloudrun-runtime-sa@terraform-wars-dev.iam.gserviceaccount.com"
+)
+GCP_TERRAFORM_EXECUTOR_SERVICE_ACCOUNT_EMAIL = config(
+    "GCP_TERRAFORM_EXECUTOR_SERVICE_ACCOUNT_EMAIL", "twa-tf-executor-sa@terraform-wars-dev.iam.gserviceaccount.com"
+)
+GCP_TERRAFORM_VALIDATOR_SERVICE_ACCOUNT_EMAIL = config(
+    "GCP_TERRAFORM_VALIDATOR_SERVICE_ACCOUNT_EMAIL", "twa-tf-validator-sa@terraform-wars-dev.iam.gserviceaccount.com"
+)
 GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID = config(
     "GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID", default="terraform-wars-tutorial-submission-tasks-production-queue"
 )
@@ -235,7 +243,7 @@ MEDIA_LOCATION = "media"
 USE_CLOUD_STORAGE = config("USE_CLOUD_STORAGE", cast=bool, default=True)
 
 if USE_CLOUD_STORAGE:
-    GCS_BUCKET_NAME = config("GCP_STORAGE_BUCKET_NAME")
+    GCS_BUCKET_NAME = config("GCP_STORAGE_BUCKET_NAME", "terraform-wars-backend-production")
     common_storage_backend = "storages.backends.gcloud.GoogleCloudStorage"
     common_options = {
         "bucket_name": GCS_BUCKET_NAME,
@@ -376,10 +384,10 @@ LOGGING = {
 # ALLOWED_HOSTS, CSRF and CORS
 
 SESSION_COOKIE_NAME = "__session"
-SESSION_COOKIE_DOMAIN = config("SESSION_COOKIE_DOMAIN")
+SESSION_COOKIE_DOMAIN = config("SESSION_COOKIE_DOMAIN", ".app.terraformwars.com")
 SESSION_COOKIE_SECURE = config("SESSION_COOKIE_SECURE", cast=bool, default=True)
 
-CSRF_COOKIE_DOMAIN = config("CSRF_COOKIE_DOMAIN")
+CSRF_COOKIE_DOMAIN = config("CSRF_COOKIE_DOMAIN", ".app.terraformwars.com")
 CSRF_COOKIE_SECURE = config("CSRF_COOKIE_SECURE", cast=bool, default=True)
 
 CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", cast=lambda v: [s.strip() for s in v.replace('"', "").split(",")])
@@ -422,10 +430,10 @@ SECURE_HSTS_SECONDS = 3600
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@terraformwars.com")
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-EMAIL_HOST = config("EMAIL_HOST")
-EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST = config("EMAIL_HOST", "smtp-relay.brevo.com")
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", "9f9939001@smtp-brevo.com")
 EMAIL_HOST_PASSWORD = secrets.EMAIL_HOST_PASSWORD
-EMAIL_PORT = config("EMAIL_PORT")
+EMAIL_PORT = config("EMAIL_PORT", default=587)
 EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool, default=True)
 
 
