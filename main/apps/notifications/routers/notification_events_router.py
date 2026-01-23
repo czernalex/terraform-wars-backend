@@ -43,5 +43,6 @@ async def stream_notifications(request: AuthedHttpRequest) -> StreamingHttpRespo
         content_type="text/event-stream",
     )
     response["Cache-control"] = "no-cache"
+    response["Connection"] = "keep-alive"
     response["X-Accel-Buffering"] = "no"
     return response
