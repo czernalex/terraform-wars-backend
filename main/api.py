@@ -9,6 +9,7 @@ from ninja.throttling import AnonRateThrottle, AuthRateThrottle
 from main.apps.api_auth.routers import auth_router
 from main.apps.core.exceptions import ForbiddenError, NotFoundError
 from main.apps.core.schemas import ForbiddenErrorSchema, NotFoundErrorSchema
+from main.apps.notifications.routers import notifications_router
 from main.apps.providers.routers import providers_router, provider_user_projects_router
 from main.apps.tutorials.routers import (
     tutorial_tags_router,
@@ -80,6 +81,7 @@ def handle_not_found_error(request: HttpRequest, exc: NotFoundError) -> HttpResp
 
 
 root_api_router.add_router("/auth", auth_router, tags=["auth"])
+root_api_router.add_router("/notifications", notifications_router, tags=["notifications"])
 root_api_router.add_router("/providers", providers_router, tags=["providers"])
 root_api_router.add_router("/provider-user-projects", provider_user_projects_router, tags=["provider-user-projects"])
 root_api_router.add_router("/submissions", tutorial_submissions_router, tags=["submissions"])

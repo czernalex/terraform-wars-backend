@@ -47,7 +47,7 @@ class ProviderUserProjectCreateService:
             "Creating provider user project for user: %(user_id)s and provider: %(provider_id)s",
             {"user_id": user_id, "provider_id": data.provider_id},
         )
-        validated_data = self._provider_user_project_validation_service.validate_create_data(data)
+        validated_data = self._provider_user_project_validation_service.validate_create_data(user_id, data)
         provider_user_project = self._create_provider_user_project(user_id, validated_data.provider, data)
         logger.info(
             "Provider user project created: %(provider_user_project_id)s",

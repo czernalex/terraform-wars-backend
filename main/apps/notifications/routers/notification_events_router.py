@@ -15,7 +15,7 @@ notification_events_router = Router()
 # openapi_extra. This is a workaround to provide example schema in openapi documentation.
 @notification_events_router.get(
     "/",
-    url_name="notification_list",
+    url_name="notification_event_list",
     response={HTTPStatus.BAD_REQUEST: None},
     openapi_extra={
         "responses": {

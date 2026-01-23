@@ -44,11 +44,13 @@ class NotificationStreamService:
                 NotificationListFilterSchema(
                     user_id=user_id,
                     dispatched=False,
+                    read=False,
                     last_event_id=last_event_id,
                     created_at=now - timedelta(seconds=10) if last_event_id is None else None,
                 )
             )
             async for notification in notifications:
+                logger.info(f"Sending notification: {notification.id}")
                 yield self.notification_event_builder.build_event(notification)
                 await self.notification_update_service.mark_as_dispatched(notification)
 

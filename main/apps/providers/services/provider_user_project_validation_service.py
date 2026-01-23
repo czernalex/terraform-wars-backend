@@ -54,7 +54,9 @@ class ProviderUserProjectValidationService:
                 ]
             ) from error
 
-    def validate_create_data(self, data: CreateProviderUserProjectSchema) -> CreateProviderUserProjectValidatedData:
+    def validate_create_data(
+        self, user_id: UUID, data: CreateProviderUserProjectSchema
+    ) -> CreateProviderUserProjectValidatedData:
         provider = self.validate_provider_exists(data.provider_id)
-        self.validate_project_id_is_unique(data.project_id)
+        self.validate_project_id_is_unique(user_id, data.provider_id, data.project_id)
         return CreateProviderUserProjectValidatedData(provider=provider)

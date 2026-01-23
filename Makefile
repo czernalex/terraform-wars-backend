@@ -4,7 +4,7 @@ run:
 
 .PHONY: arun
 arun:
-	uv run uvicorn main.asgi:application --host localhost --port 8080 --reload --log-level debug
+	uv run uvicorn main.asgi:application --host localhost --port 8081 --reload --log-level debug
 
 .PHONY: migrate
 migrate:
