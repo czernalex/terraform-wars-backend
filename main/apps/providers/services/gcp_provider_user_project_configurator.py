@@ -115,7 +115,7 @@ class GCPProviderUserProjectConfigurator(ProviderUserProjectConfigurator):
                 credentials,
                 provider_user_project.config_data["gcp_project_id"],
                 provider_user_project.config_data["gcp_service_account_email"],
-                "roles/serviceusage.serviceUsageAdmin",
+                ["roles/serviceusage.serviceUsageAdmin"],
             )
         except Exception as error:
             logger.warning(

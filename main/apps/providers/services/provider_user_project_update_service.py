@@ -23,6 +23,7 @@ class ProviderUserProjectUpdateService:
         provider_user_project.description = data.description
         provider_user_project.status = data.status
         provider_user_project.configuration_attempts = data.configuration_attempts
+        provider_user_project.configuration_error = data.configuration_error
         provider_user_project.save()
         return provider_user_project
 

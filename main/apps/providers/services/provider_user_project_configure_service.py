@@ -80,7 +80,7 @@ class ProviderUserProjectConfigureService:
         try:
             provider_user_project = provider_user_project_configurator.configure(provider_user_project)
         except ProviderUserProjectConfigurationError as error:
-            return self._handle_failed_configuration_attempt(provider_user_project)
+            return self._handle_failed_configuration_attempt(provider_user_project, error)
 
         provider_user_project = self._handle_successful_configuration_attempt(provider_user_project)
         logger.info(

@@ -85,6 +85,7 @@ class UpdateProviderUserProjectSchema(Schema):
     description: Optional[str]
     status: ProviderUserProjectStatus
     configuration_attempts: int = Field(..., gte=0, lte=ProviderUserProject.MAX_CONFIGURATION_ATTEMPTS)
+    configuration_error: Optional[str]
 
 
 class ConfigureProviderUserProjectSchema(Schema):
@@ -98,8 +99,9 @@ class ProviderUserProjectListSchema(ModelSchema):
     status: ProviderUserProjectStatus
     configuration_attempts: int
     project_id: str
-    name: Optional[str]
-    description: Optional[str]
+    name: str
+    description: str
+    configuration_error: str
 
     class Meta:
         model = ProviderUserProject
@@ -113,8 +115,9 @@ class ProviderUserProjectDetailSchema(ModelSchema):
     status: ProviderUserProjectStatus
     configuration_attempts: int
     project_id: str
-    name: Optional[str]
-    description: Optional[str]
+    name: str
+    description: str
+    configuration_error: str
     config_data: dict[str, str]
 
     class Meta:
