@@ -317,7 +317,7 @@ SOCIALACCOUNT_PROVIDERS = {
         "SCOPE": [
             "email",
             "profile",
-            "https://www.googleapis.com/auth/cloud-platform",
+            "https://www.googleapis.com/auth/cloud-platform.read-only",
         ],
         "AUTH_PARAMS": {
             "access_type": "offline",

@@ -27,6 +27,7 @@ class ProviderUserProject(AbstractUUIDModel):
         default=ProviderUserProjectStatus.PENDING,
     )
     configuration_attempts = models.PositiveSmallIntegerField(_("Configuration attempts"), default=0)
+    configuration_error = models.TextField(_("Configuration error"), blank=True, default="")
 
     project_id = models.CharField(_("Project ID"), max_length=255, blank=True, default="")
     name = models.CharField(_("Name"), max_length=255, blank=True, default="")

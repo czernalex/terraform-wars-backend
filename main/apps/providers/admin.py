@@ -118,6 +118,7 @@ class ProviderUserProjectAdmin(BaseModelAdmin):
                     "user",
                     "status",
                     "configuration_attempts",
+                    "configuration_error",
                     "project_id",
                     "name",
                     "description",

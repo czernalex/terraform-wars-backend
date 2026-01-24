@@ -13,13 +13,10 @@ from main.di import injector
 tasks_router = Router()
 
 
-# TODO: We should return a response schema which will allow us to track the status of the execution and validation processes
-
-
 @tasks_router.post(
     "/provider-user-projects/{provider_user_project_id}/configuration/",
     url_name="provider_user_project_configuration_list",
-    response={HTTPStatus.ACCEPTED: None},
+    response={HTTPStatus.NO_CONTENT: None},
     description="Verify a provider user project configuration",
 )
 def configure_provider_user_project(
@@ -32,7 +29,7 @@ def configure_provider_user_project(
 @tasks_router.post(
     "/submissions/{tutorial_submission_id}/execute/",
     url_name="tutorial_submission_execute",
-    response={HTTPStatus.ACCEPTED: None},
+    response={HTTPStatus.NO_CONTENT: None},
     description="Trigger a tutorial submission execution",
 )
 def execute_tutorial_submission(
@@ -46,7 +43,7 @@ def execute_tutorial_submission(
 @tasks_router.post(
     "/submissions/{tutorial_submission_id}/validate/",
     url_name="tutorial_submission_validate",
-    response={HTTPStatus.ACCEPTED: None},
+    response={HTTPStatus.NO_CONTENT: None},
     description="Trigger a tutorial submission validation",
 )
 def validate_tutorial_submission(
