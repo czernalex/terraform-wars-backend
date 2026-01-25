@@ -1,14 +1,12 @@
 import asyncio
 import logging
-from datetime import timedelta
-from typing import AsyncIterator, Optional
+from typing import AsyncIterator
 from uuid import UUID
 
-from django.utils import timezone
 from injector import inject
 
 from main.apps.core.services import HeartbeatEventBuilder
-from main.apps.notifications.schemas import NotificationListFilterSchema
+from main.apps.notifications.services.notification_hub_service import NotificationHubService
 from main.apps.notifications.services.notification_retrieval_service import NotificationRetrievalService
 from main.apps.notifications.services.notification_update_service import NotificationUpdateService
 from main.apps.notifications.services.notification_event_builder import NotificationEventBuilder
@@ -25,38 +23,26 @@ class NotificationStreamService:
         notification_update_service: NotificationUpdateService,
         notification_event_builder: NotificationEventBuilder,
         heartbeat_event_builder: HeartbeatEventBuilder,
+        notification_hub_service: NotificationHubService,
     ):
         self.notification_retrieval_service = notification_retrieval_service
         self.notification_update_service = notification_update_service
         self.notification_event_builder = notification_event_builder
         self.heartbeat_event_builder = heartbeat_event_builder
+        self.notification_hub_service = notification_hub_service
 
-    def try_cast_last_event_id(self, last_event_id: Optional[str]) -> Optional[int]:
-        if last_event_id:
-            try:
-                return int(last_event_id)
-            except ValueError:
-                logger.warning(f"Invalid last event ID: {last_event_id}")
-                return
-
-    async def stream(self, user_id: UUID, last_event_id: Optional[str] = None) -> AsyncIterator[str]:
-        last_event_id = self.try_cast_last_event_id(last_event_id)
-        from_last_heartbeat = 0
-        while True:
-            now = timezone.now()
-            notifications = self.notification_retrieval_service.get_list(
-                NotificationListFilterSchema(
-                    user_id=user_id,
-                    dispatched=False,
-                    read=False,
-                    last_event_id=last_event_id,
-                    created_at=now - timedelta(seconds=10) if last_event_id is None else None,
-                )
-            )
-            async for notification in notifications:
-                logger.info(f"Sending notification: {notification.id}")
-                yield self.notification_event_builder.build_event(notification)
-                await self.notification_update_service.mark_as_dispatched(notification)
-
-            await asyncio.sleep(5)
-            yield self.heartbeat_event_builder.build_event()
+    async def astream(self, user_id: UUID) -> AsyncIterator[str]:
+        queue = self.notification_hub_service.add_subscriber(user_id)
+        yield self.heartbeat_event_builder.build_event()  # Send initial heartbeat event
+        try:
+            while True:
+                try:
+                    notification_id = await asyncio.wait_for(queue.get(), timeout=30.0)
+                    notification = await self.notification_retrieval_service.aget_for_read_by_id(notification_id)
+                    logger.info(f"Notification: {notification.id} sent to the user: {user_id}")
+                    yield self.notification_event_builder.build_event(notification)
+                except asyncio.TimeoutError:
+                    logger.info(f"Heartbeat event sent to the user: {user_id}")
+                    yield self.heartbeat_event_builder.build_event()
+        finally:
+            self.notification_hub_service.remove_subscriber(user_id, queue)

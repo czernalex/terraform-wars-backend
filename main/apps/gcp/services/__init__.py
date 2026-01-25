@@ -7,6 +7,9 @@ from main.apps.gcp.services.gcp_project_iam_role_grant_service import GCPProject
 from main.apps.gcp.services.gcp_cloud_run_job_invoke_service import GCPCloudRunJobInvokeService
 from main.apps.gcp.services.gcp_project_search_service import GCPProjectSearchService
 from main.apps.gcp.services.gcp_project_billing_info_get_service import GCPProjectBillingInfoGetService
+from main.apps.gcp.services.gcp_pubsub_subscribe_service import GCPPubSubSubscribeService
+from main.apps.gcp.services.gcp_pubsub_subscription_create_service import GCPPubSubSubscriptionCreateService
+from main.apps.gcp.services.gcp_pubsub_publish_service import GCPPubSubPublishService
 
 __all__ = (
     "GCPOAuth2CredentialsCreateService",
@@ -18,4 +21,7 @@ __all__ = (
     "GCPCloudTaskCreateService",
     "GCPProjectSearchService",
     "GCPProjectBillingInfoGetService",
+    "GCPPubSubSubscribeService",
+    "GCPPubSubSubscriptionCreateService",
+    "GCPPubSubPublishService",
 )

@@ -14,6 +14,6 @@ from django.core.wsgi import get_wsgi_application
 
 config = AutoConfig(os.environ.get("DJANGO_CONFIG_ENV_DIR"))
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", config("DJANGO_SETTINGS_MODULE", default="main.settings"))
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", config("DJANGO_SETTINGS_MODULE", default="main.settings.production"))
 
 application = get_wsgi_application()

@@ -4,6 +4,9 @@ from uuid import UUID
 from django.db import transaction
 from injector import inject
 
+from main.apps.notifications.enums import NotificationLevel
+from main.apps.notifications.schemas import NotificationCreateSchema
+from main.apps.notifications.services import NotificationCreateService
 from main.apps.providers.enums import ProviderUserProjectStatus
 from main.apps.providers.exceptions import ProviderUserProjectConfigurationError
 from main.apps.providers.models import ProviderUserProject
@@ -26,16 +29,18 @@ class ProviderUserProjectConfigureService:
         provider_user_project_validation_service: ProviderUserProjectValidationService,
         provider_user_project_update_service: ProviderUserProjectUpdateService,
         provider_user_project_configurator_factory: ProviderUserProjectConfiguratorFactory,
+        notification_create_service: NotificationCreateService,
     ):
         self._provider_user_project_retrieval_service = provider_user_project_retrieval_service
         self._provider_user_project_validation_service = provider_user_project_validation_service
         self._provider_user_project_update_service = provider_user_project_update_service
         self._provider_user_project_configurator_factory = provider_user_project_configurator_factory
+        self._notification_create_service = notification_create_service
 
     def _handle_failed_configuration_attempt(
         self, provider_user_project: ProviderUserProject, error: ProviderUserProjectConfigurationError
     ) -> ProviderUserProject:
-        return self._provider_user_project_update_service.update_with_data(
+        provider_user_project = self._provider_user_project_update_service.update_with_data(
             provider_user_project,
             UpdateProviderUserProjectSchema(
                 name=provider_user_project.name,
@@ -47,11 +52,20 @@ class ProviderUserProjectConfigureService:
                 configuration_error=str(error),
             ),
         )
+        if provider_user_project.status == ProviderUserProjectStatus.FAILED:
+            self._notification_create_service.create(
+                provider_user_project.user_id,
+                NotificationCreateSchema(
+                    text=f"Failed to configure provider project: {provider_user_project.project_id}. Check the bug report for more details.",
+                    level=NotificationLevel.ERROR,
+                ),
+            )
+        return provider_user_project
 
     def _handle_successful_configuration_attempt(
         self, provider_user_project: ProviderUserProject
     ) -> ProviderUserProject:
-        return self._provider_user_project_update_service.update_with_data(
+        provider_user_project = self._provider_user_project_update_service.update_with_data(
             provider_user_project,
             UpdateProviderUserProjectSchema(
                 name=provider_user_project.name,
@@ -61,6 +75,14 @@ class ProviderUserProjectConfigureService:
                 configuration_error="",
             ),
         )
+        self._notification_create_service.create(
+            provider_user_project.user_id,
+            NotificationCreateSchema(
+                text=f"Provider project {provider_user_project.project_id} configured successfully",
+                level=NotificationLevel.SUCCESS,
+            ),
+        )
+        return provider_user_project
 
     @transaction.atomic
     def configure(self, user_id: UUID, provider_user_project_id: UUID) -> ProviderUserProject:

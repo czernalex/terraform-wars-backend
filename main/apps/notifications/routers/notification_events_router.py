@@ -35,11 +35,10 @@ notification_events_router = Router()
         }
     },
 )
-async def stream_notifications(request: AuthedHttpRequest) -> StreamingHttpResponse:
-    last_event_id = request.headers.get("Last-Event-ID")
+async def astream_notifications(request: AuthedHttpRequest) -> StreamingHttpResponse:
     notification_stream_service = injector.get(NotificationStreamService)
     response = StreamingHttpResponse(
-        notification_stream_service.stream(request.user.id, last_event_id),
+        notification_stream_service.astream(request.user.id),
         content_type="text/event-stream",
     )
     response["Cache-control"] = "no-cache"

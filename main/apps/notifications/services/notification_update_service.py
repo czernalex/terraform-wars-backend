@@ -18,12 +18,6 @@ class NotificationUpdateService:
     def __init__(self, notification_retrieval_service: NotificationRetrievalService):
         self._notification_retrieval_service = notification_retrieval_service
 
-    async def mark_as_dispatched(self, notification: Notification) -> None:
-        logger.info(f"Marking notification as dispatched: {notification.id}")
-        notification.dispatched = True
-        await notification.asave()
-        logger.info(f"Notification: {notification.id} marked as dispatched")
-
     def _partial_update_notification_with_data(
         self, notification: Notification, data: NotificationPartialUpdateSchema
     ) -> Notification:

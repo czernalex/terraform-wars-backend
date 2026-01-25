@@ -22,6 +22,11 @@ class NotificationEventSchema(Schema):
     level: NotificationLevel
 
 
+class NotificationCreateSchema(Schema):
+    text: str
+    level: NotificationLevel
+
+
 class NotificationPartialUpdateSchema(Schema):
     dispatched: Optional[bool] = None
     read: Optional[bool] = None
