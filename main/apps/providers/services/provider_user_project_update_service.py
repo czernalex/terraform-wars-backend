@@ -20,10 +20,10 @@ class ProviderUserProjectUpdateService:
         self, provider_user_project: ProviderUserProject, data: UpdateProviderUserProjectSchema
     ) -> ProviderUserProject:
         provider_user_project.name = data.name
-        provider_user_project.description = data.description
+        provider_user_project.description = data.description or ""
         provider_user_project.status = data.status
         provider_user_project.configuration_attempts = data.configuration_attempts
-        provider_user_project.configuration_error = data.configuration_error
+        provider_user_project.configuration_error = data.configuration_error or ""
         provider_user_project.save()
         return provider_user_project
 
