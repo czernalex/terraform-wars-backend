@@ -42,7 +42,9 @@ class NotificationStreamService:
                     logger.info(f"Notification: {notification.id} sent to the user: {user_id}")
                     yield self.notification_event_builder.build_event(notification)
                 except asyncio.TimeoutError:
-                    logger.info(f"Heartbeat event sent to the user: {user_id}")
+                    logger.info(
+                        f"No new notifications received within the timeout. Sending heartbeat event to the user: {user_id}"
+                    )
                     yield self.heartbeat_event_builder.build_event()
         finally:
             self.notification_hub_service.remove_subscriber(user_id, queue)

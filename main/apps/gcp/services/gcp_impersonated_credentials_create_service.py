@@ -9,7 +9,8 @@ class GCPImpersonatedCredentialsCreateService:
 
     def _get_source_credentials(self) -> Credentials:
         if settings.USE_GCP_DEFAULT_CREDENTIALS:
-            return default()
+            credentials, _ = default()
+            return credentials
         else:
             return service_account.Credentials.from_service_account_file(
                 settings.GCP_SERVICE_ACCOUNT_SECRET_KEY, scopes=["https://www.googleapis.com/auth/cloud-platform"]
