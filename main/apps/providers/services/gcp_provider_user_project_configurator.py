@@ -30,6 +30,7 @@ class GCPProviderUserProjectConfigurator(ProviderUserProjectConfigurator):
         "iam.googleapis.com",
         "iamcredentials.googleapis.com",
         "sts.googleapis.com",
+        "cloudbilling.googleapis.com",
     ]
 
     @inject
