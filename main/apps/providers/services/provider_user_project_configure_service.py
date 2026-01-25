@@ -46,7 +46,7 @@ class ProviderUserProjectConfigureService:
                 name=provider_user_project.name,
                 description=provider_user_project.description,
                 status=ProviderUserProjectStatus.FAILED
-                if provider_user_project.configuration_attempts >= ProviderUserProject.MAX_CONFIGURATION_ATTEMPTS
+                if (provider_user_project.configuration_attempts + 1) >= ProviderUserProject.MAX_CONFIGURATION_ATTEMPTS
                 else ProviderUserProjectStatus.PENDING,
                 configuration_attempts=provider_user_project.configuration_attempts + 1,
                 configuration_error=str(error),
