@@ -35,10 +35,12 @@ class TutorialSubmissionCreateService:
         transaction.on_commit(
             lambda: self._gcp_cloud_task_create_service.create(
                 queue_id=settings.GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID,
-                url=reverse_lazy(
-                    "terraform-wars-internal-api:tutorial_submission_execute",
-                    kwargs={"tutorial_submission_id": tutorial_submission.id},
-                ),
+                url=f"{settings.INTERNAL_API_BASE_URL}{
+                    reverse_lazy(
+                        'terraform-wars-internal-api:tutorial_submission_execute',
+                        kwargs={'tutorial_submission_id': tutorial_submission.id},
+                    )
+                }",
             )
         )
 

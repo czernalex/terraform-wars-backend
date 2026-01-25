@@ -31,12 +31,10 @@ class ProviderUserProjectConfigureScheduler:
                 "provider_user_project_id": provider_user_project.id,
             },
         )
+        task_url = f"{settings.INTERNAL_API_BASE_URL}{reverse_lazy('terraform-wars-internal-api:provider_user_project_configuration_list', kwargs={'provider_user_project_id': provider_user_project.id})}"
         self._gcp_cloud_task_create_service.create(
             settings.GCP_TASKS_PROVIDER_USER_PROJECT_CONFIGURATION_QUEUE_ID,
-            reverse_lazy(
-                "terraform-wars-internal-api:provider_user_project_configuration_list",
-                kwargs={"provider_user_project_id": provider_user_project.id},
-            ),
+            task_url,
             payload={
                 "user_id": provider_user_project.user_id,
             },

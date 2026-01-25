@@ -1,5 +1,10 @@
+import logging
+
 from google.cloud import pubsub_v1
 from injector import inject
+
+
+logger = logging.getLogger(__name__)
 
 
 class GCPPubSubPublishService:
@@ -11,4 +16,3 @@ class GCPPubSubPublishService:
     def publish(self, topic_name: str, message: bytes):
         topic_path = self._publisher_client.topic_path(self._gcp_project_id, topic_name)
         future = self._publisher_client.publish(topic_path, message)
-        # TODO: handle future
