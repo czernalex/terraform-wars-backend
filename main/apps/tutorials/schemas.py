@@ -36,16 +36,17 @@ class TutorialListFilterSchema(FilterSchema):
     difficulty: Optional[Difficulty] = None
     provider_id: Optional[UUID] = None
     tag_ids: Annotated[Optional[list[UUID]], FilterLookup(["tags__id__in"])] = None
+    author_id: Optional[UUID] = None
 
 
 class TutorialListSchema(ModelSchema):
     id: UUID
-    provider_id: UUID
-    provider_name: str = Field(alias="provider.name")
+    provider: ProviderSchema
     author_email: Optional[str]
     author_username: Optional[str]
     tags: list[TutorialTagSchema]
     difficulty: Difficulty
+    status: TutorialStatus
 
     class Meta:
         model = Tutorial
@@ -85,6 +86,7 @@ class TutorialDetailSchema(ModelSchema):
     author_username: Optional[str]
     tags: list[TutorialTagSchema]
     difficulty: Difficulty
+    status: TutorialStatus
 
     class Meta:
         model = Tutorial

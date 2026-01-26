@@ -35,7 +35,7 @@ class TutorialRetrievalService:
 
     def get_list(self, filters: TutorialListFilterSchema) -> models.QuerySet[Tutorial]:
         return filters.filter(
-            self._get_queryset(select_related_fields=["provider"], prefetch_related_fields=["tags"]).all()
+            self._get_queryset(select_related_fields=["provider", "author"], prefetch_related_fields=["tags"]).all()
         )
 
     def get_detail_by_slug(self, tutorial_slug: str) -> Tutorial:
