@@ -6,6 +6,7 @@ from uuid import UUID
 from injector import inject
 
 from main.apps.core.services import HeartbeatEventBuilder
+from main.apps.notifications.schemas import NotificationEventSchema
 from main.apps.notifications.services.notification_hub_service import NotificationHubService
 from main.apps.notifications.services.notification_retrieval_service import NotificationRetrievalService
 from main.apps.notifications.services.notification_update_service import NotificationUpdateService
@@ -40,7 +41,12 @@ class NotificationStreamService:
                     notification_id = await asyncio.wait_for(queue.get(), timeout=30.0)
                     notification = await self.notification_retrieval_service.aget_for_read_by_id(notification_id)
                     logger.info(f"Notification: {notification.id} sent to the user: {user_id}")
-                    yield self.notification_event_builder.build_event(notification)
+                    notification_event = NotificationEventSchema(
+                        id=notification.id,
+                        text=notification.text,
+                        level=notification.level,
+                    )
+                    yield self.notification_event_builder.build_event(notification_event)
                 except asyncio.TimeoutError:
                     logger.info(
                         f"No new notifications received within the timeout. Sending heartbeat event to the user: {user_id}"

@@ -7,7 +7,6 @@ from django.utils.translation import gettext as _
 from main.apps.core.exceptions import NotFoundError
 from main.apps.tutorials.models import Tutorial
 from main.apps.tutorials.schemas import TutorialListFilterSchema
-from main.apps.users.models import User
 
 
 class TutorialRetrievalService:
@@ -34,7 +33,7 @@ class TutorialRetrievalService:
             .get(id=tutorial_id)
         )
 
-    def get_list(self, user: User, filters: TutorialListFilterSchema) -> models.QuerySet[Tutorial]:
+    def get_list(self, filters: TutorialListFilterSchema) -> models.QuerySet[Tutorial]:
         return filters.filter(
             self._get_queryset(select_related_fields=["provider"], prefetch_related_fields=["tags"]).all()
         )

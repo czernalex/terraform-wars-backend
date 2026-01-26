@@ -4,16 +4,17 @@ from django.db import models
 from ninja import Query, Router
 from ninja.pagination import paginate
 
+from main.apps.tutorials.services import TutorialCreateService, TutorialRetrievalService
 from main.di import injector
 from main.apps.core.schemas import NotFoundErrorSchema
 from main.apps.core.types import AuthedHttpRequest
 from main.apps.tutorials.models import Tutorial
 from main.apps.tutorials.schemas import (
+    CreateTutorialSchema,
     TutorialDetailSchema,
     TutorialListFilterSchema,
     TutorialListSchema,
 )
-from main.apps.tutorials.services.tutorial_retrieval_service import TutorialRetrievalService
 
 
 tutorials_router = Router()
@@ -31,7 +32,21 @@ def get_tutorial_list(
     filters: Query[TutorialListFilterSchema],
 ) -> models.QuerySet[Tutorial]:
     tutorial_retrieval_service = injector.get(TutorialRetrievalService)
-    return tutorial_retrieval_service.get_list(request.user, filters)
+    return tutorial_retrieval_service.get_list(filters)
+
+
+@tutorials_router.post(
+    "/",
+    url_name="tutorial_list",
+    response={HTTPStatus.CREATED: TutorialDetailSchema},
+    description="Create new tutorial",
+)
+def create_tutorial(
+    request: AuthedHttpRequest,
+    data: CreateTutorialSchema,
+) -> models.QuerySet[Tutorial]:
+    tutorial_create_service = injector.get(TutorialCreateService)
+    return tutorial_create_service.create(request.user.id, data)
 
 
 @tutorials_router.get(

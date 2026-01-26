@@ -11,7 +11,6 @@ from main.apps.notifications.models import Notification
 class NotificationListFilterSchema(FilterSchema):
     user_id: Optional[UUID] = None
     dispatched: Optional[bool] = None
-    read: Optional[bool] = None
     last_event_id: Annotated[Optional[int], FilterLookup("id__gt")] = None
     created_at: Annotated[Optional[datetime], FilterLookup("created_at__gte")] = None
 
@@ -29,7 +28,6 @@ class NotificationCreateSchema(Schema):
 
 class NotificationPartialUpdateSchema(Schema):
     dispatched: Optional[bool] = None
-    read: Optional[bool] = None
 
 
 class NotificationSchema(ModelSchema):
@@ -42,6 +40,5 @@ class NotificationSchema(ModelSchema):
         fields = [
             "text",
             "dispatched",
-            "read",
             "created_at",
         ]

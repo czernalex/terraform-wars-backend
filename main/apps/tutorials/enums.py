@@ -5,6 +5,8 @@ from django.utils.translation import gettext as _
 class TutorialStatus(models.TextChoices):
     DRAFT = "draft", _("Draft")
     REVIEW = "review", _("Review")
+    REJECTED = "rejected", _("Rejected")
+    APPROVED = "approved", _("Approved")
     PUBLISHED = "published", _("Published")
     ARCHIVED = "archived", _("Archived")
 

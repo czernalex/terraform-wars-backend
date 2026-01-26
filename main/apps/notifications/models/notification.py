@@ -19,7 +19,6 @@ class Notification(AbstractTimestampedModel):
         _("Notification level"), max_length=255, choices=NotificationLevel.choices, default=NotificationLevel.INFO
     )
     dispatched = models.BooleanField(_("Dispatched"), default=False)
-    read = models.BooleanField(_("Read"), default=False)
 
     objects = NotificationQuerySet.as_manager()
 

@@ -33,7 +33,7 @@ def get_notification_list(
     return notification_retrieval_service.get_list(
         filters,
         ordering=(
-            "read",
+            "dispatched",
             "-created_at",
         ),
     )

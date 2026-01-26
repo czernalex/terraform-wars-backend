@@ -11,6 +11,11 @@ from main.apps.tutorials.models import (
 )
 
 
+class TutorialTagListFilterSchema(FilterSchema):
+    ids: Annotated[Optional[list[UUID]], FilterLookup(["id__in"])] = None
+    search: Annotated[Optional[str], FilterLookup(["name__icontains"])] = None
+
+
 class TutorialTagSchema(ModelSchema):
     id: UUID
 
@@ -26,6 +31,7 @@ class TutorialListFilterSchema(FilterSchema):
     search: Annotated[
         Optional[str], FilterLookup(["title__icontains", "description__icontains", "provider__name__icontains"])
     ] = None
+    slug: Optional[str] = None
     status: Optional[TutorialStatus] = None
     difficulty: Optional[Difficulty] = None
     provider_id: Optional[UUID] = None
@@ -58,6 +64,18 @@ class TutorialListSchema(ModelSchema):
     @staticmethod
     def resolve_author_username(obj: Tutorial) -> Optional[str]:
         return obj.author.username if obj.author else None
+
+
+class CreateTutorialSchema(Schema):
+    provider_id: UUID
+    title: str = Field(..., min_length=1, max_length=255)
+    description: str
+    assignment: str
+    difficulty: Difficulty
+    tag_ids: list[UUID]
+    validation_script: str
+    code_template: str
+    status: TutorialStatus
 
 
 class TutorialDetailSchema(ModelSchema):

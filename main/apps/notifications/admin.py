@@ -13,7 +13,7 @@ from main.apps.notifications.models import Notification
 
 @admin.register(Notification)
 class NotificationAdmin(BaseModelAdmin):
-    list_display = ("user", "text", "level", "dispatched", "read", "created_at", "updated_at")
+    list_display = ("user", "text", "level", "dispatched", "created_at", "updated_at")
     list_select_related = ("user",)
     list_filter = (
         ("created_at", RangeDateFilter),
@@ -21,7 +21,6 @@ class NotificationAdmin(BaseModelAdmin):
         ("user", AutocompleteSelectFilter),
         ("level", ChoicesDropdownFilter),
         ("dispatched", BooleanRadioFilter),
-        ("read", BooleanRadioFilter),
     )
     search_fields = (
         "id",
@@ -40,7 +39,6 @@ class NotificationAdmin(BaseModelAdmin):
                     "text",
                     "level",
                     "dispatched",
-                    "read",
                 )
             },
         ),
