@@ -1,4 +1,5 @@
 import logging
+from typing import Optional
 from uuid import UUID
 
 from django.utils.text import slugify
@@ -11,10 +12,16 @@ from main.apps.providers.models import Provider
 from main.apps.providers.services.provider_retrieval_service import ProviderRetrievalService
 from main.apps.tutorials.enums import TutorialStatus
 from main.apps.tutorials.models import Tutorial, TutorialTag
-from main.apps.tutorials.schemas import CreateTutorialSchema, TutorialListFilterSchema, TutorialTagListFilterSchema
+from main.apps.tutorials.schemas import (
+    CreateTutorialSchema,
+    PartialUpdateTutorialSchema,
+    TutorialListFilterSchema,
+    TutorialTagListFilterSchema,
+    UpdateTutorialSchema,
+)
 from main.apps.tutorials.services.tutorial_retrieval_service import TutorialRetrievalService
 from main.apps.tutorials.services.tutorial_tag_retrieval_service import TutorialTagRetrievalService
-from main.apps.tutorials.types import CreateTutorialValidatedData
+from main.apps.tutorials.types import CreateOrUpdateTutorialValidatedData
 
 
 logger = logging.getLogger(__name__)
@@ -66,8 +73,10 @@ class TutorialValidationService:
                 )
         return existing_tag_ids
 
-    def _validate_unique_slug(self, slug: str) -> None:
-        if self._tutorial_retrieval_service.get_list(filters=TutorialListFilterSchema(slug=slug)):
+    def _validate_unique_slug(self, slug: str, tutorial_id: Optional[UUID] = None) -> None:
+        if self._tutorial_retrieval_service.get_list(
+            filters=TutorialListFilterSchema(slug=slug, exclude_id=tutorial_id)
+        ):
             raise ValidationError(
                 [
                     {
@@ -78,7 +87,7 @@ class TutorialValidationService:
                 ]
             )
 
-    def _validate_create_status(self, status: TutorialStatus) -> None:
+    def _validate_post_status(self, status: TutorialStatus) -> None:
         if status not in [TutorialStatus.DRAFT, TutorialStatus.REVIEW]:
             raise ValidationError(
                 [
@@ -90,18 +99,50 @@ class TutorialValidationService:
                 ]
             )
 
-    def validate_create_data(self, data: CreateTutorialSchema) -> CreateTutorialValidatedData:
+    def _validate_pre_update_status(self, status: TutorialStatus) -> None:
+        if status not in [TutorialStatus.DRAFT, TutorialStatus.REJECTED]:
+            raise ValidationError(
+                [
+                    {
+                        "loc": ["status"],
+                        "msg": _("To update the tutorial, the status must be draft or rejected"),
+                        "type": "value_error",
+                    }
+                ]
+            )
+
+    def validate_create_data(self, data: CreateTutorialSchema) -> CreateOrUpdateTutorialValidatedData:
         slug = slugify(data.title)
         self._validate_unique_slug(slug)
-        self._validate_create_status(data.status)
+        self._validate_post_status(data.status)
         provider = self._validate_provider_exists(data.provider_id)
         tag_ids = self._validate_tags_exist(data.tag_ids)
-        return CreateTutorialValidatedData(
+        return CreateOrUpdateTutorialValidatedData(
             provider=provider,
             slug=slug,
             status=data.status,
             tag_ids=tag_ids,
         )
+
+    def validate_update_data(
+        self, tutorial: Tutorial, data: UpdateTutorialSchema
+    ) -> CreateOrUpdateTutorialValidatedData:
+        slug = slugify(data.title)
+        self._validate_unique_slug(slug, tutorial.id)
+        self._validate_pre_update_status(tutorial.status)
+        self._validate_post_status(data.status)
+        provider = self._validate_provider_exists(data.provider_id)
+        tag_ids = self._validate_tags_exist(data.tag_ids)
+        return CreateOrUpdateTutorialValidatedData(
+            provider=provider,
+            slug=slug,
+            status=data.status,
+            tag_ids=tag_ids,
+        )
+
+    def validate_partial_update_data(self, tutorial: Tutorial, data: PartialUpdateTutorialSchema) -> None:
+        # TODO: Validate the status flow
+        return
 
     def validate_accepts_submissions(self, tutorial: Tutorial, loc: str = "tutorial_id") -> None:
         if not tutorial.status != TutorialStatus.PUBLISHED:
@@ -112,6 +153,23 @@ class TutorialValidationService:
                     {
                         "loc": [loc],
                         "msg": error_message,
+                        "type": "value_error",
+                    }
+                ]
+            )
+
+    def validate_can_be_deleted(self, tutorial: Tutorial) -> None:
+        if tutorial.status not in [
+            TutorialStatus.DRAFT,
+            TutorialStatus.REVIEW,
+            TutorialStatus.REJECTED,
+            TutorialStatus.APPROVED,
+        ]:
+            raise ValidationError(
+                [
+                    {
+                        "loc": ["status"],
+                        "msg": _("Tutorial with status %(status)s cannot be deleted") % {"status": tutorial.status},
                         "type": "value_error",
                     }
                 ]

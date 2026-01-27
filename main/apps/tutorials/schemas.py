@@ -1,5 +1,7 @@
 from typing import Annotated, Optional
 from uuid import UUID
+
+from django.db.models import Q
 from ninja import Field, FilterLookup, FilterSchema, ModelSchema, Schema
 
 from main.apps.providers.schemas import ProviderSchema
@@ -37,6 +39,10 @@ class TutorialListFilterSchema(FilterSchema):
     provider_id: Optional[UUID] = None
     tag_ids: Annotated[Optional[list[UUID]], FilterLookup(["tags__id__in"])] = None
     author_id: Optional[UUID] = None
+    exclude_id: Optional[UUID] = None
+
+    def filter_exclude_id(self, value: UUID) -> Q:
+        return ~Q(id=value)
 
 
 class TutorialListSchema(ModelSchema):
@@ -79,6 +85,22 @@ class CreateTutorialSchema(Schema):
     status: TutorialStatus
 
 
+class UpdateTutorialSchema(Schema):
+    provider_id: UUID
+    title: str = Field(..., min_length=1, max_length=255)
+    description: str
+    assignment: str
+    difficulty: Difficulty
+    tag_ids: list[UUID]
+    validation_script: str
+    code_template: str
+    status: TutorialStatus
+
+
+class PartialUpdateTutorialSchema(Schema):
+    status: Optional[TutorialStatus] = None
+
+
 class TutorialDetailSchema(ModelSchema):
     id: UUID
     provider: ProviderSchema
@@ -87,6 +109,8 @@ class TutorialDetailSchema(ModelSchema):
     tags: list[TutorialTagSchema]
     difficulty: Difficulty
     status: TutorialStatus
+    validation_script: str
+    code_template: str
 
     class Meta:
         model = Tutorial
@@ -96,7 +120,6 @@ class TutorialDetailSchema(ModelSchema):
             "description",
             "assignment",
             "config_data",
-            "code_template",
             "created_at",
             "updated_at",
         ]

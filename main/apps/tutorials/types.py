@@ -6,7 +6,7 @@ from main.apps.tutorials.enums import TutorialStatus
 
 
 @dataclass(frozen=True)
-class CreateTutorialValidatedData:
+class CreateOrUpdateTutorialValidatedData:
     provider: Provider
     slug: str
     status: TutorialStatus

@@ -45,7 +45,7 @@ def get_notification_list(
     response={HTTPStatus.OK: NotificationSchema},
     description="Partial update a notification for the authenticated user",
 )
-def patch_notification(
+def partial_update_notification(
     request: AuthedHttpRequest, notification_id: int, data: NotificationPartialUpdateSchema
 ) -> Notification:
     notification_update_service = injector.get(NotificationUpdateService)

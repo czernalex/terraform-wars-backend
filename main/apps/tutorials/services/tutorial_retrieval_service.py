@@ -26,10 +26,11 @@ class TutorialRetrievalService:
         )
 
     @transaction.atomic
-    def _get_for_update_by_id(self, tutorial_id: UUID) -> Tutorial:
+    def _get_for_update_by_id(self, user_id: UUID, tutorial_id: UUID) -> Tutorial:
         return (
             self._get_queryset(select_related_fields=["author", "provider"], prefetch_related_fields=["tags"])
             .select_for_update(of=("self",))
+            .for_user(user_id)
             .get(id=tutorial_id)
         )
 
@@ -47,5 +48,12 @@ class TutorialRetrievalService:
     def get_detail_by_id(self, tutorial_id: UUID) -> Tutorial:
         try:
             return self._get_for_read_by_id(tutorial_id)
+        except Tutorial.DoesNotExist:
+            raise NotFoundError(_("Tutorial not found"))
+
+    @transaction.atomic
+    def get_for_update_by_id(self, user_id: UUID, tutorial_id: UUID) -> Tutorial:
+        try:
+            return self._get_for_update_by_id(user_id, tutorial_id)
         except Tutorial.DoesNotExist:
             raise NotFoundError(_("Tutorial not found"))

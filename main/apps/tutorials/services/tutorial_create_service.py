@@ -7,7 +7,7 @@ from injector import inject
 from main.apps.tutorials.schemas import CreateTutorialSchema
 from main.apps.tutorials.models import Tutorial
 from main.apps.tutorials.services.tutorial_validation_service import TutorialValidationService
-from main.apps.tutorials.types import CreateTutorialValidatedData
+from main.apps.tutorials.types import CreateOrUpdateTutorialValidatedData
 
 
 logger = logging.getLogger(__name__)
@@ -22,7 +22,7 @@ class TutorialCreateService:
         self,
         user_id: UUID,
         data: CreateTutorialSchema,
-        validated_data: CreateTutorialValidatedData,
+        validated_data: CreateOrUpdateTutorialValidatedData,
     ) -> Tutorial:
         tutorial = Tutorial.objects.create(
             provider_id=validated_data.provider.id,

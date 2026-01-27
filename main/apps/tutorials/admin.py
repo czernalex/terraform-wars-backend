@@ -13,6 +13,7 @@ from unfold.contrib.forms.widgets import WysiwygWidget
 from main.apps.core.admin import BaseModelAdmin
 from main.apps.tutorials.models import (
     Tutorial,
+    TutorialReview,
     TutorialSubmission,
     TutorialTag,
 )
@@ -111,6 +112,43 @@ class TutorialAdmin(BaseModelAdmin):
             },
         ),
     )
+
+    def formfield_for_dbfield(self, db_field: models.Field, request: HttpRequest, **kwargs) -> models.Field | None:
+        if isinstance(db_field, models.TextField) and db_field.name in self.wysiwyg_fields:
+            kwargs["widget"] = WysiwygWidget
+
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
+
+
+@admin.register(TutorialReview)
+class TutorialReviewAdmin(BaseModelAdmin):
+    list_display = ("tutorial", "user", "created_at", "updated_at")
+    list_select_related = (
+        "tutorial",
+        "user",
+    )
+    list_filter = (
+        ("created_at", RangeDateFilter),
+        ("updated_at", RangeDateFilter),
+        ("tutorial", AutocompleteSelectFilter),
+        ("user", AutocompleteSelectFilter),
+    )
+    search_fields = (
+        "id",
+        "tutorial__id",
+        "tutorial__title",
+        "user__id",
+        "user__email",
+    )
+    autocomplete_fields = (
+        "tutorial",
+        "user",
+    )
+    fieldsets = (
+        (_("Tutorial review information"), {"fields": ("tutorial", "user", "feedback")}),
+        (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
+    )
+    wysiwyg_fields = ("feedback",)
 
     def formfield_for_dbfield(self, db_field: models.Field, request: HttpRequest, **kwargs) -> models.Field | None:
         if isinstance(db_field, models.TextField) and db_field.name in self.wysiwyg_fields:
