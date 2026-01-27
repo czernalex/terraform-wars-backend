@@ -57,25 +57,8 @@ def create_tutorial(
     return tutorial_create_service.create(request.user.id, data)
 
 
-@tutorials_router.get(
-    "/{tutorial_slug}/",
-    url_name="tutorial_detail",
-    response={
-        HTTPStatus.OK: TutorialDetailSchema,
-        HTTPStatus.NOT_FOUND: NotFoundErrorSchema,
-    },
-    description="Get a tutorial by slug",
-)
-def get_tutorial_detail(
-    request: AuthedHttpRequest,
-    tutorial_slug: str,
-) -> Tutorial:
-    tutorial_retrieval_service = injector.get(TutorialRetrievalService)
-    return tutorial_retrieval_service.get_detail_by_slug(tutorial_slug)
-
-
 @tutorials_router.put(
-    "/{tutorial_id}/",
+    "/{uuid:tutorial_id}/",
     url_name="tutorial_detail",
     response={
         HTTPStatus.OK: TutorialDetailSchema,
@@ -93,7 +76,7 @@ def update_tutorial(
 
 
 @tutorials_router.patch(
-    "/{tutorial_id}/",
+    "/{uuid:tutorial_id}/",
     url_name="tutorial_detail",
     response={
         HTTPStatus.OK: TutorialDetailSchema,
@@ -111,7 +94,7 @@ def partial_update_tutorial(
 
 
 @tutorials_router.delete(
-    "/{tutorial_id}/",
+    "/{uuid:tutorial_id}/",
     url_name="tutorial_detail",
     response={
         HTTPStatus.NO_CONTENT: None,
@@ -125,3 +108,20 @@ def delete_tutorial(
 ) -> None:
     tutorial_delete_service = injector.get(TutorialDeleteService)
     return tutorial_delete_service.delete(request.user.id, tutorial_id)
+
+
+@tutorials_router.get(
+    "/{str:tutorial_slug}/",
+    url_name="tutorial_detail",
+    response={
+        HTTPStatus.OK: TutorialDetailSchema,
+        HTTPStatus.NOT_FOUND: NotFoundErrorSchema,
+    },
+    description="Get a tutorial by slug",
+)
+def get_tutorial_detail(
+    request: AuthedHttpRequest,
+    tutorial_slug: str,
+) -> Tutorial:
+    tutorial_retrieval_service = injector.get(TutorialRetrievalService)
+    return tutorial_retrieval_service.get_detail_by_slug(tutorial_slug)

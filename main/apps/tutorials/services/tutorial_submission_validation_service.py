@@ -1,0 +1,80 @@
+import logging
+from uuid import UUID
+
+from injector import inject
+from ninja.errors import ValidationError
+
+from main.apps.core.exceptions import NotFoundError
+from main.apps.providers.models import ProviderUserProject
+from main.apps.tutorials.models import Tutorial
+from main.apps.tutorials.services.tutorial_retrieval_service import TutorialRetrievalService
+from main.apps.providers.services import ProviderUserProjectRetrievalService
+from main.apps.tutorials.schemas import CreateTutorialSubmissionSchema
+from main.apps.tutorials.services.tutorial_validation_service import TutorialValidationService
+from main.apps.tutorials.types import CreateTutorialSubmissionValidatedData
+
+
+logger = logging.getLogger(__name__)
+
+
+class TutorialSubmissionValidationService:
+    @inject
+    def __init__(
+        self,
+        tutorial_retrieval_service: TutorialRetrievalService,
+        provider_user_project_retrieval_service: ProviderUserProjectRetrievalService,
+        tutorial_validation_service: TutorialValidationService,
+    ):
+        self._tutorial_retrieval_service = tutorial_retrieval_service
+        self._provider_user_project_retrieval_service = provider_user_project_retrieval_service
+        self._tutorial_validation_service = tutorial_validation_service
+
+    def _validate_tutorial_exists(self, tutorial_id: UUID) -> Tutorial:
+        try:
+            return self._tutorial_retrieval_service.get_detail_by_id(tutorial_id)
+        except NotFoundError as error:
+            logger.warning("Tutorial not found: %(tutorial_id)s", {"tutorial_id": tutorial_id})
+            raise ValidationError(
+                [
+                    {
+                        "loc": ["tutorial_id"],
+                        "msg": str(error),
+                        "type": "value_error",
+                    }
+                ]
+            ) from error
+
+    def _validate_tutorial_accepts_submissions(self, tutorial: Tutorial) -> None:
+        return self._tutorial_validation_service.validate_accepts_submissions(tutorial)
+
+    def _validate_provider_user_project_exists(
+        self, user_id: UUID, provider_user_project_id: UUID
+    ) -> ProviderUserProject:
+        try:
+            return self._provider_user_project_retrieval_service.get_detail_by_id(user_id, provider_user_project_id)
+        except NotFoundError as error:
+            logger.warning(
+                "Provider user project not found: %(user_id)s and %(provider_user_project_id)s",
+                {"user_id": user_id, "provider_user_project_id": provider_user_project_id},
+            )
+            raise ValidationError(
+                [
+                    {
+                        "loc": ["provider_user_project_id"],
+                        "msg": str(error),
+                        "type": "value_error",
+                    }
+                ]
+            ) from error
+
+    def validate_create_data(
+        self, user_id: UUID, data: CreateTutorialSubmissionSchema
+    ) -> CreateTutorialSubmissionValidatedData:
+        tutorial = self._validate_tutorial_exists(data.tutorial_id)
+        self._validate_tutorial_accepts_submissions(tutorial)
+        provider_user_project = self._validate_provider_user_project_exists(user_id, data.provider_user_project_id)
+        return CreateTutorialSubmissionValidatedData(
+            tutorial=tutorial,
+            provider_user_project=provider_user_project,
+            code=data.code,
+        )

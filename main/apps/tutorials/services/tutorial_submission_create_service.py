@@ -5,14 +5,12 @@ from django.conf import settings
 from django.db import transaction
 from django.urls import reverse_lazy
 from injector import inject
-from ninja.errors import ValidationError
 
-from main.apps.core.exceptions import NotFoundError
 from main.apps.gcp.services import GCPCloudTaskCreateService
 from main.apps.tutorials.models import TutorialSubmission
 from main.apps.tutorials.schemas import CreateTutorialSubmissionSchema
-from main.apps.tutorials.services.tutorial_retrieval_service import TutorialRetrievalService
-from main.apps.tutorials.services.tutorial_validation_service import TutorialValidationService
+from main.apps.tutorials.services.tutorial_submission_validation_service import TutorialSubmissionValidationService
+from main.apps.tutorials.types import CreateTutorialSubmissionValidatedData
 from main.apps.users.models import User
 
 
@@ -23,12 +21,10 @@ class TutorialSubmissionCreateService:
     @inject
     def __init__(
         self,
-        tutorial_retrieval_service: TutorialRetrievalService,
-        tutorial_validation_service: TutorialValidationService,
+        tutorial_submission_validation_service: TutorialSubmissionValidationService,
         gcp_cloud_task_create_service: GCPCloudTaskCreateService,
     ) -> None:
-        self._tutorial_retrieval_service = tutorial_retrieval_service
-        self._tutorial_validation_service = tutorial_validation_service
+        self._tutorial_submission_validation_service = tutorial_submission_validation_service
         self._gcp_cloud_task_create_service = gcp_cloud_task_create_service
 
     def _enqueue_tutorial_submission_task(self, tutorial_submission: TutorialSubmission) -> None:
@@ -44,38 +40,29 @@ class TutorialSubmissionCreateService:
             )
         )
 
-    def _create_tutorial_submission(self, user_id: UUID, tutorial_id: UUID, code: str) -> TutorialSubmission:
+    def _create_tutorial_submission(
+        self, user_id: UUID, validated_data: CreateTutorialSubmissionValidatedData
+    ) -> TutorialSubmission:
         logger.info(
-            "Creating tutorial submission for user: %(user_id)s and tutorial: %(tutorial_id)s",
+            "Creating tutorial submission for user: %(user_id)s and tutorial: %(tutorial_id)s and provider user project: %(provider_user_project_id)s",
             {
                 "user_id": user_id,
-                "tutorial_id": tutorial_id,
+                "tutorial_id": validated_data.tutorial.id,
+                "provider_user_project_id": validated_data.provider_user_project.id,
             },
         )
-        return TutorialSubmission.objects.create(
-            tutorial_id=tutorial_id,
+        tutorial_submission = TutorialSubmission.objects.create(
             user_id=user_id,
-            code=code,
+            tutorial_id=validated_data.tutorial.id,
+            provider_user_project_id=validated_data.provider_user_project.id,
+            code=validated_data.code,
         )
+        logger.info(f"Tutorial submission created: {tutorial_submission.id}")
+        return tutorial_submission
 
     @transaction.atomic
     def create(self, user: User, data: CreateTutorialSubmissionSchema) -> TutorialSubmission:
-        try:
-            tutorial = self._tutorial_retrieval_service.get_detail_by_id(data.tutorial_id)
-        except NotFoundError as error:
-            logger.warning("Tutorial not found: %(tutorial_id)s", {"tutorial_id": data.tutorial_id})
-            raise ValidationError(
-                [
-                    {
-                        "loc": ["tutorial_id"],
-                        "msg": str(error),
-                        "type": "value_error",
-                    }
-                ]
-            )
-
-        self._tutorial_validation_service.validate_accepts_submissions(tutorial)
-
-        tutorial_submission = self._create_tutorial_submission(user.id, tutorial.id, data.code)
+        validated_data = self._tutorial_submission_validation_service.validate_create_data(user.id, data)
+        tutorial_submission = self._create_tutorial_submission(user.id, validated_data)
         self._enqueue_tutorial_submission_task(tutorial_submission)
         return tutorial_submission

@@ -6,6 +6,7 @@ from main.apps.tutorials.services import (
     TutorialRetrievalService,
     TutorialSubmissionRetrievalService,
     TutorialSubmissionCreateService,
+    TutorialSubmissionValidationService,
     TutorialTagRetrievalService,
     TutorialUpdateService,
     TutorialValidationService,
@@ -22,3 +23,4 @@ class TutorialsModule(Module):
         binder.bind(TutorialSubmissionRetrievalService, to=TutorialSubmissionRetrievalService, scope=singleton)
         binder.bind(TutorialSubmissionCreateService, to=TutorialSubmissionCreateService, scope=singleton)
         binder.bind(TutorialValidationService, to=TutorialValidationService, scope=singleton)
+        binder.bind(TutorialSubmissionValidationService, to=TutorialSubmissionValidationService, scope=singleton)

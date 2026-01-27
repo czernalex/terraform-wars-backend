@@ -8,6 +8,7 @@ from main.apps.tutorials.services.tutorial_submission_retrieval_service import (
     TutorialSubmissionRetrievalService,
 )
 from main.apps.tutorials.services.tutorial_validation_service import TutorialValidationService
+from main.apps.tutorials.services.tutorial_submission_validation_service import TutorialSubmissionValidationService
 
 __all__ = (
     "TutorialRetrievalService",
@@ -18,4 +19,5 @@ __all__ = (
     "TutorialSubmissionCreateService",
     "TutorialSubmissionRetrievalService",
     "TutorialValidationService",
+    "TutorialSubmissionValidationService",
 )
