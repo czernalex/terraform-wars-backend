@@ -489,16 +489,16 @@ UNFOLD = {
             "title": _("API Docs"),
             "link": reverse_lazy("terraform-wars-api:openapi-view"),
         },
-        {
-            "icon": "api",
-            "title": _("Events API Docs"),
-            "link": reverse_lazy("terraform-wars-events-api:openapi-view"),
-        },
-        {
-            "icon": "api",
-            "title": _("Internal API Docs"),
-            "link": reverse_lazy("terraform-wars-internal-api:openapi-view"),
-        },
+        # {
+        #     "icon": "api",
+        #     "title": _("Events API Docs"),
+        #     "link": reverse_lazy("terraform-wars-events-api:openapi-view"),
+        # },
+        # {
+        #     "icon": "api",
+        #     "title": _("Internal API Docs"),
+        #     "link": reverse_lazy("terraform-wars-internal-api:openapi-view"),
+        # },
         {
             "icon": "key",
             "title": _("Allauth API Docs"),
