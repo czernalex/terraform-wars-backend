@@ -145,7 +145,7 @@ class TutorialValidationService:
         return
 
     def validate_accepts_submissions(self, tutorial: Tutorial, loc: str = "tutorial_id") -> None:
-        if not tutorial.status != TutorialStatus.PUBLISHED:
+        if tutorial.status != TutorialStatus.PUBLISHED:
             error_message = f"Tutorial {tutorial.id} does not accept submissions"
             logger.warning(error_message)
             raise ValidationError(
