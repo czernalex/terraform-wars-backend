@@ -21,6 +21,8 @@ root_internal_api_router = TerraformWarsAPI(
         "<br>"
         "<a href='/api/docs' class='btn'>API Docs</a>"
         "<br>"
+        "<a href='/events-api/docs' class='btn'>Events API Docs</a>"
+        "<br>"
         "<br>"
         "<a href='/admin' class='btn'>Administration</a>"
     ),
