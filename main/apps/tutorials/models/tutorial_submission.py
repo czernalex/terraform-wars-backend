@@ -22,6 +22,9 @@ class TutorialSubmission(AbstractUUIDModel):
     provider_user_project_id: UUID
 
     code = models.TextField(_("Code"))
+    # status = models.CharField(
+    #     _("Status"), max_length=255, choices=TutorialSubmissionStatus.choices, default=TutorialSubmissionStatus.PENDING
+    # )
 
     objects = TutorialSubmissionQuerySet.as_manager()
 

@@ -18,6 +18,14 @@ class Difficulty(models.TextChoices):
     EXPERT = "expert", _("Expert")
 
 
+class TutorialSubmissionStatus(models.TextChoices):
+    PENDING = "pending", _("Pending")
+    EXECUTING = "executing", _("Executing")
+    VALIDATING = "validating", _("Validating")
+    COMPLETED = "completed", _("Completed")
+    FAILED = "failed", _("Failed")
+
+
 class TutorialVoteValue(models.IntegerChoices):
     UPVOTE = 1, _("Upvote")
     DOWNVOTE = -1, _("Downvote")

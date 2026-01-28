@@ -3,7 +3,6 @@ from uuid import UUID
 
 from django.conf import settings
 from django.db import transaction
-from django.urls import reverse_lazy
 from injector import inject
 
 from main.apps.gcp.services import GCPCloudTaskCreateService
@@ -31,12 +30,7 @@ class TutorialSubmissionCreateService:
         transaction.on_commit(
             lambda: self._gcp_cloud_task_create_service.create(
                 queue_id=settings.GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID,
-                url=f"{settings.INTERNAL_API_BASE_URL}{
-                    reverse_lazy(
-                        'terraform-wars-internal-api:tutorial_submission_execute',
-                        kwargs={'tutorial_submission_id': tutorial_submission.id},
-                    )
-                }",
+                url=f"{settings.INTERNAL_API_BASE_URL}/_internal-api/tasks/submissions/{tutorial_submission.id}/execute/",
                 payload={
                     "user_id": tutorial_submission.user_id,
                 },

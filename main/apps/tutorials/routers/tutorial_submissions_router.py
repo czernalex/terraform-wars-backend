@@ -11,7 +11,7 @@ from main.apps.tutorials.schemas import (
     CreateTutorialSubmissionSchema,
     TutorialSubmissionDetailSchema,
 )
-from main.apps.tutorials.services.tutorial_submission_create_service import TutorialSubmissionCreateService
+from main.apps.tutorials.services import TutorialSubmissionCreateService, TutorialSubmissionRetrievalService
 
 
 tutorial_submissions_router = Router()
@@ -44,4 +44,5 @@ def get_tutorial_submission_detail(
     request: AuthedHttpRequest,
     tutorial_submission_id: UUID,
 ) -> TutorialSubmission:
-    pass
+    tutorial_submission_retrieval_service = injector.get(TutorialSubmissionRetrievalService)
+    return tutorial_submission_retrieval_service.get_detail_by_id(request.user.id, tutorial_submission_id)
