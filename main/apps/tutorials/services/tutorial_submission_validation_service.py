@@ -1,12 +1,14 @@
 import logging
 from uuid import UUID
 
+from django.utils.translation import gettext as _
 from injector import inject
 from ninja.errors import ValidationError
 
 from main.apps.core.exceptions import NotFoundError
 from main.apps.providers.models import ProviderUserProject
-from main.apps.tutorials.models import Tutorial
+from main.apps.tutorials.enums import TutorialSubmissionStatus
+from main.apps.tutorials.models import Tutorial, TutorialSubmission
 from main.apps.tutorials.services.tutorial_retrieval_service import TutorialRetrievalService
 from main.apps.providers.services import ProviderUserProjectRetrievalService
 from main.apps.tutorials.schemas import CreateTutorialSubmissionSchema
@@ -78,3 +80,29 @@ class TutorialSubmissionValidationService:
             provider_user_project=provider_user_project,
             code=data.code,
         )
+
+    def validate_can_be_executed(self, tutorial_submission: TutorialSubmission) -> None:
+        if tutorial_submission.status != TutorialSubmissionStatus.PENDING:
+            raise ValidationError(
+                [
+                    {
+                        "loc": ["status"],
+                        "msg": _("Tutorial submission with status %(status)s cannot be executed")
+                        % {"status": tutorial_submission.status},
+                        "type": "value_error",
+                    }
+                ]
+            )
+
+    def validate_can_be_validated(self, tutorial_submission: TutorialSubmission) -> None:
+        if tutorial_submission.status != TutorialSubmissionStatus.EXECUTION_SUCCEEDED:
+            raise ValidationError(
+                [
+                    {
+                        "loc": ["status"],
+                        "msg": _("Tutorial submission with status %(status)s cannot be validated")
+                        % {"status": tutorial_submission.status},
+                        "type": "value_error",
+                    }
+                ]
+            )

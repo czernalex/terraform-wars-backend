@@ -6,7 +6,7 @@ from ninja import Router
 
 from main.apps.providers.schemas import ConfigureProviderUserProjectSchema
 from main.apps.providers.services import ProviderUserProjectConfigureService
-from main.apps.tasks.services import TutorialSubmissionExecuteService, TutorialSubmissionValidateService
+from main.apps.internal_api.tasks.services import TutorialSubmissionExecuteService, TutorialSubmissionValidateService
 from main.apps.tutorials.schemas import ExecuteTutorialSubmissionSchema, ValidateTutorialSubmissionSchema
 from main.di import injector
 

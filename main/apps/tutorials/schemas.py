@@ -5,7 +5,7 @@ from django.db.models import Q
 from ninja import Field, FilterLookup, FilterSchema, ModelSchema, Schema
 
 from main.apps.providers.schemas import ProviderSchema
-from main.apps.tutorials.enums import Difficulty, TutorialStatus
+from main.apps.tutorials.enums import Difficulty, TutorialStatus, TutorialSubmissionStatus
 from main.apps.tutorials.models import (
     Tutorial,
     TutorialSubmission,
@@ -140,6 +140,7 @@ class CreateTutorialSubmissionSchema(Schema):
 
 
 class UpdateTutorialSubmissionSchema(Schema):
+    status: TutorialSubmissionStatus
     code: str
 
 

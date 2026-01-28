@@ -43,12 +43,13 @@ SECRET_KEY = secrets.SECRET_KEY
 
 INSTALLED_APPS = [
     "main.apps.api_auth",
+    "main.apps.internal_api.jobs",
+    "main.apps.internal_api.subscribers",
+    "main.apps.internal_api.tasks",
     "main.apps.core",
     "main.apps.gcp",
     "main.apps.providers",
-    "main.apps.jobs",
     "main.apps.notifications",
-    "main.apps.tasks",
     "main.apps.tutorials",
     "main.apps.users",
     "unfold",

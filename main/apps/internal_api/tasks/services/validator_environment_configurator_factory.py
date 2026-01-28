@@ -3,9 +3,9 @@ from typing import override
 
 from injector import inject
 
-from main.apps.tasks.services.validator_environment_configurator import ValidatorEnvironmentConfigurator
+from main.apps.internal_api.tasks.services.validator_environment_configurator import ValidatorEnvironmentConfigurator
 from main.apps.tutorials.models.tutorial_submission import TutorialSubmission
-from main.apps.tasks.services.google_provider_validator_environment_configurator import (
+from main.apps.internal_api.tasks.services.google_provider_validator_environment_configurator import (
     GoogleProviderValidatorEnvironmentConfigurator,
 )
 

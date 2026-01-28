@@ -2,7 +2,7 @@ import logging
 from typing import Iterable
 from uuid import UUID
 
-from django.db import models
+from django.db import models, transaction
 from django.utils.translation import gettext as _
 
 from main.apps.core.exceptions import NotFoundError
@@ -28,6 +28,7 @@ class NotificationRetrievalService:
     ) -> models.QuerySet[Notification]:
         return filters.filter(self._get_queryset()).order_by(*ordering)
 
+    @transaction.atomic
     def get_for_update_by_id(self, user_id: UUID, notification_id: int) -> Notification:
         try:
             return self._get_for_update_by_id(user_id, notification_id)

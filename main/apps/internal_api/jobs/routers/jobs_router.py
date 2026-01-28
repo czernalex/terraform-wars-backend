@@ -3,7 +3,7 @@ from http import HTTPStatus
 from django.http import HttpRequest
 from ninja import Router
 
-from main.apps.jobs.services import ProviderUserProjectConfigureScheduler
+from main.apps.internal_api.jobs.services import ProviderUserProjectConfigureScheduler
 from main.di import injector
 
 

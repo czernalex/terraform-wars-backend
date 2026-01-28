@@ -2,7 +2,7 @@ from typing import override
 
 from google.cloud import run_v2
 
-from main.apps.tasks.services.validator_environment_configurator import ValidatorEnvironmentConfigurator
+from main.apps.internal_api.tasks.services.validator_environment_configurator import ValidatorEnvironmentConfigurator
 from main.apps.tutorials.models import TutorialSubmission
 
 

@@ -6,8 +6,9 @@ from django.http import HttpRequest, HttpResponse
 
 from main.apps.core.exceptions import ForbiddenError, NotFoundError
 from main.apps.core.schemas import ForbiddenErrorSchema, NotFoundErrorSchema
-from main.apps.jobs.routers import jobs_router
-from main.apps.tasks.routers import tasks_router
+from main.apps.internal_api.jobs.routers import jobs_router
+from main.apps.internal_api.subscribers.routers import subscribers_router
+from main.apps.internal_api.tasks.routers import tasks_router
 from main.terraform_wars_api import TerraformWarsAPI
 
 
@@ -16,7 +17,7 @@ root_internal_api_router = TerraformWarsAPI(
     urls_namespace="terraform-wars-internal-api",
     version="0.0.1",
     description=(
-        "Internal RPC API for triggering Terraform Wars background tasks and other internal operations. Authentication is managed by Google Cloud IAM."
+        "Internal RPC API for triggering Terraform Wars background tasks, handling push subscriptions from Pub/Sub, and other internal operations. Authentication is managed by Google Cloud IAM."
         "<br>"
         "<br>"
         "<a href='/api/docs' class='btn'>API Docs</a>"
@@ -68,3 +69,4 @@ def handle_not_found_error(request: HttpRequest, exc: NotFoundError) -> HttpResp
 
 root_internal_api_router.add_router("/jobs", jobs_router, tags=["jobs"])
 root_internal_api_router.add_router("/tasks", tasks_router, tags=["tasks"])
+root_internal_api_router.add_router("/subscribers", subscribers_router, tags=["subscribers"])

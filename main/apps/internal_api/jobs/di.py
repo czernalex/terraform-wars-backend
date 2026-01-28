@@ -1,6 +1,6 @@
 from injector import Binder, Module, singleton
 
-from main.apps.jobs.services import ProviderUserProjectConfigureScheduler
+from main.apps.internal_api.jobs.services import ProviderUserProjectConfigureScheduler
 
 
 class JobsModule(Module):

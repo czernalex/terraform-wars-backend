@@ -3,9 +3,9 @@ from typing import override
 
 from injector import inject
 
-from main.apps.tasks.services.executor_environment_configurator import ExecutorEnvironmentConfigurator
+from main.apps.internal_api.tasks.services.executor_environment_configurator import ExecutorEnvironmentConfigurator
 from main.apps.tutorials.models.tutorial_submission import TutorialSubmission
-from main.apps.tasks.services.google_provider_executor_environment_configurator import (
+from main.apps.internal_api.tasks.services.google_provider_executor_environment_configurator import (
     GoogleProviderExecutorEnvironmentConfigurator,
 )
 

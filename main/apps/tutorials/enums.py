@@ -21,8 +21,10 @@ class Difficulty(models.TextChoices):
 class TutorialSubmissionStatus(models.TextChoices):
     PENDING = "pending", _("Pending")
     EXECUTING = "executing", _("Executing")
+    EXECUTION_SUCCEEDED = "execution_succeeded", _("Execution Succeeded")
+    EXECUTION_FAILED = "execution_failed", _("Execution Failed")
     VALIDATING = "validating", _("Validating")
-    COMPLETED = "completed", _("Completed")
+    SUCCEEDED = "succeeded", _("Succeeded")
     FAILED = "failed", _("Failed")
 
 

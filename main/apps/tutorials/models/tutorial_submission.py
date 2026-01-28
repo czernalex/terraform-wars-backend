@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from main.apps.core.models import AbstractUUIDModel
 from main.apps.providers.models import ProviderUserProject
+from main.apps.tutorials.enums import TutorialSubmissionStatus
 from main.apps.tutorials.managers import TutorialSubmissionQuerySet
 from main.apps.tutorials.models.tutorial import Tutorial
 from main.apps.users.models.user import User
@@ -22,9 +23,9 @@ class TutorialSubmission(AbstractUUIDModel):
     provider_user_project_id: UUID
 
     code = models.TextField(_("Code"))
-    # status = models.CharField(
-    #     _("Status"), max_length=255, choices=TutorialSubmissionStatus.choices, default=TutorialSubmissionStatus.PENDING
-    # )
+    status = models.CharField(
+        _("Status"), max_length=255, choices=TutorialSubmissionStatus.choices, default=TutorialSubmissionStatus.PENDING
+    )
 
     objects = TutorialSubmissionQuerySet.as_manager()
 

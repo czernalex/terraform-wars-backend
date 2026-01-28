@@ -1,6 +1,6 @@
 from injector import Binder, Module, singleton
 
-from main.apps.tasks.services import (
+from main.apps.internal_api.tasks.services import (
     DefaultExecutorEnvironmentConfiguratorFactory,
     DefaultValidatorEnvironmentConfiguratorFactory,
     ExecutorEnvironmentConfiguratorFactory,
