@@ -54,7 +54,7 @@ class TutorialSubmissionValidationFinishedHandler:
     ) -> None:
         logger.info("Validation failed for tutorial submission: %s", tutorial_submission.id)
         tutorial_submission = self._tutorial_submission_update_service.update_status(
-            tutorial_submission, TutorialSubmissionStatus.FAILED
+            tutorial_submission, TutorialSubmissionStatus.FAILED, parsed_data.stdout
         )
         self._notification_create_service.create(
             user_id=tutorial_submission.user_id,
@@ -76,6 +76,10 @@ class TutorialSubmissionValidationFinishedHandler:
         tutorial_submission = self._tutorial_submission_retrieval_service.get_for_update_by_id(
             parsed_data.user_id, parsed_data.tutorial_submission_id
         )
+
+        if tutorial_submission.status != TutorialSubmissionStatus.VALIDATING:
+            logger.warning("Tutorial submission %s is not in validating status, skipping", tutorial_submission.id)
+            return
 
         if parsed_data.exit_code == 0:
             return self._handle_validation_succeeded(tutorial_submission, parsed_data)

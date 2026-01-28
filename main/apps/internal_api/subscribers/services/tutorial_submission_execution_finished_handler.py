@@ -83,6 +83,10 @@ class TutorialSubmissionExecutionFinishedHandler:
             parsed_data.user_id, parsed_data.tutorial_submission_id
         )
 
+        if tutorial_submission.status != TutorialSubmissionStatus.EXECUTING:
+            logger.warning("Tutorial submission %s is not in executing status, skipping", tutorial_submission.id)
+            return
+
         if parsed_data.exit_code == 0:
             return self._handle_execution_succeeded(tutorial_submission, parsed_data)
         else:
