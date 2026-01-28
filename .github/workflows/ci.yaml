@@ -157,6 +157,8 @@ jobs:
           project_id: ${{ vars.GCP_PROJECT_ID }}
           region: ${{ vars.GCP_REGION }}
           env_vars: |-
+            DJANGO_SETTINGS_MODULE=main.settings.production
+            SERVICE_TYPE=internal-api
             DB_HOST=/cloudsql/terraform-wars-dev:europe-west3:terraform-wars-db
             CSRF_TRUSTED_ORIGINS="https://api.app.terraformwars.com\,https://www.api.app.terraformwars.com\,https://app.terraformwars.com\,https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app"
             CORS_ALLOWED_ORIGINS="https://api.app.terraformwars.com\,https://www.api.app.terraformwars.com\,https://app.terraformwars.com\,https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app"
@@ -178,6 +180,7 @@ jobs:
           region: ${{ vars.GCP_REGION }}
           env_vars: |-
             DJANGO_SETTINGS_MODULE=main.settings.production
+            SERVICE_TYPE=events-api
             DB_HOST=/cloudsql/terraform-wars-dev:europe-west3:terraform-wars-db
             CSRF_TRUSTED_ORIGINS="https://api.app.terraformwars.com\,https://www.api.app.terraformwars.com\,https://app.terraformwars.com\,https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app"
             CORS_ALLOWED_ORIGINS="https://api.app.terraformwars.com\,https://www.api.app.terraformwars.com\,https://app.terraformwars.com\,https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app"
@@ -199,6 +202,7 @@ jobs:
           region: ${{ vars.GCP_REGION }}
           env_vars: |-
             DJANGO_SETTINGS_MODULE=main.settings.production
+            SERVICE_TYPE=api
             DB_HOST=/cloudsql/terraform-wars-dev:europe-west3:terraform-wars-db
             CSRF_TRUSTED_ORIGINS="https://api.app.terraformwars.com\,https://www.api.app.terraformwars.com\,https://app.terraformwars.com"
             CORS_ALLOWED_ORIGINS="https://api.app.terraformwars.com\,https://www.api.app.terraformwars.com\,https://app.terraformwars.com"

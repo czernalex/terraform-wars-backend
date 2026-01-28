@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 import sentry_sdk
-from decouple import AutoConfig
+from decouple import AutoConfig, Choices
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -21,6 +21,7 @@ secrets = Secrets(
 )
 
 ENVIRONMENT = config("ENVIRONMENT", default="production")
+SERVICE_TYPE = config("SERVICE_TYPE", default="api", cast=Choices(["api", "events-api", "internal-api"]))
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 BASE_PROTOCOL = config("BASE_PROTOCOL", default="https")

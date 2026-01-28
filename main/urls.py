@@ -19,12 +19,23 @@ urlpatterns = [
     path("healthcheck/", lambda request: HttpResponse(status=200)),
     path("accounts/", include("allauth.urls")),
     path("_allauth/", include("allauth.headless.urls")),
-    path("api/", root_api_router.urls),
-    path("events-api/", root_events_api_router.urls),
-    path("_internal-api/", root_internal_api_router.urls),
-    path("admin/", admin.site.urls),
 ]
 
+if settings.SERVICE_TYPE == "api":
+    urlpatterns += [
+        path("api/", root_api_router.urls),
+        path("admin/", admin.site.urls),
+    ]
+
+if settings.SERVICE_TYPE == "events-api":
+    urlpatterns += [
+        path("events-api/", root_events_api_router.urls),
+    ]
+
+if settings.SERVICE_TYPE == "internal-api":
+    urlpatterns += [
+        path("_internal-api/", root_internal_api_router.urls),
+    ]
 
 if settings.DEBUG:
     from django.conf.urls.static import static
