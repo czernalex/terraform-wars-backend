@@ -8,6 +8,9 @@ from main.apps.gcp.services import GCPCloudTaskCreateService
 from main.apps.internal_api.subscribers.schemas import PubSubEnvelopeSchema
 from main.apps.internal_api.subscribers.services.pubsub_message_data_parser import PubSubMessageDataParser
 from main.apps.internal_api.subscribers.types import TutorialSubmissionExecutionFinishedMessage
+from main.apps.notifications.enums import NotificationLevel
+from main.apps.notifications.schemas import NotificationCreateSchema
+from main.apps.notifications.services import NotificationCreateService
 from main.apps.tutorials.enums import TutorialSubmissionStatus
 from main.apps.tutorials.models import TutorialSubmission
 from main.apps.tutorials.services import TutorialSubmissionRetrievalService, TutorialSubmissionUpdateService
@@ -24,11 +27,13 @@ class TutorialSubmissionExecutionFinishedHandler:
         tutorial_submission_retrieval_service: TutorialSubmissionRetrievalService,
         tutorial_submission_update_service: TutorialSubmissionUpdateService,
         gcp_cloud_task_create_service: GCPCloudTaskCreateService,
+        notification_create_service: NotificationCreateService,
     ):
         self._pubsub_message_data_parser = pubsub_message_data_parser
         self._tutorial_submission_retrieval_service = tutorial_submission_retrieval_service
         self._tutorial_submission_update_service = tutorial_submission_update_service
         self._gcp_cloud_task_create_service = gcp_cloud_task_create_service
+        self._notification_create_service = notification_create_service
 
     def _enqueue_tutorial_submission_validate_task(self, tutorial_submission: TutorialSubmission) -> None:
         logger.info("Enqueuing tutorial submission validate task for tutorial submission: %s", tutorial_submission.id)
@@ -40,17 +45,28 @@ class TutorialSubmissionExecutionFinishedHandler:
             },
         )
 
-    def _handle_execution_succeeded(self, tutorial_submission: TutorialSubmission) -> None:
+    def _handle_execution_succeeded(
+        self, tutorial_submission: TutorialSubmission, parsed_data: TutorialSubmissionExecutionFinishedMessage
+    ) -> None:
         logger.info("Execution succeeded for tutorial submission: %s", tutorial_submission.id)
         tutorial_submission = self._tutorial_submission_update_service.update_status(
-            tutorial_submission, TutorialSubmissionStatus.EXECUTION_SUCCEEDED
+            tutorial_submission, TutorialSubmissionStatus.EXECUTION_SUCCEEDED, parsed_data.stdout
         )
         transaction.on_commit(lambda: self._enqueue_tutorial_submission_validate_task(tutorial_submission))
 
-    def _handle_execution_failed(self, tutorial_submission: TutorialSubmission) -> None:
+    def _handle_execution_failed(
+        self, tutorial_submission: TutorialSubmission, parsed_data: TutorialSubmissionExecutionFinishedMessage
+    ) -> None:
         logger.info("Execution failed for tutorial submission: %s", tutorial_submission.id)
         tutorial_submission = self._tutorial_submission_update_service.update_status(
-            tutorial_submission, TutorialSubmissionStatus.EXECUTION_FAILED
+            tutorial_submission, TutorialSubmissionStatus.EXECUTION_FAILED, parsed_data.stdout
+        )
+        self._notification_create_service.create(
+            user_id=tutorial_submission.user_id,
+            data=NotificationCreateSchema(
+                text=f"Your submission for tutorial {tutorial_submission.tutorial.title} failed. Check the bug report for more details.",
+                level=NotificationLevel.ERROR,
+            ),
         )
 
     @transaction.atomic
@@ -68,6 +84,6 @@ class TutorialSubmissionExecutionFinishedHandler:
         )
 
         if parsed_data.exit_code == 0:
-            return self._handle_execution_succeeded(tutorial_submission)
+            return self._handle_execution_succeeded(tutorial_submission, parsed_data)
         else:
-            return self._handle_execution_failed(tutorial_submission)
+            return self._handle_execution_failed(tutorial_submission, parsed_data)

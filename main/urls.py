@@ -40,6 +40,12 @@ if settings.SERVICE_TYPE == "internal-api":
 if settings.DEBUG:
     from django.conf.urls.static import static
 
+    if settings.SERVICE_TYPE == "api":
+        urlpatterns += [
+            path("events-api/", root_events_api_router.urls),
+            path("_internal-api/", root_internal_api_router.urls),
+        ]
+
     urlpatterns += [
         path("sentry-debug/", trigger_error),
         path("400/", lambda request: render(request, "400.html"), name="400"),

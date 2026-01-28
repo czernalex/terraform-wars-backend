@@ -160,7 +160,42 @@ class TutorialReviewAdmin(BaseModelAdmin):
 
 @admin.register(TutorialSubmission)
 class TutorialSubmissionAdmin(BaseModelAdmin):
-    pass
+    list_display = ("tutorial", "user", "provider_user_project", "status", "created_at", "updated_at")
+    list_select_related = (
+        "tutorial",
+        "user",
+        "provider_user_project",
+    )
+    list_filter = (
+        ("created_at", RangeDateFilter),
+        ("updated_at", RangeDateFilter),
+        ("tutorial", AutocompleteSelectFilter),
+        ("user", AutocompleteSelectFilter),
+        ("provider_user_project", AutocompleteSelectFilter),
+        ("status", ChoicesDropdownFilter),
+    )
+    search_fields = (
+        "id",
+        "tutorial__id",
+        "tutorial__title",
+        "user__id",
+        "user__email",
+        "provider_user_project__id",
+        "provider_user_project__name",
+        "provider_user_project__project_id",
+    )
+    autocomplete_fields = (
+        "tutorial",
+        "user",
+        "provider_user_project",
+    )
+    fieldsets = (
+        (
+            _("Tutorial submission information"),
+            {"fields": ("tutorial", "user", "provider_user_project", "code", "status", "result")},
+        ),
+        (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
+    )
 
 
 @admin.register(TutorialTag)

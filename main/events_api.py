@@ -9,6 +9,7 @@ from ninja.throttling import AnonRateThrottle, AuthRateThrottle
 from main.apps.core.exceptions import ForbiddenError, NotFoundError
 from main.apps.core.schemas import ForbiddenErrorSchema, NotFoundErrorSchema
 from main.apps.notifications.routers import notification_events_router
+from main.apps.tutorials.routers import tutorial_submission_events_router
 from main.terraform_wars_api import TerraformWarsAPI
 
 
@@ -72,4 +73,5 @@ def handle_not_found_error(request: HttpRequest, exc: NotFoundError) -> HttpResp
     )
 
 
-root_events_api_router.add_router("/notifications", notification_events_router, tags=["notifications"])
+root_events_api_router.add_router("/notifications", notification_events_router, tags=["notification_events"])
+root_events_api_router.add_router("/submissions", tutorial_submission_events_router, tags=["submission_events"])

@@ -9,7 +9,6 @@ class TutorialSubmissionExecutionFinishedMessage(msgspec.Struct):
     tutorial_submission_id: UUID
     exit_code: int
     stdout: Optional[str] = None
-    stderr: Optional[str] = None
 
 
 class TutorialSubmissionValidationFinishedMessage(msgspec.Struct):
@@ -17,4 +16,3 @@ class TutorialSubmissionValidationFinishedMessage(msgspec.Struct):
     tutorial_submission_id: UUID
     exit_code: int
     stdout: Optional[str] = None
-    stderr: Optional[str] = None
