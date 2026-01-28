@@ -2,6 +2,7 @@ import asyncio
 import msgspec
 import uuid
 
+from google.cloud import pubsub_v1
 from injector import inject
 
 from main.apps.gcp.services import GCPPubSubSubscriptionCreateService, GCPPubSubSubscribeService
@@ -33,7 +34,7 @@ class NotificationStreamSetupService:
             subscription_name=self._generate_subscription_name(),
         )
 
-        def callback(message) -> None:
+        def callback(message: "pubsub_v1.subscriber.message.Message") -> None:
             notification_message = msgspec.json.decode(message.data, type=NotificationMessage)
 
             loop.call_soon_threadsafe(
