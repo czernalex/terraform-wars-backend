@@ -37,6 +37,9 @@ class TutorialSubmissionCreateService:
                         kwargs={'tutorial_submission_id': tutorial_submission.id},
                     )
                 }",
+                payload={
+                    "user_id": tutorial_submission.user_id,
+                },
             )
         )
 
