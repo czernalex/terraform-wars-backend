@@ -16,17 +16,22 @@ class TutorialSubmissionRetrievalService:
             *prefetch_related_fields
         )
 
-    def _get_for_read_by_id(self, tutorial_submission_id: UUID) -> TutorialSubmission:
-        return self._get_queryset(
-            select_related_fields=[
-                "tutorial",
-                "tutorial__provider",
-                "user",
-            ]
-        ).get(id=tutorial_submission_id)
+    def _get_for_read_by_id(self, user_id: UUID, tutorial_submission_id: UUID) -> TutorialSubmission:
+        return (
+            self._get_queryset(
+                select_related_fields=[
+                    "tutorial",
+                    "tutorial__provider",
+                    "provider_user_project",
+                    "user",
+                ]
+            )
+            .for_user(user_id)
+            .get(id=tutorial_submission_id)
+        )
 
-    def get_detail_by_id(self, tutorial_submission_id: UUID) -> TutorialSubmission:
+    def get_detail_by_id(self, user_id: UUID, tutorial_submission_id: UUID) -> TutorialSubmission:
         try:
-            return self._get_for_read_by_id(tutorial_submission_id)
+            return self._get_for_read_by_id(user_id, tutorial_submission_id)
         except TutorialSubmission.DoesNotExist:
             raise NotFoundError(_("Tutorial submission not found"))

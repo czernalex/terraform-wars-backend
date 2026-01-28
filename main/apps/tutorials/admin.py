@@ -16,6 +16,7 @@ from main.apps.tutorials.models import (
     TutorialReview,
     TutorialSubmission,
     TutorialTag,
+    TutorialVote,
 )
 
 
@@ -180,4 +181,28 @@ class TutorialTagAdmin(BaseModelAdmin):
     fieldsets = (
         (_("Tutorial tag information"), {"fields": ("name", "slug")}),
         (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
+    )
+
+
+@admin.register(TutorialVote)
+class TutorialVoteAdmin(BaseModelAdmin):
+    list_display = ("tutorial", "user", "vote_value", "created_at", "updated_at")
+    list_select_related = (
+        "tutorial",
+        "user",
+    )
+    list_filter = (
+        ("created_at", RangeDateFilter),
+        ("updated_at", RangeDateFilter),
+    )
+    search_fields = (
+        "id",
+        "tutorial__id",
+        "tutorial__title",
+        "user__id",
+        "user__email",
+    )
+    autocomplete_fields = (
+        "tutorial",
+        "user",
     )

@@ -10,7 +10,6 @@ from main.apps.tutorials.models import TutorialSubmission
 from main.apps.tutorials.schemas import (
     CreateTutorialSubmissionSchema,
     TutorialSubmissionDetailSchema,
-    UpdateTutorialSubmissionSchema,
 )
 from main.apps.tutorials.services.tutorial_submission_create_service import TutorialSubmissionCreateService
 
@@ -44,22 +43,5 @@ def create_tutorial_submission(
 def get_tutorial_submission_detail(
     request: AuthedHttpRequest,
     tutorial_submission_id: UUID,
-) -> TutorialSubmission:
-    pass
-
-
-@tutorial_submissions_router.patch(
-    "/{tutorial_submission_id}/",
-    url_name="tutorial_submission_detail",
-    response={
-        HTTPStatus.OK: TutorialSubmissionDetailSchema,
-        HTTPStatus.NOT_FOUND: NotFoundErrorSchema,
-    },
-    description="Update the code of a tutorial submission for the authenticated user and the selected tutorial.",
-)
-def update_tutorial_submission_detail(
-    request: AuthedHttpRequest,
-    tutorial_submission_id: UUID,
-    data: UpdateTutorialSubmissionSchema,
 ) -> TutorialSubmission:
     pass

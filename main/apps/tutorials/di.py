@@ -4,6 +4,7 @@ from main.apps.tutorials.services import (
     TutorialCreateService,
     TutorialDeleteService,
     TutorialRetrievalService,
+    TutorialReviewRetrievalService,
     TutorialSubmissionRetrievalService,
     TutorialSubmissionCreateService,
     TutorialSubmissionValidationService,
@@ -24,3 +25,4 @@ class TutorialsModule(Module):
         binder.bind(TutorialSubmissionCreateService, to=TutorialSubmissionCreateService, scope=singleton)
         binder.bind(TutorialValidationService, to=TutorialValidationService, scope=singleton)
         binder.bind(TutorialSubmissionValidationService, to=TutorialSubmissionValidationService, scope=singleton)
+        binder.bind(TutorialReviewRetrievalService, to=TutorialReviewRetrievalService, scope=singleton)

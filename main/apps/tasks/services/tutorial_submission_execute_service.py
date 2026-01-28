@@ -40,7 +40,9 @@ class TutorialSubmissionExecuteService:
         )
         logger.info(f"Execution job for tutorial submission: {tutorial_submission.id} invoked successfully")
 
-    def execute(self, tutorial_submission_id: UUID) -> None:
-        tutorial_submission = self._tutorial_submission_retrieval_service.get_detail_by_id(tutorial_submission_id)
+    def execute(self, tutorial_submission_id: UUID, user_id: UUID) -> None:
+        tutorial_submission = self._tutorial_submission_retrieval_service.get_detail_by_id(
+            user_id, tutorial_submission_id
+        )
         environment_configurator = self._executor_environment_configurator_factory.get_configurator(tutorial_submission)
         self._invoke_execution_job(tutorial_submission, environment_configurator)

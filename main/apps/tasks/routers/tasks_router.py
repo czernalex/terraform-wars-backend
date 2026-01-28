@@ -7,6 +7,7 @@ from ninja import Router
 from main.apps.providers.schemas import ConfigureProviderUserProjectSchema
 from main.apps.providers.services import ProviderUserProjectConfigureService
 from main.apps.tasks.services import TutorialSubmissionExecuteService, TutorialSubmissionValidateService
+from main.apps.tutorials.schemas import ExecuteTutorialSubmissionSchema, ValidateTutorialSubmissionSchema
 from main.di import injector
 
 
@@ -35,9 +36,10 @@ def configure_provider_user_project(
 def execute_tutorial_submission(
     request: HttpRequest,
     tutorial_submission_id: UUID,
+    data: ExecuteTutorialSubmissionSchema,
 ) -> None:
     tutorial_submission_execution_service = injector.get(TutorialSubmissionExecuteService)
-    tutorial_submission_execution_service.execute(tutorial_submission_id)
+    tutorial_submission_execution_service.execute(tutorial_submission_id, data.user_id)
 
 
 @tasks_router.post(
@@ -49,6 +51,7 @@ def execute_tutorial_submission(
 def validate_tutorial_submission(
     request: HttpRequest,
     tutorial_submission_id: UUID,
+    data: ValidateTutorialSubmissionSchema,
 ) -> None:
     tutorial_submission_validate_service = injector.get(TutorialSubmissionValidateService)
-    tutorial_submission_validate_service.validate(tutorial_submission_id)
+    tutorial_submission_validate_service.validate(tutorial_submission_id, data.user_id)

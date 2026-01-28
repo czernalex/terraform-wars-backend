@@ -71,8 +71,8 @@ class TutorialSubmissionValidationService:
         self, user_id: UUID, data: CreateTutorialSubmissionSchema
     ) -> CreateTutorialSubmissionValidatedData:
         tutorial = self._validate_tutorial_exists(data.tutorial_id)
-        self._validate_tutorial_accepts_submissions(tutorial)
         provider_user_project = self._validate_provider_user_project_exists(user_id, data.provider_user_project_id)
+        self._validate_tutorial_accepts_submissions(tutorial)
         return CreateTutorialSubmissionValidatedData(
             tutorial=tutorial,
             provider_user_project=provider_user_project,

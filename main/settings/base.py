@@ -629,6 +629,12 @@ UNFOLD = {
                         "link": reverse_lazy("admin:tutorials_tutorialtag_changelist"),
                         "permission": lambda request: request.user.has_perm("tutorials.view_tutorialtag"),
                     },
+                    {
+                        "title": _("Votes"),
+                        "icon": "thumbs_up_down",
+                        "link": reverse_lazy("admin:tutorials_tutorialvote_changelist"),
+                        "permission": lambda request: request.user.has_perm("tutorials.view_tutorialvote"),
+                    },
                 ],
             },
             {

@@ -15,6 +15,7 @@ class TutorialReview(AbstractUUIDModel):
     tutorial_id: UUID
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews")
     user_id: UUID
+
     feedback = models.TextField(_("Review feedback"))
 
     objects = TutorialReviewQuerySet.as_manager()

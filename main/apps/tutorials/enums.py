@@ -16,3 +16,8 @@ class Difficulty(models.TextChoices):
     INTERMEDIATE = "intermediate", _("Intermediate")
     ADVANCED = "advanced", _("Advanced")
     EXPERT = "expert", _("Expert")
+
+
+class TutorialVoteValue(models.IntegerChoices):
+    UPVOTE = 1, _("Upvote")
+    DOWNVOTE = -1, _("Downvote")

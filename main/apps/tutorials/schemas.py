@@ -143,6 +143,14 @@ class UpdateTutorialSubmissionSchema(Schema):
     code: str
 
 
+class ExecuteTutorialSubmissionSchema(Schema):
+    user_id: UUID
+
+
+class ValidateTutorialSubmissionSchema(Schema):
+    user_id: UUID
+
+
 class TutorialSubmissionDetailSchema(ModelSchema):
     id: UUID
 
@@ -151,3 +159,12 @@ class TutorialSubmissionDetailSchema(ModelSchema):
         fields = [
             "code",
         ]
+
+
+class TutorialReviewListFilterSchema(FilterSchema):
+    tutorial_id: Optional[UUID] = None
+    user_id: Optional[UUID] = None
+
+
+# class TutorialReviewSchema(ModelSchema):
+#     id: UUID
