@@ -193,7 +193,15 @@ class TutorialSubmissionAdmin(BaseModelAdmin):
     fieldsets = (
         (
             _("Tutorial submission information"),
-            {"fields": ("tutorial", "user", "provider_user_project", "code", "status", "result")},
+            {
+                "fields": (
+                    "tutorial",
+                    "user",
+                    "provider_user_project",
+                    "code",
+                    "status",
+                )
+            },
         ),
         (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
     )

@@ -26,7 +26,6 @@ class TutorialSubmission(AbstractUUIDModel):
     status = models.CharField(
         _("Status"), max_length=255, choices=TutorialSubmissionStatus.choices, default=TutorialSubmissionStatus.PENDING
     )
-    result = models.TextField(_("Result"), blank=True, default="")
 
     objects = TutorialSubmissionQuerySet.as_manager()
 

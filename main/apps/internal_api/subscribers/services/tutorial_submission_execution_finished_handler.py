@@ -71,7 +71,7 @@ class TutorialSubmissionExecutionFinishedHandler:
     ) -> None:
         logger.info("Execution succeeded for tutorial submission: %s", tutorial_submission.id)
         tutorial_submission = self._tutorial_submission_update_service.update_status(
-            tutorial_submission, TutorialSubmissionStatus.EXECUTION_SUCCEEDED, parsed_data.stdout
+            tutorial_submission, TutorialSubmissionStatus.EXECUTION_SUCCEEDED
         )
         self._create_tutorial_submission_event(tutorial_submission, parsed_data)
         transaction.on_commit(lambda: self._enqueue_tutorial_submission_validate_task(tutorial_submission))
@@ -81,7 +81,7 @@ class TutorialSubmissionExecutionFinishedHandler:
     ) -> None:
         logger.info("Execution failed for tutorial submission: %s", tutorial_submission.id)
         tutorial_submission = self._tutorial_submission_update_service.update_status(
-            tutorial_submission, TutorialSubmissionStatus.EXECUTION_FAILED, parsed_data.stdout
+            tutorial_submission, TutorialSubmissionStatus.EXECUTION_FAILED
         )
         self._create_tutorial_submission_event(tutorial_submission, parsed_data)
         self._notification_create_service.create(

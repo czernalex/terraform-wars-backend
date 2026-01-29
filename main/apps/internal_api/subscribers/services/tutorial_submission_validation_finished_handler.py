@@ -54,7 +54,7 @@ class TutorialSubmissionValidationFinishedHandler:
     ) -> None:
         logger.info("Validation succeeded for tutorial submission: %s", tutorial_submission.id)
         tutorial_submission = self._tutorial_submission_update_service.update_status(
-            tutorial_submission, TutorialSubmissionStatus.SUCCEEDED, parsed_data.stdout
+            tutorial_submission, TutorialSubmissionStatus.SUCCEEDED
         )
         self._create_tutorial_submission_event(tutorial_submission, parsed_data)
         self._notification_create_service.create(
@@ -70,7 +70,7 @@ class TutorialSubmissionValidationFinishedHandler:
     ) -> None:
         logger.info("Validation failed for tutorial submission: %s", tutorial_submission.id)
         tutorial_submission = self._tutorial_submission_update_service.update_status(
-            tutorial_submission, TutorialSubmissionStatus.FAILED, parsed_data.stdout
+            tutorial_submission, TutorialSubmissionStatus.FAILED
         )
         self._create_tutorial_submission_event(tutorial_submission, parsed_data)
         self._notification_create_service.create(
