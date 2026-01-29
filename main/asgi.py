@@ -13,6 +13,8 @@ import asyncio
 from decouple import AutoConfig
 from django.core.asgi import get_asgi_application
 
+from main.apps.tutorials.services import TutorialSubmissionEventStreamSetupService
+
 config = AutoConfig(os.environ.get("DJANGO_CONFIG_ENV_DIR"))
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", config("DJANGO_SETTINGS_MODULE", default="main.settings.production"))
@@ -33,3 +35,5 @@ async def application(scope, receive, send):
     loop = asyncio.get_event_loop()
     notification_stream_setup_service = injector.get(NotificationStreamSetupService)
     notification_stream_setup_service.setup(loop)
+    tutorial_submission_event_stream_setup_service = injector.get(TutorialSubmissionEventStreamSetupService)
+    tutorial_submission_event_stream_setup_service.setup(loop)

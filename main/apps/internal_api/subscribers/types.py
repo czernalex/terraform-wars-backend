@@ -8,11 +8,13 @@ class TutorialSubmissionExecutionFinishedMessage(msgspec.Struct):
     user_id: UUID
     tutorial_submission_id: UUID
     exit_code: int
-    stdout: Optional[str] = None
+    stdout: str
+    error: Optional[str] = None
 
 
 class TutorialSubmissionValidationFinishedMessage(msgspec.Struct):
     user_id: UUID
     tutorial_submission_id: UUID
     exit_code: int
-    stdout: Optional[str] = None
+    stdout: str
+    error: Optional[str] = None

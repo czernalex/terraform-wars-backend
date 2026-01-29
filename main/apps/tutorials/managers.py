@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from main.apps.tutorials.models import (
         Tutorial,
         TutorialSubmission,
+        TutorialSubmissionEvent,
         TutorialTag,
         TutorialReview,
         TutorialVote,
@@ -30,6 +31,14 @@ class TutorialQuerySet(models.QuerySet["Tutorial"]):
 class TutorialSubmissionQuerySet(models.QuerySet["TutorialSubmission"]):
     def for_user(self, user_id: UUID) -> Self:
         return self.filter(user_id=user_id)
+
+
+class TutorialSubmissionEventQuerySet(models.QuerySet["TutorialSubmissionEvent"]):
+    def for_user(self, user_id: UUID) -> Self:
+        return self.filter(tutorial_submission__user_id=user_id)
+
+    def for_tutorial_submission(self, tutorial_submission_id: UUID) -> Self:
+        return self.filter(tutorial_submission_id=tutorial_submission_id)
 
 
 class TutorialTagQuerySet(models.QuerySet["TutorialTag"]):

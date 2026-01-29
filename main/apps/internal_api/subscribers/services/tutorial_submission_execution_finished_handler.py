@@ -13,7 +13,12 @@ from main.apps.notifications.schemas import NotificationCreateSchema
 from main.apps.notifications.services import NotificationCreateService
 from main.apps.tutorials.enums import TutorialSubmissionStatus
 from main.apps.tutorials.models import TutorialSubmission
-from main.apps.tutorials.services import TutorialSubmissionRetrievalService, TutorialSubmissionUpdateService
+from main.apps.tutorials.schemas import CreateTutorialSubmissionEventSchema
+from main.apps.tutorials.services import (
+    TutorialSubmissionEventCreateService,
+    TutorialSubmissionRetrievalService,
+    TutorialSubmissionUpdateService,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -28,12 +33,14 @@ class TutorialSubmissionExecutionFinishedHandler:
         tutorial_submission_update_service: TutorialSubmissionUpdateService,
         gcp_cloud_task_create_service: GCPCloudTaskCreateService,
         notification_create_service: NotificationCreateService,
+        tutorial_submission_event_create_service: TutorialSubmissionEventCreateService,
     ):
         self._pubsub_message_data_parser = pubsub_message_data_parser
         self._tutorial_submission_retrieval_service = tutorial_submission_retrieval_service
         self._tutorial_submission_update_service = tutorial_submission_update_service
         self._gcp_cloud_task_create_service = gcp_cloud_task_create_service
         self._notification_create_service = notification_create_service
+        self._tutorial_submission_event_create_service = tutorial_submission_event_create_service
 
     def _enqueue_tutorial_submission_validate_task(self, tutorial_submission: TutorialSubmission) -> None:
         logger.info("Enqueuing tutorial submission validate task for tutorial submission: %s", tutorial_submission.id)
@@ -45,6 +52,20 @@ class TutorialSubmissionExecutionFinishedHandler:
             },
         )
 
+    def _create_tutorial_submission_event(
+        self, tutorial_submission: TutorialSubmission, parsed_data: TutorialSubmissionExecutionFinishedMessage
+    ) -> None:
+        create_tutorial_submission_event_data = CreateTutorialSubmissionEventSchema(
+            event_status=tutorial_submission.status,
+            exit_code=parsed_data.exit_code,
+            stdout=parsed_data.stdout,
+            error=parsed_data.error,
+        )
+        self._tutorial_submission_event_create_service.create(
+            tutorial_submission_id=tutorial_submission.id,
+            data=create_tutorial_submission_event_data,
+        )
+
     def _handle_execution_succeeded(
         self, tutorial_submission: TutorialSubmission, parsed_data: TutorialSubmissionExecutionFinishedMessage
     ) -> None:
@@ -52,6 +73,7 @@ class TutorialSubmissionExecutionFinishedHandler:
         tutorial_submission = self._tutorial_submission_update_service.update_status(
             tutorial_submission, TutorialSubmissionStatus.EXECUTION_SUCCEEDED, parsed_data.stdout
         )
+        self._create_tutorial_submission_event(tutorial_submission, parsed_data)
         transaction.on_commit(lambda: self._enqueue_tutorial_submission_validate_task(tutorial_submission))
 
     def _handle_execution_failed(
@@ -61,6 +83,7 @@ class TutorialSubmissionExecutionFinishedHandler:
         tutorial_submission = self._tutorial_submission_update_service.update_status(
             tutorial_submission, TutorialSubmissionStatus.EXECUTION_FAILED, parsed_data.stdout
         )
+        self._create_tutorial_submission_event(tutorial_submission, parsed_data)
         self._notification_create_service.create(
             user_id=tutorial_submission.user_id,
             data=NotificationCreateSchema(
@@ -72,8 +95,6 @@ class TutorialSubmissionExecutionFinishedHandler:
     @transaction.atomic
     def handle(self, envelope: PubSubEnvelopeSchema) -> None:
         assert envelope.message.attributes["message_type"] == "tutorial_submission_execution_finished"
-
-        # TODO: Publish a message to another pubsub topic, to populate update to frontend
 
         logger.info("Received message %s from subscription %s", envelope.message.message_id, envelope.subscription)
         parsed_data = self._pubsub_message_data_parser.parse_data(

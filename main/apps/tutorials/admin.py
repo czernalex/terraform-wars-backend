@@ -15,6 +15,7 @@ from main.apps.tutorials.models import (
     Tutorial,
     TutorialReview,
     TutorialSubmission,
+    TutorialSubmissionEvent,
     TutorialTag,
     TutorialVote,
 )
@@ -193,6 +194,42 @@ class TutorialSubmissionAdmin(BaseModelAdmin):
         (
             _("Tutorial submission information"),
             {"fields": ("tutorial", "user", "provider_user_project", "code", "status", "result")},
+        ),
+        (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
+    )
+
+
+@admin.register(TutorialSubmissionEvent)
+class TutorialSubmissionEventAdmin(BaseModelAdmin):
+    list_display = (
+        "tutorial_submission",
+        "event_status",
+        "exit_code",
+        "created_at",
+        "updated_at",
+    )
+    list_select_related = ("tutorial_submission",)
+    list_filter = (
+        ("created_at", RangeDateFilter),
+        ("updated_at", RangeDateFilter),
+        ("tutorial_submission", AutocompleteSelectFilter),
+        ("tutorial_submission__user", AutocompleteSelectFilter),
+        ("event_status", ChoicesDropdownFilter),
+    )
+    search_fields = (
+        "id",
+        "tutorial_submission__id",
+        "tutorial_submission__tutorial__id",
+        "tutorial_submission__tutorial__title",
+        "tutorial_submission__user__id",
+        "tutorial_submission__user__email",
+        "event_status",
+    )
+    autocomplete_fields = ("tutorial_submission",)
+    fieldsets = (
+        (
+            _("Tutorial submission event information"),
+            {"fields": ("tutorial_submission", "event_status", "exit_code", "stdout", "error")},
         ),
         (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
     )

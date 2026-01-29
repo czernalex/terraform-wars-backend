@@ -9,6 +9,7 @@ from main.apps.tutorials.enums import Difficulty, TutorialStatus, TutorialSubmis
 from main.apps.tutorials.models import (
     Tutorial,
     TutorialSubmission,
+    TutorialSubmissionEvent,
     TutorialTag,
 )
 
@@ -169,3 +170,39 @@ class TutorialReviewListFilterSchema(FilterSchema):
 
 # class TutorialReviewSchema(ModelSchema):
 #     id: UUID
+
+
+class TutorialSubmissionEventListFilterSchema(FilterSchema):
+    user_id: Annotated[Optional[UUID], FilterLookup(["tutorial_submission__user_id"])] = None
+    tutorial_submission_id: Optional[UUID] = None
+    event_status: Optional[TutorialSubmissionStatus] = None
+
+
+class TutorialSubmissionEventEventSchema(Schema):
+    id: UUID
+    tutorial_submission_id: UUID
+    event_status: TutorialSubmissionStatus
+    exit_code: int
+    stdout: str
+    error: str
+
+
+class CreateTutorialSubmissionEventSchema(Schema):
+    event_status: TutorialSubmissionStatus
+    exit_code: int
+    stdout: str
+    error: Optional[str]
+
+
+class TutorialSubmissionEventSchema(ModelSchema):
+    id: UUID
+    tutorial_submission_id: UUID
+    event_status: TutorialSubmissionStatus
+
+    class Meta:
+        model = TutorialSubmissionEvent
+        fields = [
+            "exit_code",
+            "stdout",
+            "error",
+        ]

@@ -12,6 +12,7 @@ from main.apps.notifications.schemas import NotificationCreateSchema
 from main.apps.notifications.services import NotificationCreateService
 from main.apps.tutorials.enums import TutorialSubmissionStatus
 from main.apps.tutorials.models import TutorialSubmission
+from main.apps.tutorials.schemas import CreateTutorialSubmissionEventSchema
 from main.apps.tutorials.services import TutorialSubmissionRetrievalService, TutorialSubmissionUpdateService
 
 
@@ -34,6 +35,20 @@ class TutorialSubmissionValidationFinishedHandler:
         self._gcp_cloud_task_create_service = gcp_cloud_task_create_service
         self._notification_create_service = notification_create_service
 
+    def _create_tutorial_submission_event(
+        self, tutorial_submission: TutorialSubmission, parsed_data: TutorialSubmissionValidationFinishedMessage
+    ) -> None:
+        create_tutorial_submission_event_data = CreateTutorialSubmissionEventSchema(
+            event_status=tutorial_submission.status,
+            exit_code=parsed_data.exit_code,
+            stdout=parsed_data.stdout,
+            error=parsed_data.error,
+        )
+        self._tutorial_submission_event_create_service.create(
+            tutorial_submission_id=tutorial_submission.id,
+            data=create_tutorial_submission_event_data,
+        )
+
     def _handle_validation_succeeded(
         self, tutorial_submission: TutorialSubmission, parsed_data: TutorialSubmissionValidationFinishedMessage
     ) -> None:
@@ -41,6 +56,7 @@ class TutorialSubmissionValidationFinishedHandler:
         tutorial_submission = self._tutorial_submission_update_service.update_status(
             tutorial_submission, TutorialSubmissionStatus.SUCCEEDED, parsed_data.stdout
         )
+        self._create_tutorial_submission_event(tutorial_submission, parsed_data)
         self._notification_create_service.create(
             user_id=tutorial_submission.user_id,
             data=NotificationCreateSchema(
@@ -56,6 +72,7 @@ class TutorialSubmissionValidationFinishedHandler:
         tutorial_submission = self._tutorial_submission_update_service.update_status(
             tutorial_submission, TutorialSubmissionStatus.FAILED, parsed_data.stdout
         )
+        self._create_tutorial_submission_event(tutorial_submission, parsed_data)
         self._notification_create_service.create(
             user_id=tutorial_submission.user_id,
             data=NotificationCreateSchema(

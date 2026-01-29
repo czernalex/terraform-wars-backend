@@ -5,6 +5,12 @@ from main.apps.tutorials.services import (
     TutorialDeleteService,
     TutorialRetrievalService,
     TutorialReviewRetrievalService,
+    TutorialSubmissionEventCreateService,
+    TutorialSubmissionEventEventBuilder,
+    TutorialSubmissionEventHubService,
+    TutorialSubmissionEventRetrievalService,
+    TutorialSubmissionEventStreamService,
+    TutorialSubmissionEventStreamSetupService,
     TutorialSubmissionRetrievalService,
     TutorialSubmissionCreateService,
     TutorialSubmissionUpdateService,
@@ -28,3 +34,13 @@ class TutorialsModule(Module):
         binder.bind(TutorialSubmissionValidationService, to=TutorialSubmissionValidationService, scope=singleton)
         binder.bind(TutorialReviewRetrievalService, to=TutorialReviewRetrievalService, scope=singleton)
         binder.bind(TutorialSubmissionUpdateService, to=TutorialSubmissionUpdateService, scope=singleton)
+        binder.bind(TutorialSubmissionEventStreamService, to=TutorialSubmissionEventStreamService, scope=singleton)
+        binder.bind(
+            TutorialSubmissionEventRetrievalService, to=TutorialSubmissionEventRetrievalService, scope=singleton
+        )
+        binder.bind(TutorialSubmissionEventEventBuilder, to=TutorialSubmissionEventEventBuilder, scope=singleton)
+        binder.bind(TutorialSubmissionEventHubService, to=TutorialSubmissionEventHubService, scope=singleton)
+        binder.bind(
+            TutorialSubmissionEventStreamSetupService, to=TutorialSubmissionEventStreamSetupService, scope=singleton
+        )
+        binder.bind(TutorialSubmissionEventCreateService, to=TutorialSubmissionEventCreateService, scope=singleton)

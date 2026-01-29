@@ -1,17 +1,24 @@
 from http import HTTPStatus
 from uuid import UUID
 
+from django.db import models
 from ninja import Router
 
 from main.apps.core.schemas import NotFoundErrorSchema
 from main.di import injector
 from main.apps.core.types import AuthedHttpRequest
-from main.apps.tutorials.models import TutorialSubmission
+from main.apps.tutorials.models import TutorialSubmission, TutorialSubmissionEvent
 from main.apps.tutorials.schemas import (
     CreateTutorialSubmissionSchema,
     TutorialSubmissionDetailSchema,
+    TutorialSubmissionEventListFilterSchema,
+    TutorialSubmissionEventSchema,
 )
-from main.apps.tutorials.services import TutorialSubmissionCreateService, TutorialSubmissionRetrievalService
+from main.apps.tutorials.services import (
+    TutorialSubmissionCreateService,
+    TutorialSubmissionEventRetrievalService,
+    TutorialSubmissionRetrievalService,
+)
 
 
 tutorial_submissions_router = Router()
@@ -46,3 +53,23 @@ def get_tutorial_submission_detail(
 ) -> TutorialSubmission:
     tutorial_submission_retrieval_service = injector.get(TutorialSubmissionRetrievalService)
     return tutorial_submission_retrieval_service.get_detail_by_id(request.user.id, tutorial_submission_id)
+
+
+@tutorial_submissions_router.get(
+    "/{tutorial_submission_id}/events/",
+    url_name="tutorial_submission_detail_events_list",
+    response={
+        HTTPStatus.OK: list[TutorialSubmissionEventSchema],
+        HTTPStatus.NOT_FOUND: NotFoundErrorSchema,
+    },
+    description="Get the detail of a tutorial submission for the authenticated user and the selected tutorial.",
+)
+def get_tutorial_submission_events_list(
+    request: AuthedHttpRequest,
+    tutorial_submission_id: UUID,
+    filters: TutorialSubmissionEventListFilterSchema,
+) -> models.QuerySet[TutorialSubmissionEvent]:
+    filters.user_id = request.user.id
+    filters.tutorial_submission_id = tutorial_submission_id
+    tutorial_submission_event_retrieval_service = injector.get(TutorialSubmissionEventRetrievalService)
+    return tutorial_submission_event_retrieval_service.get_list(filters)

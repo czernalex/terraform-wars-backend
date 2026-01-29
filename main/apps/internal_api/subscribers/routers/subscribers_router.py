@@ -14,6 +14,9 @@ from main.apps.internal_api.subscribers.services import (
 subscribers_router = Router()
 
 
+# Routes are triggered by GCP Pub/Sub Push subscriptions
+
+
 @subscribers_router.post(
     "/submissions/execute/",
     url_name="submission_execution_finished",

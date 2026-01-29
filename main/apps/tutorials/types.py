@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from uuid import UUID
 
+import msgspec
+
 from main.apps.providers.models import Provider, ProviderUserProject
 from main.apps.tutorials.enums import TutorialStatus
 from main.apps.tutorials.models import Tutorial
@@ -19,3 +21,9 @@ class CreateTutorialSubmissionValidatedData:
     tutorial: Tutorial
     provider_user_project: ProviderUserProject
     code: str
+
+
+class TutorialSubmissionEventMessage(msgspec.Struct):
+    user_id: UUID
+    tutorial_submission_id: UUID
+    tutorial_submission_event_id: UUID
