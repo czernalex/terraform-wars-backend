@@ -13,8 +13,6 @@ import asyncio
 from decouple import AutoConfig
 from django.core.asgi import get_asgi_application
 
-from main.apps.tutorials.services import TutorialSubmissionEventStreamSetupService
-
 config = AutoConfig(os.environ.get("DJANGO_CONFIG_ENV_DIR"))
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", config("DJANGO_SETTINGS_MODULE", default="main.settings.production"))
@@ -26,6 +24,7 @@ django_application = get_asgi_application()
 async def application(scope, receive, send):
     from main.di import injector
     from main.apps.notifications.services import NotificationStreamSetupService
+    from main.apps.tutorials.services import TutorialSubmissionEventStreamSetupService
 
     if scope["type"] == "http":
         return await django_application(scope, receive, send)

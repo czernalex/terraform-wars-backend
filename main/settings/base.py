@@ -470,42 +470,51 @@ def get_admin_environment() -> list[str]:
             raise ValueError(f"Invalid environment: {ENVIRONMENT}")
 
 
+UNFOLD_SITE_DROPDOWN = [
+    {
+        "icon": "web",
+        "title": _("App"),
+        "link": FRONTEND_BASE_URL,
+    },
+    {
+        "icon": "settings",
+        "title": _("Admin"),
+        "link": reverse_lazy("admin:index"),
+    },
+    {
+        "icon": "api",
+        "title": _("API Docs"),
+        "link": reverse_lazy("terraform-wars-api:openapi-view"),
+    },
+    {
+        "icon": "key",
+        "title": _("Allauth API Docs"),
+        "link": reverse_lazy("headless:openapi_html"),
+    },
+]
+
+if DEBUG:
+    UNFOLD_SITE_DROPDOWN.extend(
+        [
+            {
+                "icon": "api",
+                "title": _("Events API Docs"),
+                "link": reverse_lazy("terraform-wars-events-api:openapi-view"),
+            },
+            {
+                "icon": "api",
+                "title": _("Internal API Docs"),
+                "link": reverse_lazy("terraform-wars-internal-api:openapi-view"),
+            },
+        ]
+    )
+
+
 UNFOLD = {
     "SITE_TITLE": "Terraform Wars",
     "SITE_HEADER": "Terraform Wars",
     "SITE_SUBHEADER": "Site administration",
-    "SITE_DROPDOWN": [
-        {
-            "icon": "web",
-            "title": _("App"),
-            "link": FRONTEND_BASE_URL,
-        },
-        {
-            "icon": "settings",
-            "title": _("Admin"),
-            "link": reverse_lazy("admin:index"),
-        },
-        {
-            "icon": "api",
-            "title": _("API Docs"),
-            "link": reverse_lazy("terraform-wars-api:openapi-view"),
-        },
-        # {
-        #     "icon": "api",
-        #     "title": _("Events API Docs"),
-        #     "link": reverse_lazy("terraform-wars-events-api:openapi-view"),
-        # },
-        # {
-        #     "icon": "api",
-        #     "title": _("Internal API Docs"),
-        #     "link": reverse_lazy("terraform-wars-internal-api:openapi-view"),
-        # },
-        {
-            "icon": "key",
-            "title": _("Allauth API Docs"),
-            "link": reverse_lazy("headless:openapi_html"),
-        },
-    ],
+    "SITE_DROPDOWN": UNFOLD_SITE_DROPDOWN,
     "SITE_URL": FRONTEND_BASE_URL,
     "SITE_SYMBOL": "action_key",
     "SHOW_HISTORY": True,
