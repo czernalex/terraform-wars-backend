@@ -12,7 +12,9 @@ from main.apps.internal_api.tasks.services.executor_environment_configurator_fac
 )
 from main.apps.tutorials.enums import TutorialSubmissionStatus
 from main.apps.tutorials.models import TutorialSubmission
+from main.apps.tutorials.schemas import CreateTutorialSubmissionEventSchema
 from main.apps.tutorials.services import (
+    TutorialSubmissionEventCreateService,
     TutorialSubmissionRetrievalService,
     TutorialSubmissionUpdateService,
     TutorialSubmissionValidationService,
@@ -29,12 +31,14 @@ class TutorialSubmissionExecuteService:
         tutorial_submission_retrieval_service: TutorialSubmissionRetrievalService,
         tutorial_submission_validation_service: TutorialSubmissionValidationService,
         tutorial_submission_update_service: TutorialSubmissionUpdateService,
+        tutorial_submission_event_create_service: TutorialSubmissionEventCreateService,
         executor_environment_configurator_factory: ExecutorEnvironmentConfiguratorFactory,
         gcp_cloud_run_job_invoke_service: GCPCloudRunJobInvokeService,
     ):
         self._tutorial_submission_retrieval_service = tutorial_submission_retrieval_service
         self._tutorial_submission_validation_service = tutorial_submission_validation_service
         self._tutorial_submission_update_service = tutorial_submission_update_service
+        self._tutorial_submission_event_create_service = tutorial_submission_event_create_service
         self._executor_environment_configurator_factory = executor_environment_configurator_factory
         self._gcp_cloud_run_job_invoke_service = gcp_cloud_run_job_invoke_service
 
@@ -52,6 +56,18 @@ class TutorialSubmissionExecuteService:
         )
         logger.info(f"Execution job for tutorial submission: {tutorial_submission.id} invoked successfully")
 
+    def _create_tutorial_submission_event(self, tutorial_submission: TutorialSubmission) -> None:
+        create_tutorial_submission_event_data = CreateTutorialSubmissionEventSchema(
+            event_status=tutorial_submission.status,
+            exit_code=0,
+            stdout="",
+            error="",
+        )
+        self._tutorial_submission_event_create_service.create(
+            tutorial_submission_id=tutorial_submission.id,
+            data=create_tutorial_submission_event_data,
+        )
+
     @transaction.atomic
     def execute(self, tutorial_submission_id: UUID, user_id: UUID) -> None:
         tutorial_submission = self._tutorial_submission_retrieval_service.get_for_update_by_id(
@@ -61,5 +77,6 @@ class TutorialSubmissionExecuteService:
         tutorial_submission = self._tutorial_submission_update_service.update_status(
             tutorial_submission, TutorialSubmissionStatus.EXECUTING
         )
+        self._create_tutorial_submission_event(tutorial_submission)
         environment_configurator = self._executor_environment_configurator_factory.get_configurator(tutorial_submission)
         transaction.on_commit(lambda: self._invoke_execution_job(tutorial_submission, environment_configurator))

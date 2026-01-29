@@ -12,7 +12,9 @@ from main.apps.internal_api.tasks.services.validator_environment_configurator_fa
 )
 from main.apps.tutorials.enums import TutorialSubmissionStatus
 from main.apps.tutorials.models import TutorialSubmission
+from main.apps.tutorials.schemas import CreateTutorialSubmissionEventSchema
 from main.apps.tutorials.services import (
+    TutorialSubmissionEventCreateService,
     TutorialSubmissionRetrievalService,
     TutorialSubmissionUpdateService,
     TutorialSubmissionValidationService,
@@ -29,12 +31,14 @@ class TutorialSubmissionValidateService:
         tutorial_submission_retrieval_service: TutorialSubmissionRetrievalService,
         tutorial_submission_validation_service: TutorialSubmissionValidationService,
         tutorial_submission_update_service: TutorialSubmissionUpdateService,
+        tutorial_submission_event_create_service: TutorialSubmissionEventCreateService,
         validator_environment_configurator_factory: ValidatorEnvironmentConfiguratorFactory,
         gcp_cloud_run_job_invoke_service: GCPCloudRunJobInvokeService,
     ):
         self._tutorial_submission_retrieval_service = tutorial_submission_retrieval_service
         self._tutorial_submission_validation_service = tutorial_submission_validation_service
         self._tutorial_submission_update_service = tutorial_submission_update_service
+        self._tutorial_submission_event_create_service = tutorial_submission_event_create_service
         self._validator_environment_configurator_factory = validator_environment_configurator_factory
         self._gcp_cloud_run_job_invoke_service = gcp_cloud_run_job_invoke_service
 
@@ -43,14 +47,26 @@ class TutorialSubmissionValidateService:
         tutorial_submission: TutorialSubmission,
         environment_configurator: ValidatorEnvironmentConfigurator,
     ) -> None:
-        logger.info(f"Invoking execution job for tutorial submission: {tutorial_submission.id}")
+        logger.info(f"Invoking validation job for tutorial submission: {tutorial_submission.id}")
         self._gcp_cloud_run_job_invoke_service.invoke(
             job_name=settings.GCP_TERRAFORM_VALIDATOR_JOB_NAME,
             job_container_name="app-production-1",
             job_container_args=None,
             job_container_env_vars=environment_configurator.configure(tutorial_submission),
         )
-        logger.info(f"Execution job for tutorial submission: {tutorial_submission.id} invoked successfully")
+        logger.info(f"Validation job for tutorial submission: {tutorial_submission.id} invoked successfully")
+
+    def _create_tutorial_submission_event(self, tutorial_submission: TutorialSubmission) -> None:
+        create_tutorial_submission_event_data = CreateTutorialSubmissionEventSchema(
+            event_status=tutorial_submission.status,
+            exit_code=0,
+            stdout="",
+            error="",
+        )
+        self._tutorial_submission_event_create_service.create(
+            tutorial_submission_id=tutorial_submission.id,
+            data=create_tutorial_submission_event_data,
+        )
 
     @transaction.atomic
     def validate(self, tutorial_submission_id: UUID, user_id: UUID) -> None:
@@ -61,6 +77,7 @@ class TutorialSubmissionValidateService:
         tutorial_submission = self._tutorial_submission_update_service.update_status(
             tutorial_submission, TutorialSubmissionStatus.VALIDATING
         )
+        self._create_tutorial_submission_event(tutorial_submission)
         environment_configurator = self._validator_environment_configurator_factory.get_configurator(
             tutorial_submission
         )
