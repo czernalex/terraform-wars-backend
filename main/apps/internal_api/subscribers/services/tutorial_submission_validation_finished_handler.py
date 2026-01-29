@@ -13,7 +13,11 @@ from main.apps.notifications.services import NotificationCreateService
 from main.apps.tutorials.enums import TutorialSubmissionStatus
 from main.apps.tutorials.models import TutorialSubmission
 from main.apps.tutorials.schemas import CreateTutorialSubmissionEventSchema
-from main.apps.tutorials.services import TutorialSubmissionRetrievalService, TutorialSubmissionUpdateService
+from main.apps.tutorials.services import (
+    TutorialSubmissionEventCreateService,
+    TutorialSubmissionRetrievalService,
+    TutorialSubmissionUpdateService,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -26,12 +30,14 @@ class TutorialSubmissionValidationFinishedHandler:
         pubsub_message_data_parser: PubSubMessageDataParser,
         tutorial_submission_retrieval_service: TutorialSubmissionRetrievalService,
         tutorial_submission_update_service: TutorialSubmissionUpdateService,
+        tutorial_submission_event_create_service: TutorialSubmissionEventCreateService,
         gcp_cloud_task_create_service: GCPCloudTaskCreateService,
         notification_create_service: NotificationCreateService,
     ):
         self._pubsub_message_data_parser = pubsub_message_data_parser
         self._tutorial_submission_retrieval_service = tutorial_submission_retrieval_service
         self._tutorial_submission_update_service = tutorial_submission_update_service
+        self._tutorial_submission_event_create_service = tutorial_submission_event_create_service
         self._gcp_cloud_task_create_service = gcp_cloud_task_create_service
         self._notification_create_service = notification_create_service
 
