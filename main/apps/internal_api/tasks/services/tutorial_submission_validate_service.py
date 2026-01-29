@@ -47,6 +47,7 @@ class TutorialSubmissionValidateService:
         self._gcp_cloud_run_job_invoke_service.invoke(
             job_name=settings.GCP_TERRAFORM_VALIDATOR_JOB_NAME,
             job_container_name="app-production-1",
+            job_container_args=None,
             job_container_env_vars=environment_configurator.configure(tutorial_submission),
         )
         logger.info(f"Execution job for tutorial submission: {tutorial_submission.id} invoked successfully")

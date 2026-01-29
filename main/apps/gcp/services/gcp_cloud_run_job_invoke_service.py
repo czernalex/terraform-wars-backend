@@ -1,5 +1,5 @@
 import logging
-from typing import MutableSequence
+from typing import MutableSequence, Optional
 
 from google.cloud import run_v2
 from injector import inject
@@ -22,8 +22,8 @@ class GCPCloudRunJobInvokeService:
         self,
         job_name: str,
         job_container_name: str,
-        job_container_args: MutableSequence[str],
-        job_container_env_vars: MutableSequence[run_v2.EnvVar],
+        job_container_args: Optional[MutableSequence[str]],
+        job_container_env_vars: Optional[MutableSequence[run_v2.EnvVar]],
     ) -> run_v2.Job:
         logger.info(f"Invoking Cloud Run Job: {job_name}")
         run_job_request = run_v2.RunJobRequest(
@@ -46,7 +46,7 @@ class GCPCloudRunJobInvokeService:
         self,
         job_name: str,
         job_container_name: str,
-        job_container_args: MutableSequence[str],
-        job_container_env_vars: MutableSequence[run_v2.EnvVar],
+        job_container_args: Optional[MutableSequence[str]],
+        job_container_env_vars: Optional[MutableSequence[run_v2.EnvVar]],
     ) -> None:
         return self._run_job(job_name, job_container_name, job_container_args, job_container_env_vars)
