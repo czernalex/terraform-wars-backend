@@ -46,11 +46,13 @@ class TutorialSubmissionEventStreamService:
                     logger.info(
                         f"Tutorial submission event: {tutorial_submission_event_id} sent to the user: {user_id}"
                     )
-                    yield await self._tutorial_submission_event_event_builder.build_event(tutorial_submission_events)
+                    yield await self._tutorial_submission_event_event_builder.build_event(
+                        tutorial_submission_event_id, tutorial_submission_events
+                    )
                 except asyncio.TimeoutError:
                     logger.info(
                         f"No new tutorial submission events received within the timeout. Sending heartbeat event to the user: {user_id}"
                     )
                     yield self._heartbeat_event_builder.build_event()
         finally:
-            self._tutorial_submission_event_hub_service.remove_subscriber(user_id, queue)
+            self._tutorial_submission_event_hub_service.remove_subscriber(user_id, tutorial_submission_id, queue)
