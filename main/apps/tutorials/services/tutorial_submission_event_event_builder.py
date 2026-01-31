@@ -1,6 +1,8 @@
 from typing import AsyncIterable
 from uuid import UUID
 
+import msgspec
+
 from main.apps.tutorials.models import TutorialSubmissionEvent
 from main.apps.tutorials.schemas import TutorialSubmissionEventSchema
 
@@ -15,4 +17,6 @@ class TutorialSubmissionEventEventBuilder:
             TutorialSubmissionEventSchema.from_orm(tutorial_submission_event).model_dump_json()
             async for tutorial_submission_event in tutorial_submission_event_events
         ]
-        return f"event: message\nid: {tutorial_submission_event_id}\ndata: {data}\n\n"
+        return (
+            f"event: message\nid: {tutorial_submission_event_id}\ndata: {msgspec.json.encode(data).decode('utf-8')}\n\n"
+        )
