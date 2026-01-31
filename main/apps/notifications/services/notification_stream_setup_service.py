@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import msgspec
 import uuid
 
@@ -8,6 +9,9 @@ from injector import inject
 from main.apps.gcp.services import GCPPubSubSubscriptionCreateService, GCPPubSubSubscribeService
 from main.apps.notifications.services.notification_hub_service import NotificationHubService
 from main.apps.notifications.types import NotificationMessage
+
+
+logger = logging.getLogger(__name__)
 
 
 class NotificationStreamSetupService:
@@ -33,6 +37,7 @@ class NotificationStreamSetupService:
             topic_name="notifications",
             subscription_name=self._generate_subscription_name(),
         )
+        logger.info(f"Created notifications subscription: {subscription.name}")
 
         def callback(message: "pubsub_v1.subscriber.message.Message") -> None:
             notification_message = msgspec.json.decode(message.data, type=NotificationMessage)

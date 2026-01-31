@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import uuid
 
 import msgspec
@@ -8,6 +9,9 @@ from injector import inject
 from main.apps.gcp.services import GCPPubSubSubscribeService, GCPPubSubSubscriptionCreateService
 from main.apps.tutorials.types import TutorialSubmissionEventMessage
 from main.apps.tutorials.services.tutorial_submission_event_hub_service import TutorialSubmissionEventHubService
+
+
+logger = logging.getLogger(__name__)
 
 
 class TutorialSubmissionEventStreamSetupService:
@@ -33,6 +37,7 @@ class TutorialSubmissionEventStreamSetupService:
             topic_name="tutorial-submission-events",
             subscription_name=self._generate_subscription_name(),
         )
+        logger.info(f"Created tutorial submission events subscription: {subscription.name}")
 
         def callback(message: "pubsub_v1.subscriber.message.Message") -> None:
             tutorial_submission_event_message = msgspec.json.decode(message.data, type=TutorialSubmissionEventMessage)
