@@ -6,6 +6,7 @@ from django.utils.translation import gettext as _
 
 from main.apps.core.exceptions import NotFoundError
 from main.apps.tutorials.models.tutorial_submission import TutorialSubmission
+from main.apps.tutorials.schemas import TutorialSubmissionListFilterSchema
 
 
 class TutorialSubmissionRetrievalService:
@@ -43,6 +44,19 @@ class TutorialSubmissionRetrievalService:
             .select_for_update(of=("self",))
             .for_user(user_id)
             .get(id=tutorial_submission_id)
+        )
+
+    def get_list(self, filters: TutorialSubmissionListFilterSchema) -> models.QuerySet[TutorialSubmission]:
+        return filters.filter(
+            self._get_queryset(
+                select_related_fields=[
+                    "tutorial",
+                    "tutorial__provider",
+                    "provider_user_project",
+                    "provider_user_project__provider",
+                    "user",
+                ]
+            )
         )
 
     def get_detail_by_id(self, user_id: UUID, tutorial_submission_id: UUID) -> TutorialSubmission:

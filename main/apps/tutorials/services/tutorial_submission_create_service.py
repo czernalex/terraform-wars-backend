@@ -7,8 +7,9 @@ from injector import inject
 
 from main.apps.gcp.services import GCPCloudTaskCreateService
 from main.apps.tutorials.models import TutorialSubmission
-from main.apps.tutorials.schemas import CreateTutorialSubmissionSchema
+from main.apps.tutorials.schemas import CreateTutorialSubmissionEventSchema, CreateTutorialSubmissionSchema
 from main.apps.tutorials.services.tutorial_submission_validation_service import TutorialSubmissionValidationService
+from main.apps.tutorials.services.tutorial_submission_event_create_service import TutorialSubmissionEventCreateService
 from main.apps.tutorials.types import CreateTutorialSubmissionValidatedData
 from main.apps.users.models import User
 
@@ -21,9 +22,11 @@ class TutorialSubmissionCreateService:
     def __init__(
         self,
         tutorial_submission_validation_service: TutorialSubmissionValidationService,
+        tutorial_submission_event_create_service: TutorialSubmissionEventCreateService,
         gcp_cloud_task_create_service: GCPCloudTaskCreateService,
     ) -> None:
         self._tutorial_submission_validation_service = tutorial_submission_validation_service
+        self._tutorial_submission_event_create_service = tutorial_submission_event_create_service
         self._gcp_cloud_task_create_service = gcp_cloud_task_create_service
 
     def _enqueue_tutorial_submission_task(self, tutorial_submission: TutorialSubmission) -> None:
@@ -35,6 +38,17 @@ class TutorialSubmissionCreateService:
                     "user_id": tutorial_submission.user_id,
                 },
             )
+        )
+
+    def _create_initial_tutorial_submission_event(self, tutorial_submission: TutorialSubmission) -> None:
+        create_tutorial_submission_event_data = CreateTutorialSubmissionEventSchema(
+            event_status=tutorial_submission.status,
+            exit_code=0,
+            stdout="",
+            error="",
+        )
+        self._tutorial_submission_event_create_service.create(
+            tutorial_submission.id, create_tutorial_submission_event_data
         )
 
     def _create_tutorial_submission(
@@ -61,5 +75,6 @@ class TutorialSubmissionCreateService:
     def create(self, user: User, data: CreateTutorialSubmissionSchema) -> TutorialSubmission:
         validated_data = self._tutorial_submission_validation_service.validate_create_data(user.id, data)
         tutorial_submission = self._create_tutorial_submission(user.id, validated_data)
+        self._create_initial_tutorial_submission_event(tutorial_submission)
         self._enqueue_tutorial_submission_task(tutorial_submission)
         return tutorial_submission

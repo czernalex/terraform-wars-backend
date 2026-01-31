@@ -1,6 +1,12 @@
-from main.apps.tutorials.schemas import TutorialSubmissionEventEventSchema
+from typing import AsyncIterable
+from main.apps.tutorials.models import TutorialSubmissionEvent
+from main.apps.tutorials.schemas import TutorialSubmissionEventSchema
 
 
 class TutorialSubmissionEventEventBuilder:
-    def build_event(self, tutorial_submission_event_event: TutorialSubmissionEventEventSchema) -> str:
-        return f"event: message\nid: {tutorial_submission_event_event.id}\ndata: {tutorial_submission_event_event.model_dump_json()}\n\n"
+    async def build_event(self, tutorial_submission_event_events: AsyncIterable[TutorialSubmissionEvent]) -> str:
+        data = [
+            TutorialSubmissionEventSchema.from_orm(tutorial_submission_event).model_dump_json()
+            async for tutorial_submission_event in tutorial_submission_event_events
+        ]
+        return f"event: message\nid: {data[0]['id']}\ndata: {data}\n\n"

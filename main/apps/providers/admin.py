@@ -45,6 +45,8 @@ class ProviderAdmin(BaseModelAdmin):
                     "setup_script_instructions",
                     "setup_script",
                     "setup_checklist",
+                    "validation_script_instructions",
+                    "validation_script_template",
                 )
             },
         ),
@@ -62,6 +64,7 @@ class ProviderAdmin(BaseModelAdmin):
     wysiwyg_fields = (
         "setup_instructions",
         "setup_script_instructions",
+        "validation_script_instructions",
     )
 
     def formfield_for_dbfield(self, db_field: models.Field, request: HttpRequest, **kwargs) -> Optional[models.Field]:

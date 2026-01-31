@@ -3,7 +3,7 @@ from uuid import UUID
 
 from django.db import models
 
-from main.apps.tutorials.enums import TutorialVoteValue
+from main.apps.tutorials.enums import TutorialSubmissionStatus, TutorialVoteValue
 
 
 if TYPE_CHECKING:
@@ -25,6 +25,17 @@ class TutorialQuerySet(models.QuerySet["Tutorial"]):
         return self.annotate(
             _upvote_count=models.Count("votes", filter=models.Q(votes__vote_value=TutorialVoteValue.UPVOTE)),
             _downvote_count=models.Count("votes", filter=models.Q(votes__vote_value=TutorialVoteValue.DOWNVOTE)),
+        )
+
+    def annotate_is_completed(self, user_id: UUID) -> Self:
+        return self.annotate(
+            _is_completed=models.Exists(
+                TutorialSubmission.objects.filter(
+                    tutorial_id=models.OuterRef("id"),
+                    user_id=user_id,
+                    status=TutorialSubmissionStatus.SUCCEEDED,
+                )
+            )
         )
 
 

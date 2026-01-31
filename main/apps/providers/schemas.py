@@ -35,10 +35,12 @@ class ProviderProjectSchema(Schema):
 class ProviderDetailSchema(ModelSchema):
     id: UUID
     short_name: str
-    setup_instructions: Optional[str]
-    setup_script_instructions: Optional[str]
-    setup_script: Optional[str]
+    setup_instructions: str
+    setup_script_instructions: str
+    setup_script: str
     setup_checklist: Optional[list[str]]
+    validation_script_instructions: str
+    validation_script_template: str
 
     class Meta:
         model = Provider

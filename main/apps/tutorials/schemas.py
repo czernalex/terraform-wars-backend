@@ -134,6 +134,14 @@ class TutorialDetailSchema(ModelSchema):
         return obj.author.username if obj.author else None
 
 
+class TutorialSubmissionListFilterSchema(FilterSchema):
+    user_id: Optional[UUID] = None
+    tutorial_id: Optional[UUID] = None
+    provider_user_project_id: Optional[UUID] = None
+    provider_id: Annotated[Optional[UUID], FilterLookup(["tutorial__provider_id"])] = None
+    status: Optional[TutorialSubmissionStatus] = None
+
+
 class CreateTutorialSubmissionSchema(Schema):
     tutorial_id: UUID
     provider_user_project_id: UUID
@@ -153,13 +161,30 @@ class ValidateTutorialSubmissionSchema(Schema):
     user_id: UUID
 
 
+class TutorialSubmissionListSchema(ModelSchema):
+    id: UUID
+    status: TutorialSubmissionStatus
+
+    class Meta:
+        model = TutorialSubmission
+        fields = [
+            "created_at",
+            "updated_at",
+        ]
+
+
 class TutorialSubmissionDetailSchema(ModelSchema):
     id: UUID
+    tutorial_id: UUID
+    provider_user_project_id: Optional[UUID]
+    status: TutorialSubmissionStatus
 
     class Meta:
         model = TutorialSubmission
         fields = [
             "code",
+            "created_at",
+            "updated_at",
         ]
 
 
@@ -178,15 +203,6 @@ class TutorialSubmissionEventListFilterSchema(FilterSchema):
     event_status: Optional[TutorialSubmissionStatus] = None
 
 
-class TutorialSubmissionEventEventSchema(Schema):
-    id: UUID
-    tutorial_submission_id: UUID
-    event_status: TutorialSubmissionStatus
-    exit_code: int
-    stdout: str
-    error: str
-
-
 class CreateTutorialSubmissionEventSchema(Schema):
     event_status: TutorialSubmissionStatus
     exit_code: int
@@ -198,11 +214,11 @@ class TutorialSubmissionEventSchema(ModelSchema):
     id: UUID
     tutorial_submission_id: UUID
     event_status: TutorialSubmissionStatus
+    stdout: str
+    error: str
 
     class Meta:
         model = TutorialSubmissionEvent
         fields = [
             "exit_code",
-            "stdout",
-            "error",
         ]

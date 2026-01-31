@@ -36,7 +36,7 @@ class NotificationRetrievalService:
             logger.warning(f"Notification: {notification_id} not found for user: {user_id}")
             raise NotFoundError(_("Notification not found"))
 
-    async def aget_for_read_by_id(self, notification_id: int) -> Notification:
+    async def aget_detail_by_id(self, notification_id: int) -> Notification:
         try:
             return await self._aget_for_read_by_id(notification_id)
         except Notification.DoesNotExist:

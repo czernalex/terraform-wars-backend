@@ -10,7 +10,7 @@ from main.apps.providers.models import ProviderUserProject
 from main.apps.tutorials.enums import TutorialSubmissionStatus
 from main.apps.tutorials.models import Tutorial, TutorialSubmission
 from main.apps.tutorials.services.tutorial_retrieval_service import TutorialRetrievalService
-from main.apps.providers.services import ProviderUserProjectRetrievalService
+from main.apps.providers.services import ProviderUserProjectRetrievalService, ProviderUserProjectValidationService
 from main.apps.tutorials.schemas import CreateTutorialSubmissionSchema
 from main.apps.tutorials.services.tutorial_validation_service import TutorialValidationService
 from main.apps.tutorials.types import CreateTutorialSubmissionValidatedData
@@ -25,10 +25,12 @@ class TutorialSubmissionValidationService:
         self,
         tutorial_retrieval_service: TutorialRetrievalService,
         provider_user_project_retrieval_service: ProviderUserProjectRetrievalService,
+        provider_user_project_validation_service: ProviderUserProjectValidationService,
         tutorial_validation_service: TutorialValidationService,
     ):
         self._tutorial_retrieval_service = tutorial_retrieval_service
         self._provider_user_project_retrieval_service = provider_user_project_retrieval_service
+        self._provider_user_project_validation_service = provider_user_project_validation_service
         self._tutorial_validation_service = tutorial_validation_service
 
     def _validate_tutorial_exists(self, tutorial_id: UUID) -> Tutorial:
@@ -69,11 +71,32 @@ class TutorialSubmissionValidationService:
                 ]
             ) from error
 
+    def _validate_provider_user_project_is_configured(self, provider_user_project: ProviderUserProject) -> None:
+        self._provider_user_project_validation_service.validate_is_configured(
+            provider_user_project, "provider_user_project_id"
+        )
+
+    def _validate_provider_user_project_matches_tutorial_provider(
+        self, tutorial: Tutorial, provider_user_project: ProviderUserProject
+    ) -> None:
+        if tutorial.provider_id != provider_user_project.provider_id:
+            raise ValidationError(
+                [
+                    {
+                        "loc": ["provider_user_project_id"],
+                        "msg": _("Provider user project does not match tutorial provider"),
+                        "type": "value_error",
+                    }
+                ]
+            )
+
     def validate_create_data(
         self, user_id: UUID, data: CreateTutorialSubmissionSchema
     ) -> CreateTutorialSubmissionValidatedData:
         tutorial = self._validate_tutorial_exists(data.tutorial_id)
         provider_user_project = self._validate_provider_user_project_exists(user_id, data.provider_user_project_id)
+        self._validate_provider_user_project_is_configured(provider_user_project)
+        self._validate_provider_user_project_matches_tutorial_provider(tutorial, provider_user_project)
         self._validate_tutorial_accepts_submissions(tutorial)
         return CreateTutorialSubmissionValidatedData(
             tutorial=tutorial,

@@ -40,6 +40,19 @@ class Provider(AbstractUUIDModel):
         models.CharField(max_length=512), default=list, help_text=_("Checklist of steps to setup the Provider Project")
     )
 
+    validation_script_instructions = models.TextField(
+        _("Validation script instructions"),
+        help_text=_("Instructions on how to validate the resources managed by the terraform in provider project"),
+        blank=True,
+        default="",
+    )
+    validation_script_template = models.TextField(
+        _("Validation script template"),
+        help_text=_("Template for the validation script"),
+        blank=True,
+        default="",
+    )
+
     objects = ProviderQuerySet.as_manager()
 
     class Meta:

@@ -3,6 +3,7 @@ from uuid import UUID
 
 from django.db import models
 from ninja import Router
+from ninja.pagination import paginate
 
 from main.apps.core.schemas import NotFoundErrorSchema
 from main.di import injector
@@ -13,6 +14,8 @@ from main.apps.tutorials.schemas import (
     TutorialSubmissionDetailSchema,
     TutorialSubmissionEventListFilterSchema,
     TutorialSubmissionEventSchema,
+    TutorialSubmissionListFilterSchema,
+    TutorialSubmissionListSchema,
 )
 from main.apps.tutorials.services import (
     TutorialSubmissionCreateService,
@@ -24,10 +27,26 @@ from main.apps.tutorials.services import (
 tutorial_submissions_router = Router()
 
 
+@tutorial_submissions_router.get(
+    "/",
+    url_name="tutorial_submission_list",
+    response={HTTPStatus.OK: list[TutorialSubmissionListSchema]},
+    description="Get the list of tutorial submissions for the authenticated user.",
+)
+@paginate
+def get_tutorial_submission_list(
+    request: AuthedHttpRequest,
+    filters: TutorialSubmissionListFilterSchema,
+) -> models.QuerySet[TutorialSubmission]:
+    filters.user_id = request.user.id
+    tutorial_submission_retrieval_service = injector.get(TutorialSubmissionRetrievalService)
+    return tutorial_submission_retrieval_service.get_list(filters)
+
+
 @tutorial_submissions_router.post(
     "/",
     url_name="tutorial_submission_list",
-    response={HTTPStatus.CREATED: None},
+    response={HTTPStatus.CREATED: TutorialSubmissionDetailSchema},
     description="Create a new tutorial submission for the authenticated user and the selected tutorial.",
 )
 def create_tutorial_submission(
@@ -67,9 +86,10 @@ def get_tutorial_submission_detail(
 def get_tutorial_submission_events_list(
     request: AuthedHttpRequest,
     tutorial_submission_id: UUID,
-    filters: TutorialSubmissionEventListFilterSchema,
 ) -> models.QuerySet[TutorialSubmissionEvent]:
-    filters.user_id = request.user.id
-    filters.tutorial_submission_id = tutorial_submission_id
+    filters = TutorialSubmissionEventListFilterSchema(
+        user_id=request.user.id,
+        tutorial_submission_id=tutorial_submission_id,
+    )
     tutorial_submission_event_retrieval_service = injector.get(TutorialSubmissionEventRetrievalService)
     return tutorial_submission_event_retrieval_service.get_list(filters)

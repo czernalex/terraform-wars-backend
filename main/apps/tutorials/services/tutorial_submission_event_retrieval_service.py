@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Iterable, Sequence
 from uuid import UUID
 
 from django.db import models
@@ -20,10 +20,12 @@ class TutorialSubmissionEventRetrievalService:
             .aget(id=tutorial_submission_event_id)
         )
 
-    def get_list(self, filters: TutorialSubmissionEventListFilterSchema) -> models.QuerySet[TutorialSubmissionEvent]:
+    def get_list(
+        self, filters: TutorialSubmissionEventListFilterSchema, ordering: Iterable[str] = ("-created_at",)
+    ) -> models.QuerySet[TutorialSubmissionEvent]:
         return filters.filter(
             self._get_queryset(select_related_fields=["tutorial_submission", "tutorial_submission__user"])
-        )
+        ).order_by(*ordering)
 
     async def aget_for_read_by_id(self, user_id: UUID, tutorial_submission_event_id: UUID) -> TutorialSubmissionEvent:
         try:

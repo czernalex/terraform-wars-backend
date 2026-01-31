@@ -30,10 +30,10 @@ root_internal_api_router = TerraformWarsAPI(
     docs_decorator=staff_member_required if not settings.DEBUG else None,
     servers=[
         {"url": "http://localhost:8080", "description": "Local development server"},
-        {"url": "https://api.app.terraformwars.com", "description": "Production server"},
+        {"url": "https://api.app.terraformwars.com", "description": "Production API server"},
         {
             "url": "https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app",
-            "description": "Production task worker server",
+            "description": "Production task worker API server",
         },
     ],
     openapi_extra={

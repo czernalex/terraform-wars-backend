@@ -39,7 +39,7 @@ class NotificationStreamService:
             while True:
                 try:
                     notification_id = await asyncio.wait_for(queue.get(), timeout=30.0)
-                    notification = await self._notification_retrieval_service.aget_for_read_by_id(notification_id)
+                    notification = await self._notification_retrieval_service.aget_detail_by_id(notification_id)
                     logger.info(f"Notification: {notification.id} sent to the user: {user_id}")
                     notification_event = NotificationEventSchema(
                         id=notification.id,

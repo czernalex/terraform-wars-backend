@@ -6,7 +6,7 @@ from uuid import UUID
 from injector import inject
 
 from main.apps.core.services import HeartbeatEventBuilder
-from main.apps.tutorials.schemas import TutorialSubmissionEventEventSchema
+from main.apps.tutorials.schemas import TutorialSubmissionEventListFilterSchema
 from main.apps.tutorials.services.tutorial_submission_event_event_builder import TutorialSubmissionEventEventBuilder
 from main.apps.tutorials.services.tutorial_submission_event_hub_service import TutorialSubmissionEventHubService
 from main.apps.tutorials.services.tutorial_submission_event_retrieval_service import (
@@ -33,29 +33,20 @@ class TutorialSubmissionEventStreamService:
 
     async def astream(self, user_id: UUID, tutorial_submission_id: UUID) -> AsyncIterator[str]:
         queue = self._tutorial_submission_event_hub_service.add_subscriber(user_id, tutorial_submission_id)
+        filters = TutorialSubmissionEventListFilterSchema(
+            user_id=user_id,
+            tutorial_submission_id=tutorial_submission_id,
+        )
         yield self._heartbeat_event_builder.build_event()  # Send initial heartbeat event
         try:
             while True:
                 try:
                     tutorial_submission_event_id = await asyncio.wait_for(queue.get(), timeout=30.0)
-                    tutorial_submission_event = (
-                        await self._tutorial_submission_event_retrieval_service.aget_for_read_by_id(
-                            user_id,
-                            tutorial_submission_event_id,
-                        )
-                    )
+                    tutorial_submission_events = self._tutorial_submission_event_retrieval_service.get_list(filters)
                     logger.info(
-                        f"Tutorial submission event: {tutorial_submission_event.id} sent to the user: {user_id}"
+                        f"Tutorial submission event: {tutorial_submission_event_id} sent to the user: {user_id}"
                     )
-                    tutorial_submission_event_event = TutorialSubmissionEventEventSchema(
-                        id=tutorial_submission_event.id,
-                        tutorial_submission_id=tutorial_submission_event.tutorial_submission_id,
-                        event_status=tutorial_submission_event.event_status,
-                        exit_code=tutorial_submission_event.exit_code,
-                        stdout=tutorial_submission_event.stdout,
-                        error=tutorial_submission_event.error,
-                    )
-                    yield self._tutorial_submission_event_event_builder.build_event(tutorial_submission_event_event)
+                    yield await self._tutorial_submission_event_event_builder.build_event(tutorial_submission_events)
                 except asyncio.TimeoutError:
                     logger.info(
                         f"No new tutorial submission events received within the timeout. Sending heartbeat event to the user: {user_id}"

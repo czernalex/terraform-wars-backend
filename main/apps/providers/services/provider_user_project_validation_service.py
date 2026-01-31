@@ -94,3 +94,15 @@ class ProviderUserProjectValidationService:
                     }
                 ]
             )
+
+    def validate_is_configured(self, provider_user_project: ProviderUserProject, loc: str = "status") -> None:
+        if provider_user_project.status != ProviderUserProjectStatus.CONFIGURED:
+            raise ValidationError(
+                [
+                    {
+                        "loc": [loc],
+                        "msg": _("Provider user project is not configured"),
+                        "type": "value_error",
+                    }
+                ]
+            )
