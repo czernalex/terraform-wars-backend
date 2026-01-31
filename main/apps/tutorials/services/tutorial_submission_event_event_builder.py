@@ -14,7 +14,7 @@ class TutorialSubmissionEventEventBuilder:
         tutorial_submission_event_events: AsyncIterable[TutorialSubmissionEvent],
     ) -> str:
         data = [
-            TutorialSubmissionEventSchema.from_orm(tutorial_submission_event).model_dump_json()
+            TutorialSubmissionEventSchema.from_orm(tutorial_submission_event).model_dump()
             async for tutorial_submission_event in tutorial_submission_event_events
         ]
         return (
