@@ -1,5 +1,7 @@
-from injector import Binder, Module, singleton
+from django.conf import settings
+from injector import Binder, Module, singleton, provider
 
+from main.apps.gcp.services import GCPPubSubSubscribeService, GCPPubSubSubscriptionCreateService
 from main.apps.tutorials.services import (
     TutorialCreateService,
     TutorialDeleteService,
@@ -40,7 +42,19 @@ class TutorialsModule(Module):
         )
         binder.bind(TutorialSubmissionEventEventBuilder, to=TutorialSubmissionEventEventBuilder, scope=singleton)
         binder.bind(TutorialSubmissionEventHubService, to=TutorialSubmissionEventHubService, scope=singleton)
-        binder.bind(
-            TutorialSubmissionEventStreamSetupService, to=TutorialSubmissionEventStreamSetupService, scope=singleton
-        )
         binder.bind(TutorialSubmissionEventCreateService, to=TutorialSubmissionEventCreateService, scope=singleton)
+
+    @provider
+    @singleton
+    def provide_tutorial_submission_event_stream_setup_service(
+        self,
+        gcp_pubsub_subscription_create_service: GCPPubSubSubscriptionCreateService,
+        gcp_pubsub_subscribe_service: GCPPubSubSubscribeService,
+        tutorial_submission_event_hub_service: TutorialSubmissionEventHubService,
+    ) -> TutorialSubmissionEventStreamSetupService:
+        return TutorialSubmissionEventStreamSetupService(
+            gcp_pubsub_subscription_create_service=gcp_pubsub_subscription_create_service,
+            gcp_pubsub_subscribe_service=gcp_pubsub_subscribe_service,
+            tutorial_submission_event_hub_service=tutorial_submission_event_hub_service,
+            gcp_project_id=settings.GCP_PROJECT_ID,
+        )

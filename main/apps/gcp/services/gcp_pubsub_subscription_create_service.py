@@ -22,5 +22,4 @@ class GCPPubSubSubscriptionCreateService:
     def create(self, project_id: str, topic_name: str, subscription_name: str) -> pubsub_v1.Subscription:
         topic_path = self._subscriber_client.topic_path(project_id, topic_name)
         subscription_path = self._subscriber_client.subscription_path(project_id, subscription_name)
-        print(f"Creating subscription: {subscription_path}, topic: {topic_path}")
         return self._create_subscription(topic_path, subscription_path)
