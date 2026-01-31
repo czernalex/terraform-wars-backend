@@ -142,7 +142,7 @@ DATABASES = {
     }
 }
 
-if os.environ.get("ASGI_APPLICATION") is not None:
+if SERVICE_TYPE == "events-api":
     DATABASES["default"]["CONN_MAX_AGE"] = 0
 
 ATOMIC_REQUESTS = False
