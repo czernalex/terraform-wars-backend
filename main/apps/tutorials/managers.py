@@ -23,17 +23,17 @@ class TutorialQuerySet(models.QuerySet["Tutorial"]):
 
     def annotate_vote_count(self) -> Self:
         return self.annotate(
-            _upvote_count=models.Count(
+            upvote_count=models.Count(
                 "votes", filter=models.Q(votes__vote_value=TutorialVoteValue.UPVOTE), distinct=True
             ),
-            _downvote_count=models.Count(
+            downvote_count=models.Count(
                 "votes", filter=models.Q(votes__vote_value=TutorialVoteValue.DOWNVOTE), distinct=True
             ),
         )
 
     def annotate_completed_count(self) -> Self:
         return self.annotate(
-            _completed_count=models.Count(
+            completed_count=models.Count(
                 "submissions",
                 filter=models.Q(submissions__status=TutorialSubmissionStatus.SUCCEEDED),
                 distinct=True,
@@ -42,7 +42,7 @@ class TutorialQuerySet(models.QuerySet["Tutorial"]):
 
     def annotate_submissions_count(self) -> Self:
         return self.annotate(
-            _submissions_count=models.Count(
+            submissions_count=models.Count(
                 "submissions",
                 distinct=True,
             )
@@ -52,7 +52,7 @@ class TutorialQuerySet(models.QuerySet["Tutorial"]):
         from main.apps.tutorials.models.tutorial_submission import TutorialSubmission
 
         return self.annotate(
-            _is_completed_by_user=models.Exists(
+            is_completed_by_user=models.Exists(
                 TutorialSubmission.objects.filter(
                     tutorial_id=models.OuterRef("id"),
                     user_id=user_id,

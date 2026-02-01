@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Annotated, Optional
 from uuid import UUID
 
@@ -170,7 +171,8 @@ class TutorialSubmissionListFilterSchema(FilterSchema):
     tutorial_id: Optional[UUID] = None
     provider_user_project_id: Optional[UUID] = None
     provider_id: Annotated[Optional[UUID], FilterLookup(["tutorial__provider_id"])] = None
-    status: Optional[TutorialSubmissionStatus] = None
+    status: Annotated[Optional[list[TutorialSubmissionStatus]], FilterLookup(["status__in"])] = None
+    created_at: Annotated[Optional[datetime], FilterLookup("created_at__lte")] = None
 
 
 class CreateTutorialSubmissionSchema(Schema):
