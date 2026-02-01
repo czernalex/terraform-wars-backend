@@ -54,6 +54,11 @@ class TutorialListSchema(ModelSchema):
     tags: list[TutorialTagSchema]
     difficulty: Difficulty
     status: TutorialStatus
+    upvote_count: int
+    downvote_count: int
+    completed_count: int
+    submissions_count: int
+    is_completed_by_user: bool
 
     class Meta:
         model = Tutorial
@@ -112,6 +117,11 @@ class TutorialDetailSchema(ModelSchema):
     status: TutorialStatus
     validation_script: str
     code_template: str
+    upvote_count: int
+    downvote_count: int
+    completed_count: int
+    submissions_count: int
+    is_completed_by_user: bool
 
     class Meta:
         model = Tutorial

@@ -23,19 +23,44 @@ class TutorialQuerySet(models.QuerySet["Tutorial"]):
 
     def annotate_vote_count(self) -> Self:
         return self.annotate(
-            _upvote_count=models.Count("votes", filter=models.Q(votes__vote_value=TutorialVoteValue.UPVOTE)),
-            _downvote_count=models.Count("votes", filter=models.Q(votes__vote_value=TutorialVoteValue.DOWNVOTE)),
+            upvote_count=models.Count("votes", filter=models.Q(votes__vote_value=TutorialVoteValue.UPVOTE)),
+            downvote_count=models.Count("votes", filter=models.Q(votes__vote_value=TutorialVoteValue.DOWNVOTE)),
         )
 
-    def annotate_is_completed(self, user_id: UUID) -> Self:
+    def annotate_completed_count(self) -> Self:
         return self.annotate(
-            _is_completed=models.Exists(
+            completed_count=models.Count(
+                "submissions",
+                filter=models.Q(submissions__status=TutorialSubmissionStatus.SUCCEEDED),
+            )
+        )
+
+    def annotate_submissions_count(self) -> Self:
+        return self.annotate(
+            submissions_count=models.Count(
+                "submissions",
+            )
+        )
+
+    def annotate_is_completed_by_user(self, user_id: UUID) -> Self:
+        from main.apps.tutorials.models.tutorial_submission import TutorialSubmission
+
+        return self.annotate(
+            is_completed_by_user=models.Exists(
                 TutorialSubmission.objects.filter(
                     tutorial_id=models.OuterRef("id"),
                     user_id=user_id,
                     status=TutorialSubmissionStatus.SUCCEEDED,
                 )
             )
+        )
+
+    def annotate_stats(self, user_id: UUID) -> Self:
+        return (
+            self.annotate_vote_count()
+            .annotate_completed_count()
+            .annotate_submissions_count()
+            .annotate_is_completed_by_user(user_id)
         )
 
 

@@ -2,7 +2,7 @@ from http import HTTPStatus
 from uuid import UUID
 
 from django.db import models
-from ninja import Router
+from ninja import Query, Router
 from ninja.pagination import paginate
 
 from main.apps.core.schemas import NotFoundErrorSchema
@@ -36,11 +36,12 @@ tutorial_submissions_router = Router()
 @paginate
 def get_tutorial_submission_list(
     request: AuthedHttpRequest,
-    filters: TutorialSubmissionListFilterSchema,
+    filters: Query[TutorialSubmissionListFilterSchema],
+    ordering: Query[list[str]] = ("-created_at",),
 ) -> models.QuerySet[TutorialSubmission]:
     filters.user_id = request.user.id
     tutorial_submission_retrieval_service = injector.get(TutorialSubmissionRetrievalService)
-    return tutorial_submission_retrieval_service.get_list(filters)
+    return tutorial_submission_retrieval_service.get_list(filters, ordering)
 
 
 @tutorial_submissions_router.post(

@@ -46,6 +46,14 @@ class TutorialSubmissionEventStreamService:
             while True:
                 try:
                     tutorial_submission_event_id = await asyncio.wait_for(queue.get(), timeout=30.0)
+                    tutorial_submission_events = self._tutorial_submission_event_retrieval_service.get_list(filters)
+                    logger.info(
+                        f"Tutorial submission event: {tutorial_submission_event_id} sent to the user: {user_id}"
+                    )
+                    yield await self._tutorial_submission_event_event_builder.build_event(
+                        tutorial_submission_event_id, tutorial_submission_events
+                    )
+                except asyncio.TimeoutError:
                     tutorial_submission = await self._tutorial_submission_retrieval_service.aget_detail_by_id(
                         user_id, tutorial_submission_id
                     )
@@ -56,18 +64,14 @@ class TutorialSubmissionEventStreamService:
                         TutorialSubmissionStatus.FAILED,
                     ]:
                         logger.info(
-                            f"Tutorial submission: {tutorial_submission_id} reached a final state, stopping the stream"
+                            f"Tutorial submission: {tutorial_submission_id} reached a final state, sending the last event and stopping the stream"
+                        )
+                        tutorial_submission_events = self._tutorial_submission_event_retrieval_service.get_list(filters)
+                        yield await self._tutorial_submission_event_event_builder.build_event(
+                            tutorial_submission.id, tutorial_submission_events
                         )
                         return
 
-                    tutorial_submission_events = self._tutorial_submission_event_retrieval_service.get_list(filters)
-                    logger.info(
-                        f"Tutorial submission event: {tutorial_submission_event_id} sent to the user: {user_id}"
-                    )
-                    yield await self._tutorial_submission_event_event_builder.build_event(
-                        tutorial_submission_event_id, tutorial_submission_events
-                    )
-                except asyncio.TimeoutError:
                     logger.info(
                         f"No new tutorial submission events received within the timeout. Sending heartbeat event to the user: {user_id}"
                     )

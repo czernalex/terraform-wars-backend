@@ -40,7 +40,7 @@ def get_tutorial_list(
     filters: Query[TutorialListFilterSchema],
 ) -> models.QuerySet[Tutorial]:
     tutorial_retrieval_service = injector.get(TutorialRetrievalService)
-    return tutorial_retrieval_service.get_list(filters)
+    return tutorial_retrieval_service.get_list(filters, request.user.id)
 
 
 @tutorials_router.post(
@@ -124,4 +124,4 @@ def get_tutorial_detail(
     tutorial_slug: str,
 ) -> Tutorial:
     tutorial_retrieval_service = injector.get(TutorialRetrievalService)
-    return tutorial_retrieval_service.get_detail_by_slug(tutorial_slug)
+    return tutorial_retrieval_service.get_detail_by_slug(request.user.id, tutorial_slug)

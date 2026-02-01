@@ -1,5 +1,5 @@
 import logging
-from typing import Sequence
+from typing import Iterable, Sequence
 from uuid import UUID
 
 from django.db import models, transaction
@@ -64,7 +64,9 @@ class TutorialSubmissionRetrievalService:
             .get(id=tutorial_submission_id)
         )
 
-    def get_list(self, filters: TutorialSubmissionListFilterSchema) -> models.QuerySet[TutorialSubmission]:
+    def get_list(
+        self, filters: TutorialSubmissionListFilterSchema, ordering: Iterable[str] = ("-created_at",)
+    ) -> models.QuerySet[TutorialSubmission]:
         return filters.filter(
             self._get_queryset(
                 select_related_fields=[
@@ -75,7 +77,7 @@ class TutorialSubmissionRetrievalService:
                     "user",
                 ]
             )
-        )
+        ).order_by(*ordering)
 
     async def aget_detail_by_id(self, user_id: UUID, tutorial_submission_id: UUID) -> TutorialSubmission:
         try:

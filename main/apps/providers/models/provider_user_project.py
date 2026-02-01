@@ -50,4 +50,4 @@ class ProviderUserProject(AbstractUUIDModel):
 
     @override
     def __str__(self) -> str:
-        return f"[{self.provider}] - {self.user.email}"
+        return f"[{self.provider}:{self.project_id}] - {self.user.email}"
