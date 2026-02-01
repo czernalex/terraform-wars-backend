@@ -41,6 +41,7 @@ class TutorialListFilterSchema(FilterSchema):
     tag_ids: Annotated[Optional[list[UUID]], FilterLookup(["tags__id__in"])] = None
     author_id: Optional[UUID] = None
     exclude_id: Optional[UUID] = None
+    is_completed_by_user: Optional[bool] = None
 
     def filter_exclude_id(self, value: UUID) -> Q:
         return ~Q(id=value)

@@ -16,18 +16,16 @@ class TutorialRetrievalService:
         return Tutorial.objects.select_related(*select_related_fields).prefetch_related(*prefetch_related_fields)
 
     def _get_for_read_by_slug(self, user_id: UUID, tutorial_slug: str) -> Tutorial:
-        return (
-            self._get_queryset(select_related_fields=["author", "provider"], prefetch_related_fields=["tags"])
-            .annotate_stats(user_id)
-            .get(slug=tutorial_slug)
-        )
+        qs = self._get_queryset(select_related_fields=["author", "provider"], prefetch_related_fields=["tags"])
+        if user_id:
+            qs = qs.annotate_stats(user_id)
+        return qs.get(slug=tutorial_slug)
 
-    def _get_for_read_by_id(self, user_id: UUID, tutorial_id: UUID) -> Tutorial:
-        return (
-            self._get_queryset(select_related_fields=["author", "provider"], prefetch_related_fields=["tags"])
-            .annotate_stats(user_id)
-            .get(id=tutorial_id)
-        )
+    def _get_for_read_by_id(self, tutorial_id: UUID, user_id: Optional[UUID]) -> Tutorial:
+        qs = self._get_queryset(select_related_fields=["author", "provider"], prefetch_related_fields=["tags"])
+        if user_id:
+            qs = qs.annotate_stats(user_id)
+        return qs.get(id=tutorial_id)
 
     @transaction.atomic
     def _get_for_update_by_id(self, user_id: UUID, tutorial_id: UUID) -> Tutorial:
@@ -45,15 +43,15 @@ class TutorialRetrievalService:
             qs = qs.annotate_stats(user_id)
         return filters.filter(qs)
 
-    def get_detail_by_slug(self, user_id: UUID, tutorial_slug: str) -> Tutorial:
+    def get_detail_by_slug(self, tutorial_slug: str, user_id: Optional[UUID] = None) -> Tutorial:
         try:
-            return self._get_for_read_by_slug(user_id, tutorial_slug)
+            return self._get_for_read_by_slug(tutorial_slug, user_id)
         except Tutorial.DoesNotExist:
             raise NotFoundError(_("Tutorial not found"))
 
-    def get_detail_by_id(self, user_id: UUID, tutorial_id: UUID) -> Tutorial:
+    def get_detail_by_id(self, tutorial_id: UUID, user_id: Optional[UUID] = None) -> Tutorial:
         try:
-            return self._get_for_read_by_id(user_id, tutorial_id)
+            return self._get_for_read_by_id(tutorial_id, user_id)
         except Tutorial.DoesNotExist:
             raise NotFoundError(_("Tutorial not found"))
 
