@@ -21,6 +21,10 @@ from main.apps.tutorials.services.tutorial_submission_event_stream_setup_service
     TutorialSubmissionEventStreamSetupService,
 )
 from main.apps.tutorials.services.tutorial_submission_event_create_service import TutorialSubmissionEventCreateService
+from main.apps.tutorials.services.tutorial_vote_retrieval_service import TutorialVoteRetrievalService
+from main.apps.tutorials.services.tutorial_vote_update_service import TutorialVoteUpdateService
+from main.apps.tutorials.services.tutorial_vote_create_service import TutorialVoteCreateService
+from main.apps.tutorials.services.tutorial_vote_delete_service import TutorialVoteDeleteService
 
 __all__ = (
     "TutorialRetrievalService",
@@ -40,4 +44,8 @@ __all__ = (
     "TutorialSubmissionEventHubService",
     "TutorialSubmissionEventStreamSetupService",
     "TutorialSubmissionEventCreateService",
+    "TutorialVoteRetrievalService",
+    "TutorialVoteUpdateService",
+    "TutorialVoteCreateService",
+    "TutorialVoteDeleteService",
 )

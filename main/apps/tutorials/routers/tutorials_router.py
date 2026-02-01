@@ -9,18 +9,25 @@ from main.apps.tutorials.services import (
     TutorialCreateService,
     TutorialDeleteService,
     TutorialRetrievalService,
+    TutorialReviewRetrievalService,
     TutorialUpdateService,
+    TutorialVoteCreateService,
+    TutorialVoteDeleteService,
 )
 from main.di import injector
 from main.apps.core.schemas import NotFoundErrorSchema
 from main.apps.core.types import AuthedHttpRequest
-from main.apps.tutorials.models import Tutorial
+from main.apps.tutorials.models import Tutorial, TutorialReview, TutorialVote
 from main.apps.tutorials.schemas import (
     CreateTutorialSchema,
+    CreateTutorialVoteSchema,
     PartialUpdateTutorialSchema,
     TutorialDetailSchema,
     TutorialListFilterSchema,
     TutorialListSchema,
+    TutorialReviewListFilterSchema,
+    TutorialReviewSchema,
+    TutorialVoteSchema,
     UpdateTutorialSchema,
 )
 
@@ -125,3 +132,49 @@ def get_tutorial_detail(
 ) -> Tutorial:
     tutorial_retrieval_service = injector.get(TutorialRetrievalService)
     return tutorial_retrieval_service.get_detail_by_slug(tutorial_slug, request.user.id)
+
+
+@tutorials_router.get(
+    "/{uuid:tutorial_id}/reviews/",
+    url_name="tutorial_review_list",
+    response={
+        HTTPStatus.OK: list[TutorialReviewSchema],
+        HTTPStatus.NOT_FOUND: NotFoundErrorSchema,
+    },
+    description="Get the list of reviews for a tutorial. You can only see reviews for tutorials you have authored.",
+)
+def get_tutorial_review_list(
+    request: AuthedHttpRequest,
+    tutorial_id: UUID,
+) -> models.QuerySet[TutorialReview]:
+    filters = TutorialReviewListFilterSchema(tutorial_id=tutorial_id, tutorial_author_id=request.user.id)
+    tutorial_review_retrieval_service = injector.get(TutorialReviewRetrievalService)
+    return tutorial_review_retrieval_service.get_list(filters)
+
+
+@tutorials_router.post(
+    "/{uuid:tutorial_id}/votes/",
+    url_name="tutorial_vote_list",
+    response={
+        HTTPStatus.CREATED: TutorialVoteSchema,
+        HTTPStatus.NOT_FOUND: NotFoundErrorSchema,
+    },
+    description="Create a new review for a tutorial. You can only review tutorials you have authored.",
+)
+def create_tutorial_vote(request: AuthedHttpRequest, tutorial_id: UUID, data: CreateTutorialVoteSchema) -> TutorialVote:
+    tutorial_vote_create_service = injector.get(TutorialVoteCreateService)
+    return tutorial_vote_create_service.create(request.user.id, tutorial_id, data)
+
+
+@tutorials_router.delete(
+    "/{uuid:tutorial_id}/votes/",
+    url_name="tutorial_vote_list",
+    response={
+        HTTPStatus.NO_CONTENT: None,
+        HTTPStatus.NOT_FOUND: NotFoundErrorSchema,
+    },
+    description="Delete a review for a tutorial. You can only delete reviews for tutorials you have authored.",
+)
+def delete_tutorial_vote(request: AuthedHttpRequest, tutorial_id: UUID) -> None:
+    tutorial_vote_delete_service = injector.get(TutorialVoteDeleteService)
+    return tutorial_vote_delete_service.delete(request.user.id, tutorial_id)

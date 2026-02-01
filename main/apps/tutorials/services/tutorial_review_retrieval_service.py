@@ -13,4 +13,4 @@ class TutorialReviewRetrievalService:
         return TutorialReview.objects.select_related(*select_related_fields).prefetch_related(*prefetch_related_fields)
 
     def get_list(self, filters: TutorialReviewListFilterSchema) -> models.QuerySet[TutorialReview]:
-        return filters.filter(self._get_queryset(select_related_fields=["user"]))
+        return filters.filter(self._get_queryset(select_related_fields=["tutorial", "user"])).order_by("-created_at")

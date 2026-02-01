@@ -20,6 +20,10 @@ from main.apps.tutorials.services import (
     TutorialTagRetrievalService,
     TutorialUpdateService,
     TutorialValidationService,
+    TutorialVoteDeleteService,
+    TutorialVoteRetrievalService,
+    TutorialVoteUpdateService,
+    TutorialVoteCreateService,
 )
 
 
@@ -43,6 +47,10 @@ class TutorialsModule(Module):
         binder.bind(TutorialSubmissionEventEventBuilder, to=TutorialSubmissionEventEventBuilder, scope=singleton)
         binder.bind(TutorialSubmissionEventHubService, to=TutorialSubmissionEventHubService, scope=singleton)
         binder.bind(TutorialSubmissionEventCreateService, to=TutorialSubmissionEventCreateService, scope=singleton)
+        binder.bind(TutorialVoteRetrievalService, to=TutorialVoteRetrievalService, scope=singleton)
+        binder.bind(TutorialVoteUpdateService, to=TutorialVoteUpdateService, scope=singleton)
+        binder.bind(TutorialVoteCreateService, to=TutorialVoteCreateService, scope=singleton)
+        binder.bind(TutorialVoteDeleteService, to=TutorialVoteDeleteService, scope=singleton)
 
     @provider
     @singleton

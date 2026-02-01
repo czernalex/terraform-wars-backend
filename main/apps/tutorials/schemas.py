@@ -6,12 +6,14 @@ from django.db.models import Q
 from ninja import Field, FilterLookup, FilterSchema, ModelSchema, Schema
 
 from main.apps.providers.schemas import ProviderSchema
-from main.apps.tutorials.enums import Difficulty, TutorialStatus, TutorialSubmissionStatus
+from main.apps.tutorials.enums import Difficulty, TutorialStatus, TutorialSubmissionStatus, TutorialVoteValue
 from main.apps.tutorials.models import (
     Tutorial,
+    TutorialReview,
     TutorialSubmission,
     TutorialSubmissionEvent,
     TutorialTag,
+    TutorialVote,
 )
 
 
@@ -256,5 +258,33 @@ class TutorialReviewListFilterSchema(FilterSchema):
     tutorial_author_id: Annotated[Optional[UUID], FilterLookup(["tutorial__author_id"])] = None
 
 
-# class TutorialReviewSchema(ModelSchema):
-#     id: UUID
+class TutorialReviewSchema(ModelSchema):
+    id: UUID
+    user_id: UUID
+    tutorial_id: UUID
+
+    class Meta:
+        model = TutorialReview
+        fields = [
+            "feedback",
+            "created_at",
+            "updated_at",
+        ]
+
+
+class CreateTutorialVoteSchema(Schema):
+    vote_value: TutorialVoteValue
+
+
+class TutorialVoteSchema(ModelSchema):
+    id: UUID
+    user_id: UUID
+    tutorial_id: UUID
+    vote_value: TutorialVoteValue
+
+    class Meta:
+        model = TutorialVote
+        fields = [
+            "created_at",
+            "updated_at",
+        ]

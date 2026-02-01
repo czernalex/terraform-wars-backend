@@ -12,7 +12,6 @@ from main.apps.core.schemas import ForbiddenErrorSchema, NotFoundErrorSchema
 from main.apps.notifications.routers import notifications_router
 from main.apps.providers.routers import providers_router, provider_user_projects_router
 from main.apps.tutorials.routers import (
-    tutorial_reviews_router,
     tutorial_tags_router,
     tutorials_router,
     tutorial_submissions_router,
@@ -87,6 +86,5 @@ root_api_router.add_router("/providers", providers_router, tags=["providers"])
 root_api_router.add_router("/provider-user-projects", provider_user_projects_router, tags=["provider-user-projects"])
 root_api_router.add_router("/submissions", tutorial_submissions_router, tags=["submissions"])
 root_api_router.add_router("/tutorials", tutorials_router, tags=["tutorials"])
-root_api_router.add_router("/tutorial-reviews", tutorial_reviews_router, tags=["tutorial-reviews"])
 root_api_router.add_router("/tutorial-tags", tutorial_tags_router, tags=["tutorial-tags"])
 root_api_router.add_router("/users", users_router, tags=["users"])
