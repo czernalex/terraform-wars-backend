@@ -53,6 +53,7 @@ class TutorialStatsSchema(Schema):
     downvote_count: int
     completed_count: int
     submissions_count: int
+    starred_count: int
     is_completed_by_user: bool
 
 
@@ -91,6 +92,7 @@ class TutorialListSchema(ModelSchema):
             downvote_count=obj.downvote_count,
             completed_count=obj.completed_count,
             submissions_count=obj.submissions_count,
+            starred_count=obj.starred_count,
             is_completed_by_user=obj.is_completed_by_user,
         )
 
@@ -162,6 +164,7 @@ class TutorialDetailSchema(ModelSchema):
             downvote_count=obj.downvote_count,
             completed_count=obj.completed_count,
             submissions_count=obj.submissions_count,
+            starred_count=obj.starred_count,
             is_completed_by_user=obj.is_completed_by_user,
         )
 

@@ -50,6 +50,8 @@ class Tutorial(AbstractUUIDModel):
         help_text=_("What the user will see when they start the tutorial"),
     )
 
+    starred_by = models.ManyToManyField(User, related_name="starred_tutorials", blank=True)
+
     objects = TutorialQuerySet.as_manager()
 
     class Meta:

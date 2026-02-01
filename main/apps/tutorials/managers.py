@@ -48,6 +48,14 @@ class TutorialQuerySet(models.QuerySet["Tutorial"]):
             )
         )
 
+    def annotate_starred_count(self) -> Self:
+        return self.annotate(
+            starred_count=models.Count(
+                "starred_by",
+                distinct=True,
+            )
+        )
+
     def annotate_is_completed_by_user(self, user_id: UUID) -> Self:
         from main.apps.tutorials.models.tutorial_submission import TutorialSubmission
 
@@ -66,6 +74,7 @@ class TutorialQuerySet(models.QuerySet["Tutorial"]):
             self.annotate_vote_count()
             .annotate_completed_count()
             .annotate_submissions_count()
+            .annotate_starred_count()
             .annotate_is_completed_by_user(user_id)
         )
 
