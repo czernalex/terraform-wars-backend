@@ -15,7 +15,7 @@ class TutorialRetrievalService:
     ) -> models.QuerySet[Tutorial]:
         return Tutorial.objects.select_related(*select_related_fields).prefetch_related(*prefetch_related_fields)
 
-    def _get_for_read_by_slug(self, user_id: UUID, tutorial_slug: str) -> Tutorial:
+    def _get_for_read_by_slug(self, tutorial_slug: str, user_id: Optional[UUID] = None) -> Tutorial:
         qs = self._get_queryset(select_related_fields=["author", "provider"], prefetch_related_fields=["tags"])
         if user_id:
             qs = qs.annotate_stats(user_id)
