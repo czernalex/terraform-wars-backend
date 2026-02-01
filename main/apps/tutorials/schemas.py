@@ -47,6 +47,14 @@ class TutorialListFilterSchema(FilterSchema):
         return ~Q(id=value)
 
 
+class TutorialStatsSchema(Schema):
+    upvote_count: int
+    downvote_count: int
+    completed_count: int
+    submissions_count: int
+    is_completed_by_user: bool
+
+
 class TutorialListSchema(ModelSchema):
     id: UUID
     provider: ProviderSchema
@@ -55,11 +63,7 @@ class TutorialListSchema(ModelSchema):
     tags: list[TutorialTagSchema]
     difficulty: Difficulty
     status: TutorialStatus
-    upvote_count: int
-    downvote_count: int
-    completed_count: int
-    submissions_count: int
-    is_completed_by_user: bool
+    stats: TutorialStatsSchema
 
     class Meta:
         model = Tutorial
@@ -78,6 +82,16 @@ class TutorialListSchema(ModelSchema):
     @staticmethod
     def resolve_author_username(obj: Tutorial) -> Optional[str]:
         return obj.author.username if obj.author else None
+
+    @staticmethod
+    def resolve_stats(obj: Tutorial) -> TutorialStatsSchema:
+        return TutorialStatsSchema(
+            upvote_count=obj.upvote_count,
+            downvote_count=obj.downvote_count,
+            completed_count=obj.completed_count,
+            submissions_count=obj.submissions_count,
+            is_completed_by_user=obj.is_completed_by_user,
+        )
 
 
 class CreateTutorialSchema(Schema):
@@ -118,11 +132,7 @@ class TutorialDetailSchema(ModelSchema):
     status: TutorialStatus
     validation_script: str
     code_template: str
-    upvote_count: int
-    downvote_count: int
-    completed_count: int
-    submissions_count: int
-    is_completed_by_user: bool
+    stats: TutorialStatsSchema
 
     class Meta:
         model = Tutorial
@@ -143,6 +153,16 @@ class TutorialDetailSchema(ModelSchema):
     @staticmethod
     def resolve_author_username(obj: Tutorial) -> Optional[str]:
         return obj.author.username if obj.author else None
+
+    @staticmethod
+    def resolve_stats(obj: Tutorial) -> TutorialStatsSchema:
+        return TutorialStatsSchema(
+            upvote_count=obj.upvote_count,
+            downvote_count=obj.downvote_count,
+            completed_count=obj.completed_count,
+            submissions_count=obj.submissions_count,
+            is_completed_by_user=obj.is_completed_by_user,
+        )
 
 
 class TutorialSubmissionListFilterSchema(FilterSchema):
@@ -199,15 +219,6 @@ class TutorialSubmissionDetailSchema(ModelSchema):
         ]
 
 
-class TutorialReviewListFilterSchema(FilterSchema):
-    tutorial_id: Optional[UUID] = None
-    user_id: Optional[UUID] = None
-
-
-# class TutorialReviewSchema(ModelSchema):
-#     id: UUID
-
-
 class TutorialSubmissionEventListFilterSchema(FilterSchema):
     user_id: Annotated[Optional[UUID], FilterLookup(["tutorial_submission__user_id"])] = None
     tutorial_submission_id: Optional[UUID] = None
@@ -233,3 +244,12 @@ class TutorialSubmissionEventSchema(ModelSchema):
         fields = [
             "exit_code",
         ]
+
+
+class TutorialReviewListFilterSchema(FilterSchema):
+    tutorial_id: Optional[UUID] = None
+    tutorial_author_id: Annotated[Optional[UUID], FilterLookup(["tutorial__author_id"])] = None
+
+
+# class TutorialReviewSchema(ModelSchema):
+#     id: UUID

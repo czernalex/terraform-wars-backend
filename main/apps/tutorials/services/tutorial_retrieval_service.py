@@ -32,7 +32,6 @@ class TutorialRetrievalService:
         return (
             self._get_queryset(select_related_fields=["author", "provider"], prefetch_related_fields=["tags"])
             .select_for_update(of=("self",))
-            .annotate_stats(user_id)
             .for_user(user_id)
             .get(id=tutorial_id)
         )

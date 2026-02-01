@@ -45,11 +45,13 @@ class TutorialUpdateService:
         logger.info(f"Updating tutorial: {tutorial_id}, user_id: {user_id}")
         tutorial = self._tutorial_retrieval_service.get_for_update_by_id(user_id, tutorial_id)
         validated_data = self._tutorial_validation_service.validate_update_data(tutorial, data)
-        return self._update_tutorial(tutorial, validated_data)
+        tutorial = self._update_tutorial(tutorial, validated_data)
+        return self._tutorial_retrieval_service.get_detail_by_id(tutorial.id, user_id)
 
     @transaction.atomic
     def partial_update(self, user_id: UUID, tutorial_id: UUID, data: PartialUpdateTutorialSchema) -> Tutorial:
         logger.info(f"Partial updating tutorial: {tutorial_id}, user_id: {user_id}")
         tutorial = self._tutorial_retrieval_service.get_for_update_by_id(user_id, tutorial_id)
         self._tutorial_validation_service.validate_partial_update_data(tutorial, data)
-        return self._partial_update_tutorial(tutorial, data)
+        tutorial = self._partial_update_tutorial(tutorial, data)
+        return self._tutorial_retrieval_service.get_detail_by_id(tutorial.id, user_id)

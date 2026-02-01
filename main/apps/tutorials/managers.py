@@ -23,22 +23,28 @@ class TutorialQuerySet(models.QuerySet["Tutorial"]):
 
     def annotate_vote_count(self) -> Self:
         return self.annotate(
-            upvote_count=models.Count("votes", filter=models.Q(votes__vote_value=TutorialVoteValue.UPVOTE)),
-            downvote_count=models.Count("votes", filter=models.Q(votes__vote_value=TutorialVoteValue.DOWNVOTE)),
+            _upvote_count=models.Count(
+                "votes", filter=models.Q(votes__vote_value=TutorialVoteValue.UPVOTE), distinct=True
+            ),
+            _downvote_count=models.Count(
+                "votes", filter=models.Q(votes__vote_value=TutorialVoteValue.DOWNVOTE), distinct=True
+            ),
         )
 
     def annotate_completed_count(self) -> Self:
         return self.annotate(
-            completed_count=models.Count(
+            _completed_count=models.Count(
                 "submissions",
                 filter=models.Q(submissions__status=TutorialSubmissionStatus.SUCCEEDED),
+                distinct=True,
             )
         )
 
     def annotate_submissions_count(self) -> Self:
         return self.annotate(
-            submissions_count=models.Count(
+            _submissions_count=models.Count(
                 "submissions",
+                distinct=True,
             )
         )
 
@@ -46,7 +52,7 @@ class TutorialQuerySet(models.QuerySet["Tutorial"]):
         from main.apps.tutorials.models.tutorial_submission import TutorialSubmission
 
         return self.annotate(
-            is_completed_by_user=models.Exists(
+            _is_completed_by_user=models.Exists(
                 TutorialSubmission.objects.filter(
                     tutorial_id=models.OuterRef("id"),
                     user_id=user_id,
@@ -68,6 +74,12 @@ class TutorialSubmissionQuerySet(models.QuerySet["TutorialSubmission"]):
     def for_user(self, user_id: UUID) -> Self:
         return self.filter(user_id=user_id)
 
+    def for_tutorial(self, tutorial_id: UUID) -> Self:
+        return self.filter(tutorial_id=tutorial_id)
+
+    def for_status(self, status: TutorialSubmissionStatus) -> Self:
+        return self.filter(status=status)
+
 
 class TutorialSubmissionEventQuerySet(models.QuerySet["TutorialSubmissionEvent"]):
     def for_user(self, user_id: UUID) -> Self:
@@ -86,4 +98,8 @@ class TutorialReviewQuerySet(models.QuerySet["TutorialReview"]):
 
 
 class TutorialVoteQuerySet(models.QuerySet["TutorialVote"]):
-    pass
+    def for_tutorial(self, tutorial_id: UUID) -> Self:
+        return self.filter(tutorial_id=tutorial_id)
+
+    def for_vote_value(self, vote_value: TutorialVoteValue) -> Self:
+        return self.filter(vote_value=vote_value)
