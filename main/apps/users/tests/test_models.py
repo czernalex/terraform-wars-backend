@@ -4,11 +4,11 @@ from main.apps.users.models.user import User
 class TestUser:
     def test_full_name(self):
         user = User(first_name="John", last_name="Doe", username="john.doe", email="john.doe@example.com")
-        assert user.full_name == "John Doe"
+        assert user.full_name == "John Doe (john.doe@example.com)"
 
     def test_full_name_username(self):
         user = User(first_name="John", username="john.doe", email="john.doe@example.com")
-        assert user.full_name == "john.doe"
+        assert user.full_name == "john.doe (john.doe@example.com)"
 
     def test_full_name_email(self):
         user = User(email="john.doe@example.com")
@@ -16,4 +16,4 @@ class TestUser:
 
     def test_str(self):
         user = User(first_name="John", last_name="Doe", username="john.doe", email="john.doe@example.com")
-        assert str(user) == "John Doe"
+        assert str(user) == "John Doe (john.doe@example.com)"
