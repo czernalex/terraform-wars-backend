@@ -47,9 +47,9 @@ class User(AbstractUUIDModel, AbstractBaseUser, PermissionsMixin):
     @property
     def full_name(self) -> str:
         if self.last_name and self.first_name:
-            return f"{self.first_name} {self.last_name}"
+            return f"{self.first_name} {self.last_name} ({self.email})"
 
         if self.username:
-            return self.username
+            return f"{self.username} ({self.email})"
 
         return self.email

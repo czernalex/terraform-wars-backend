@@ -139,11 +139,21 @@ DATABASES = {
         "PASSWORD": secrets.DB_PASSWORD,
         "HOST": config("DB_HOST"),
         "PORT": config("DB_PORT", 5432),
+        "CONN_MAX_AGE": 0,
     }
 }
 
-if SERVICE_TYPE == "events-api":
-    DATABASES["default"]["CONN_MAX_AGE"] = 0
+if SERVICE_TYPE in {
+    "api",
+    "internal-api",
+}:
+    DATABASES["default"]["OPTIONS"]["pool"] = {
+        "min_size": 4,
+        "max_size": 8,
+        "timeout": 30,
+        "max_lifetime": 1800,  # 30 minutes maximum connection age
+        "max_idle": 300,  # Close idle connections after 5 minutes
+    }
 
 ATOMIC_REQUESTS = False
 AUTOCOMMIT = True
