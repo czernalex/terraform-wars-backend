@@ -129,3 +129,23 @@ class TutorialSubmissionValidationService:
                     }
                 ]
             )
+
+    def validate_can_be_deleted(self, tutorial_submission: TutorialSubmission) -> None:
+        if tutorial_submission.status in [
+            TutorialSubmissionStatus.PENDING,
+            TutorialSubmissionStatus.EXECUTING,
+            TutorialSubmissionStatus.EXECUTION_SUCCEEDED,
+            TutorialSubmissionStatus.VALIDATING,
+        ]:
+            raise ValidationError(
+                [
+                    {
+                        "loc": ["status"],
+                        "msg": _(
+                            "Tutorial submission with status %(status)s cannot be deleted. It must be in a final state."
+                        )
+                        % {"status": tutorial_submission.status},
+                        "type": "value_error",
+                    }
+                ]
+            )

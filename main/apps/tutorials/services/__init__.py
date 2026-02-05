@@ -25,6 +25,7 @@ from main.apps.tutorials.services.tutorial_vote_retrieval_service import Tutoria
 from main.apps.tutorials.services.tutorial_vote_update_service import TutorialVoteUpdateService
 from main.apps.tutorials.services.tutorial_vote_create_service import TutorialVoteCreateService
 from main.apps.tutorials.services.tutorial_vote_delete_service import TutorialVoteDeleteService
+from main.apps.tutorials.services.tutorial_submission_delete_service import TutorialSubmissionDeleteService
 
 __all__ = (
     "TutorialRetrievalService",
@@ -48,4 +49,5 @@ __all__ = (
     "TutorialVoteUpdateService",
     "TutorialVoteCreateService",
     "TutorialVoteDeleteService",
+    "TutorialSubmissionDeleteService",
 )

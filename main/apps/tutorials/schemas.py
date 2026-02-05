@@ -176,8 +176,23 @@ class TutorialSubmissionListFilterSchema(FilterSchema):
     tutorial_id: Optional[UUID] = None
     provider_user_project_id: Optional[UUID] = None
     provider_id: Annotated[Optional[UUID], FilterLookup(["tutorial__provider_id"])] = None
+    difficulty: Annotated[Optional[Difficulty], FilterLookup(["tutorial__difficulty"])] = None
     status: Annotated[Optional[list[TutorialSubmissionStatus]], FilterLookup(["status__in"])] = None
     created_at: Annotated[Optional[datetime], FilterLookup("created_at__lte")] = None
+    search: Annotated[
+        Optional[str],
+        FilterLookup(
+            [
+                "tutorial__title__icontains",
+                "tutorial__slug__icontains",
+                "tutorial__provider__provider_id__icontains",
+                "tutorial__provider__name__icontains",
+                "tutorial__provider__short_name__icontains",
+                "provider_user_project__name__icontains",
+                "provider_user_project__project_id__icontains",
+            ]
+        ),
+    ] = None
 
 
 class CreateTutorialSubmissionSchema(Schema):
@@ -202,6 +217,17 @@ class ValidateTutorialSubmissionSchema(Schema):
 class TutorialSubmissionListSchema(ModelSchema):
     id: UUID
     status: TutorialSubmissionStatus
+    tutorial_id: UUID
+    tutorial_title: str = Field(..., alias="tutorial.title")
+    tutorial_slug: str = Field(..., alias="tutorial.slug")
+    tutorial_difficulty: Difficulty = Field(..., alias="tutorial.difficulty")
+    provider_id: UUID = Field(..., alias="tutorial.provider_id")
+    provider_name: str = Field(..., alias="tutorial.provider.name")
+    provider_short_name: str = Field(..., alias="tutorial.provider.short_name")
+    provider_website_url: Optional[str] = Field(..., alias="tutorial.provider.website_url")
+    provider_user_project_id: Optional[UUID] = Field(..., alias="provider_user_project.id")
+    provider_user_project_name: Optional[str] = Field(..., alias="provider_user_project.name")
+    provider_user_project_project_id: Optional[str] = Field(..., alias="provider_user_project.project_id")
 
     class Meta:
         model = TutorialSubmission

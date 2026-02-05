@@ -19,6 +19,7 @@ from main.apps.tutorials.schemas import (
 )
 from main.apps.tutorials.services import (
     TutorialSubmissionCreateService,
+    TutorialSubmissionDeleteService,
     TutorialSubmissionEventRetrievalService,
     TutorialSubmissionRetrievalService,
 )
@@ -59,7 +60,7 @@ def create_tutorial_submission(
 
 
 @tutorial_submissions_router.get(
-    "/{tutorial_submission_id}/",
+    "/{uuid:tutorial_submission_id}/",
     url_name="tutorial_submission_detail",
     response={
         HTTPStatus.OK: TutorialSubmissionDetailSchema,
@@ -76,7 +77,7 @@ def get_tutorial_submission_detail(
 
 
 @tutorial_submissions_router.get(
-    "/{tutorial_submission_id}/events/",
+    "/{uuid:tutorial_submission_id}/events/",
     url_name="tutorial_submission_detail_events_list",
     response={
         HTTPStatus.OK: list[TutorialSubmissionEventSchema],
@@ -94,3 +95,20 @@ def get_tutorial_submission_events_list(
     )
     tutorial_submission_event_retrieval_service = injector.get(TutorialSubmissionEventRetrievalService)
     return tutorial_submission_event_retrieval_service.get_list(filters)
+
+
+@tutorial_submissions_router.delete(
+    "/{uuid:tutorial_submission_id}/",
+    url_name="tutorial_submission_detail",
+    response={
+        HTTPStatus.NO_CONTENT: None,
+        HTTPStatus.NOT_FOUND: NotFoundErrorSchema,
+    },
+    description="Delete a tutorial submission",
+)
+def delete_tutorial_submission(
+    request: AuthedHttpRequest,
+    tutorial_submission_id: UUID,
+) -> TutorialSubmission:
+    tutorial_submission_delete_service = injector.get(TutorialSubmissionDeleteService)
+    return tutorial_submission_delete_service.delete(request.user.id, tutorial_submission_id)

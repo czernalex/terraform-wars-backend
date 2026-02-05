@@ -7,6 +7,7 @@ from main.apps.tutorials.services import (
     TutorialDeleteService,
     TutorialRetrievalService,
     TutorialReviewRetrievalService,
+    TutorialSubmissionDeleteService,
     TutorialSubmissionEventCreateService,
     TutorialSubmissionEventEventBuilder,
     TutorialSubmissionEventHubService,
@@ -51,6 +52,7 @@ class TutorialsModule(Module):
         binder.bind(TutorialVoteUpdateService, to=TutorialVoteUpdateService, scope=singleton)
         binder.bind(TutorialVoteCreateService, to=TutorialVoteCreateService, scope=singleton)
         binder.bind(TutorialVoteDeleteService, to=TutorialVoteDeleteService, scope=singleton)
+        binder.bind(TutorialSubmissionDeleteService, to=TutorialSubmissionDeleteService, scope=singleton)
 
     @provider
     @singleton
