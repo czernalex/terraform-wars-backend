@@ -35,3 +35,11 @@ class UserUpdateSchema(Schema):
     username: Optional[str] = Field(..., max_length=255)
     first_name: Optional[str] = Field(..., max_length=255)
     last_name: Optional[str] = Field(..., max_length=255)
+
+
+class UserStatsSchema(Schema):
+    completed_tutorials_count: int
+    configured_provider_user_projects_count: int
+    total_tutorial_submission_count: int
+    successful_tutorial_submission_count: int
+    connected_social_accounts_count: int

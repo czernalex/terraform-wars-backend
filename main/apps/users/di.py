@@ -1,6 +1,12 @@
 from injector import Binder, Module, singleton
 
-from main.apps.users.services import UserRetrievalService, UserUpdateService, UserValidationService, UserDeleteService
+from main.apps.users.services import (
+    UserRetrievalService,
+    UserUpdateService,
+    UserValidationService,
+    UserDeleteService,
+    UserStatsRetrievalService,
+)
 
 
 class UsersModule(Module):
@@ -9,3 +15,4 @@ class UsersModule(Module):
         binder.bind(UserValidationService, to=UserValidationService, scope=singleton)
         binder.bind(UserUpdateService, to=UserUpdateService, scope=singleton)
         binder.bind(UserDeleteService, to=UserDeleteService, scope=singleton)
+        binder.bind(UserStatsRetrievalService, to=UserStatsRetrievalService, scope=singleton)
