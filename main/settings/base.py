@@ -148,6 +148,7 @@ if SERVICE_TYPE in {
     "api",
     "internal-api",
 }:
+    DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True
     DATABASES["default"]["OPTIONS"]["pool"] = {
         "min_size": 4,
         "max_size": 8,
