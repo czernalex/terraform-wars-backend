@@ -184,6 +184,8 @@ class TutorialSubmissionAdmin(BaseModelAdmin):
         "provider_user_project__id",
         "provider_user_project__name",
         "provider_user_project__project_id",
+        "gcp_executor_job_execution_id",
+        "gcp_validator_job_execution_id",
     )
     autocomplete_fields = (
         "tutorial",
@@ -203,6 +205,7 @@ class TutorialSubmissionAdmin(BaseModelAdmin):
                 )
             },
         ),
+        (_("Jobs info"), {"fields": ("gcp_executor_job_execution_id", "gcp_validator_job_execution_id")}),
         (_("Audit info"), {"fields": ("id", "created_at", "updated_at")}),
     )
 
