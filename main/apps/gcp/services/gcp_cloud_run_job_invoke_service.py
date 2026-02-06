@@ -38,8 +38,7 @@ class GCPCloudRunJobInvokeService:
                 ],
             ),
         )
-        operation = self._client.run_job(request=run_job_request)
-        operation.result()
+        self._client.run_job(request=run_job_request)
         logger.info(f"Cloud Run Job: {job_name} invoked successfully")
 
     def invoke(
