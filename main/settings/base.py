@@ -152,7 +152,7 @@ if SERVICE_TYPE in {
     DATABASES["default"]["OPTIONS"]["pool"] = {
         "min_size": 4,
         "max_size": 8,
-        "timeout": 30,
+        "timeout": 10,  # aggresive timeout
         "max_lifetime": 1800,  # 30 minutes maximum connection age
         "max_idle": 300,  # Close idle connections after 5 minutes
     }
