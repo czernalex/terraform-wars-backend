@@ -2,6 +2,7 @@ import logging
 from typing import MutableSequence, Optional
 
 from google.cloud import run_v2
+from google.api_core.operation import Operation
 from injector import inject
 
 
@@ -24,7 +25,7 @@ class GCPCloudRunJobInvokeService:
         job_container_name: str,
         job_container_args: Optional[MutableSequence[str]],
         job_container_env_vars: Optional[MutableSequence[run_v2.EnvVar]],
-    ) -> run_v2.Job:
+    ) -> Operation:
         logger.info(f"Invoking Cloud Run Job: {job_name}")
         run_job_request = run_v2.RunJobRequest(
             name=self._create_job_name(job_name),
@@ -38,8 +39,9 @@ class GCPCloudRunJobInvokeService:
                 ],
             ),
         )
-        self._client.run_job(request=run_job_request)
-        logger.info(f"Cloud Run Job: {job_name} invoked successfully")
+        operation = self._client.run_job(request=run_job_request)
+        logger.info(f"Cloud Run Job: {job_name} with operation name: {operation.metadata.name} invoked successfully")
+        return operation
 
     def invoke(
         self,
@@ -47,5 +49,6 @@ class GCPCloudRunJobInvokeService:
         job_container_name: str,
         job_container_args: Optional[MutableSequence[str]],
         job_container_env_vars: Optional[MutableSequence[run_v2.EnvVar]],
-    ) -> None:
-        return self._run_job(job_name, job_container_name, job_container_args, job_container_env_vars)
+    ) -> str:
+        operation = self._run_job(job_name, job_container_name, job_container_args, job_container_env_vars)
+        return operation.metadata.name

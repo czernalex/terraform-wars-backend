@@ -29,3 +29,25 @@ class TutorialSubmissionUpdateService:
         logger.info(f"Bulk updating tutorial submissions with status: {status}")
         submissions = self._tutorial_submission_retrieval_service.get_list(filters)
         return submissions.update(status=status)
+
+    def update_gcp_executor_job_execution_id(
+        self, tutorial_submission: TutorialSubmission, gcp_executor_job_execution_id: str
+    ) -> TutorialSubmission:
+        logger.info(
+            f"Updating tutorial submission: {tutorial_submission.id} with GCP Executor Job Execution ID: {gcp_executor_job_execution_id}"
+        )
+        tutorial_submission.gcp_executor_job_execution_id = gcp_executor_job_execution_id
+        tutorial_submission.save()
+        logger.info(f"Tutorial submission updated: {tutorial_submission.id}")
+        return tutorial_submission
+
+    def update_gcp_validator_job_execution_id(
+        self, tutorial_submission: TutorialSubmission, gcp_validator_job_execution_id: str
+    ) -> TutorialSubmission:
+        logger.info(
+            f"Updating tutorial submission: {tutorial_submission.id} with GCP Validator Job Execution ID: {gcp_validator_job_execution_id}"
+        )
+        tutorial_submission.gcp_validator_job_execution_id = gcp_validator_job_execution_id
+        tutorial_submission.save()
+        logger.info(f"Tutorial submission updated: {tutorial_submission.id}")
+        return tutorial_submission

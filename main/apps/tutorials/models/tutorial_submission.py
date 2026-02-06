@@ -22,6 +22,13 @@ class TutorialSubmission(AbstractUUIDModel):
     )
     provider_user_project_id: UUID
 
+    gcp_executor_job_execution_id = models.CharField(
+        _("GCP Executor Job Execution ID"), max_length=255, blank=True, default=""
+    )
+    gcp_validator_job_execution_id = models.CharField(
+        _("GCP Validator Job Execution ID"), max_length=255, blank=True, default=""
+    )
+
     code = models.TextField(_("Code"))
     status = models.CharField(
         _("Status"), max_length=255, choices=TutorialSubmissionStatus.choices, default=TutorialSubmissionStatus.PENDING

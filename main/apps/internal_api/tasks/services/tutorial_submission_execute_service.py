@@ -48,13 +48,17 @@ class TutorialSubmissionExecuteService:
         environment_configurator: ExecutorEnvironmentConfigurator,
     ) -> None:
         logger.info(f"Invoking execution job for tutorial submission: {tutorial_submission.id}")
-        self._gcp_cloud_run_job_invoke_service.invoke(
+        execution_id = self._gcp_cloud_run_job_invoke_service.invoke(
             job_name=settings.GCP_TERRAFORM_EXECUTOR_JOB_NAME,
             job_container_name="app-production-1",
             job_container_args=[tutorial_submission.provider_id],
             job_container_env_vars=environment_configurator.configure(tutorial_submission),
         )
         logger.info(f"Execution job for tutorial submission: {tutorial_submission.id} invoked successfully")
+        self._tutorial_submission_update_service.update_gcp_executor_job_execution_id(tutorial_submission, execution_id)
+        logger.info(
+            f"GCP Executor Job Execution ID: {execution_id} updated for tutorial submission: {tutorial_submission.id}"
+        )
 
     def _create_tutorial_submission_event(self, tutorial_submission: TutorialSubmission) -> None:
         create_tutorial_submission_event_data = CreateTutorialSubmissionEventSchema(

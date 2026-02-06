@@ -48,13 +48,19 @@ class TutorialSubmissionValidateService:
         environment_configurator: ValidatorEnvironmentConfigurator,
     ) -> None:
         logger.info(f"Invoking validation job for tutorial submission: {tutorial_submission.id}")
-        self._gcp_cloud_run_job_invoke_service.invoke(
+        execution_id = self._gcp_cloud_run_job_invoke_service.invoke(
             job_name=settings.GCP_TERRAFORM_VALIDATOR_JOB_NAME,
             job_container_name="app-production-1",
             job_container_args=None,
             job_container_env_vars=environment_configurator.configure(tutorial_submission),
         )
         logger.info(f"Validation job for tutorial submission: {tutorial_submission.id} invoked successfully")
+        self._tutorial_submission_update_service.update_gcp_validator_job_execution_id(
+            tutorial_submission, execution_id
+        )
+        logger.info(
+            f"GCP Validator Job Execution ID: {execution_id} updated for tutorial submission: {tutorial_submission.id}"
+        )
 
     def _create_tutorial_submission_event(self, tutorial_submission: TutorialSubmission) -> None:
         create_tutorial_submission_event_data = CreateTutorialSubmissionEventSchema(
