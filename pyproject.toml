@@ -7,12 +7,12 @@ requires-python = ">=3.14"
 dependencies = [
   "argon2-cffi>=25.1.0",
   "django>=6.0.0",
-  "django-allauth[mfa,socialaccount,headless-spec]>=65.13.0",
+  "django-allauth[mfa,socialaccount,headless-spec]>=65.14.0",
   "django-cors-headers>=4.9.0",
   "django-json-widget>=2.1.0",
   "django-ninja==1.5.3",
   "django-storages[google]>=1.14.6",
-  "django-unfold>=0.71.0",
+  "django-unfold>=0.78.0",
   "google-auth>=2.43.0",
   "google-cloud-billing>=1.18.0",
   "google-cloud-iam>=2.20.0",
@@ -21,13 +21,12 @@ dependencies = [
   "google-cloud-run>=0.13.0",
   "google-cloud-service-usage>=1.14.0",
   "google-cloud-tasks>=2.20.0",
-  "gunicorn>=23.0.0",
-  "injector>=0.23.0",
+  "gunicorn>=25.0.0",
+  "injector>=0.24.0",
   "msgspec>=0.20.0",
   "psycopg[binary,pool]>=3.2.12",
   "python-decouple>=3.8",
   "sentry-sdk>=2.44.0",
-  "uvicorn-worker>=0.4.0",
 ]
 
 [dependency-groups]

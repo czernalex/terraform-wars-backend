@@ -106,4 +106,4 @@ def delete_provider_user_project(
     provider_user_project_id: UUID,
 ) -> None:
     provider_user_project_delete_service = injector.get(ProviderUserProjectDeleteService)
-    return provider_user_project_delete_service.delete(request.user.id, provider_user_project_id)
+    provider_user_project_delete_service.delete(request.user.id, provider_user_project_id)
