@@ -224,10 +224,10 @@ class TutorialSubmissionListSchema(ModelSchema):
     provider_id: UUID = Field(..., alias="tutorial.provider_id")
     provider_name: str = Field(..., alias="tutorial.provider.name")
     provider_short_name: str = Field(..., alias="tutorial.provider.short_name")
-    provider_website_url: Optional[str] = Field(..., alias="tutorial.provider.website_url")
-    provider_user_project_id: Optional[UUID] = Field(..., alias="provider_user_project.id")
-    provider_user_project_name: Optional[str] = Field(..., alias="provider_user_project.name")
-    provider_user_project_project_id: Optional[str] = Field(..., alias="provider_user_project.project_id")
+    provider_website_url: str = Field(..., alias="tutorial.provider.website_url")
+    provider_user_project_id: Optional[UUID]
+    provider_user_project_name: Optional[str]
+    provider_user_project_project_id: Optional[str]
 
     class Meta:
         model = TutorialSubmission
@@ -235,6 +235,18 @@ class TutorialSubmissionListSchema(ModelSchema):
             "created_at",
             "updated_at",
         ]
+
+    @staticmethod
+    def resolve_provider_user_project_id(obj: TutorialSubmission) -> Optional[UUID]:
+        return obj.provider_user_project.id if obj.provider_user_project else None
+
+    @staticmethod
+    def resolve_provider_user_project_name(obj: TutorialSubmission) -> Optional[str]:
+        return obj.provider_user_project.name if obj.provider_user_project else None
+
+    @staticmethod
+    def resolve_provider_user_project_project_id(obj: TutorialSubmission) -> Optional[str]:
+        return obj.provider_user_project.project_id if obj.provider_user_project else None
 
 
 class TutorialSubmissionDetailSchema(ModelSchema):
