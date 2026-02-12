@@ -19,9 +19,10 @@ jobs_router = Router()
     response={HTTPStatus.NO_CONTENT: None},
     description="Configure pending provider user projects",
 )
-def configure_provider_user_projects(request: HttpRequest) -> None:
+def configure_provider_user_projects(request: HttpRequest) -> HTTPStatus:
     provider_user_project_configure_scheduler = injector.get(ProviderUserProjectConfigureScheduler)
     provider_user_project_configure_scheduler.schedule()
+    return HTTPStatus.NO_CONTENT
 
 
 @jobs_router.post(
@@ -30,6 +31,7 @@ def configure_provider_user_projects(request: HttpRequest) -> None:
     response={HTTPStatus.NO_CONTENT: None},
     description="Reconcile in progress tutorial submissions",
 )
-def reconcile_tutorial_submissions(request: HttpRequest) -> None:
+def reconcile_tutorial_submissions(request: HttpRequest) -> HTTPStatus:
     tutorial_submission_reconciliation_service = injector.get(TutorialSubmissionReconciliationService)
     tutorial_submission_reconciliation_service.reconcile()
+    return HTTPStatus.NO_CONTENT

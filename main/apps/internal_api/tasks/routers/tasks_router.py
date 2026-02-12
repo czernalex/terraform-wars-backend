@@ -22,9 +22,10 @@ tasks_router = Router()
 )
 def configure_provider_user_project(
     request: HttpRequest, provider_user_project_id: UUID, data: ConfigureProviderUserProjectSchema
-) -> None:
+) -> HTTPStatus:
     provider_user_project_configure_service = injector.get(ProviderUserProjectConfigureService)
     provider_user_project_configure_service.configure(data.user_id, provider_user_project_id)
+    return HTTPStatus.NO_CONTENT
 
 
 @tasks_router.post(
@@ -37,9 +38,10 @@ def execute_tutorial_submission(
     request: HttpRequest,
     tutorial_submission_id: UUID,
     data: ExecuteTutorialSubmissionSchema,
-) -> None:
+) -> HTTPStatus:
     tutorial_submission_execution_service = injector.get(TutorialSubmissionExecuteService)
     tutorial_submission_execution_service.execute(tutorial_submission_id, data.user_id)
+    return HTTPStatus.NO_CONTENT
 
 
 @tasks_router.post(
@@ -52,6 +54,7 @@ def validate_tutorial_submission(
     request: HttpRequest,
     tutorial_submission_id: UUID,
     data: ValidateTutorialSubmissionSchema,
-) -> None:
+) -> HTTPStatus:
     tutorial_submission_validate_service = injector.get(TutorialSubmissionValidateService)
     tutorial_submission_validate_service.validate(tutorial_submission_id, data.user_id)
+    return HTTPStatus.NO_CONTENT

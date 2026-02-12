@@ -112,9 +112,10 @@ def partial_update_tutorial(
 def delete_tutorial(
     request: AuthedHttpRequest,
     tutorial_id: UUID,
-) -> None:
+) -> HTTPStatus:
     tutorial_delete_service = injector.get(TutorialDeleteService)
-    return tutorial_delete_service.delete(request.user.id, tutorial_id)
+    tutorial_delete_service.delete(request.user.id, tutorial_id)
+    return HTTPStatus.NO_CONTENT
 
 
 @tutorials_router.get(
@@ -175,6 +176,7 @@ def create_tutorial_vote(request: AuthedHttpRequest, tutorial_id: UUID, data: Cr
     },
     description="Delete a review for a tutorial. You can only delete reviews for tutorials you have authored.",
 )
-def delete_tutorial_vote(request: AuthedHttpRequest, tutorial_id: UUID) -> None:
+def delete_tutorial_vote(request: AuthedHttpRequest, tutorial_id: UUID) -> HTTPStatus:
     tutorial_vote_delete_service = injector.get(TutorialVoteDeleteService)
-    return tutorial_vote_delete_service.delete(request.user.id, tutorial_id)
+    tutorial_vote_delete_service.delete(request.user.id, tutorial_id)
+    return HTTPStatus.NO_CONTENT

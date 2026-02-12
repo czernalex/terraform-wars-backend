@@ -109,6 +109,7 @@ def get_tutorial_submission_events_list(
 def delete_tutorial_submission(
     request: AuthedHttpRequest,
     tutorial_submission_id: UUID,
-) -> TutorialSubmission:
+) -> HTTPStatus:
     tutorial_submission_delete_service = injector.get(TutorialSubmissionDeleteService)
-    return tutorial_submission_delete_service.delete(request.user.id, tutorial_submission_id)
+    tutorial_submission_delete_service.delete(request.user.id, tutorial_submission_id)
+    return HTTPStatus.NO_CONTENT

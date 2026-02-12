@@ -41,9 +41,10 @@ def update_me(request: AuthedHttpRequest, data: UserUpdateSchema) -> User:
     response={HTTPStatus.NO_CONTENT: None},
     description="Delete the authenticated user",
 )
-def delete_me(request: AuthedHttpRequest) -> None:
+def delete_me(request: AuthedHttpRequest) -> HTTPStatus:
     user_delete_service = injector.get(UserDeleteService)
-    return user_delete_service.delete(request.user.id)
+    user_delete_service.delete(request.user.id)
+    return HTTPStatus.NO_CONTENT
 
 
 @users_router.get(

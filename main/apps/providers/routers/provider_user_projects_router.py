@@ -104,6 +104,7 @@ def update_provider_user_project(
 def delete_provider_user_project(
     request: AuthedHttpRequest,
     provider_user_project_id: UUID,
-) -> None:
+) -> HTTPStatus:
     provider_user_project_delete_service = injector.get(ProviderUserProjectDeleteService)
     provider_user_project_delete_service.delete(request.user.id, provider_user_project_id)
+    return HTTPStatus.NO_CONTENT

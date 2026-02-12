@@ -23,9 +23,10 @@ subscribers_router = Router()
     response={HTTPStatus.NO_CONTENT: None},
     description="Subscribe to a submission execution finished event",
 )
-def subscribe_to_submission_execution_finished(request: HttpRequest, data: PubSubEnvelopeSchema) -> None:
+def subscribe_to_submission_execution_finished(request: HttpRequest, data: PubSubEnvelopeSchema) -> HTTPStatus:
     tutorial_submission_execution_finished_handler = injector.get(TutorialSubmissionExecutionFinishedHandler)
     tutorial_submission_execution_finished_handler.handle(data)
+    return HTTPStatus.NO_CONTENT
 
 
 @subscribers_router.post(
@@ -34,6 +35,7 @@ def subscribe_to_submission_execution_finished(request: HttpRequest, data: PubSu
     response={HTTPStatus.NO_CONTENT: None},
     description="Subscribe to a submission validation finished event",
 )
-def subscribe_to_submission_validation_finished(request: HttpRequest, data: PubSubEnvelopeSchema) -> None:
+def subscribe_to_submission_validation_finished(request: HttpRequest, data: PubSubEnvelopeSchema) -> HTTPStatus:
     tutorial_submission_validation_finished_handler = injector.get(TutorialSubmissionValidationFinishedHandler)
     tutorial_submission_validation_finished_handler.handle(data)
+    return HTTPStatus.NO_CONTENT
