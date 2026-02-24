@@ -2,6 +2,7 @@
 name = "terraform-wars-backend"
 version = "0.1.0"
 description = "Backend for Terraform Wars - Terraform learning app"
+license = {file = "LICENSE.md"}
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
