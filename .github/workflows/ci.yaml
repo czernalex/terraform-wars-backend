@@ -116,7 +116,7 @@ jobs:
           service_account: ${{ vars.GCP_SA_ACCOUNT }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Configure Docker for Google Cloud
         run: gcloud auth configure-docker ${{ vars.GCP_REGION }}-docker.pkg.dev
