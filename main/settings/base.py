@@ -257,7 +257,7 @@ MEDIA_LOCATION = "media"
 USE_CLOUD_STORAGE = config("USE_CLOUD_STORAGE", cast=bool, default=True)
 
 if USE_CLOUD_STORAGE:
-    GCS_BUCKET_NAME = config("GCP_STORAGE_BUCKET_NAME", "terraform-wars-backend-production")
+    GCS_BUCKET_NAME = config("GCP_STORAGE_BUCKET_NAME", "terraformwars")
     common_storage_backend = "storages.backends.gcloud.GoogleCloudStorage"
     common_options = {
         "bucket_name": GCS_BUCKET_NAME,
