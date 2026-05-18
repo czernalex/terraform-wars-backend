@@ -134,8 +134,8 @@ WSGI_APPLICATION = "main.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DB_NAME", "terraform-wars"),
-        "USER": config("DB_USER", "terraform-wars"),
+        "NAME": config("DB_NAME", "terraformwars"),
+        "USER": config("DB_USER", "terraformwars"),
         "PASSWORD": secrets.DB_PASSWORD,
         "HOST": config("DB_HOST"),
         "PORT": config("DB_PORT", 5432),
@@ -218,13 +218,13 @@ INTERNAL_API_BASE_URL = config(
 GCP_PROJECT_ID = config("GCP_PROJECT_ID")
 GCP_REGION = config("GCP_REGION")
 GCP_SERVICE_ACCOUNT_EMAIL = config(
-    "GCP_SERVICE_ACCOUNT_EMAIL", "twa-be-cloudrun-runtime-sa@terraform-wars-dev.iam.gserviceaccount.com"
+    "GCP_SERVICE_ACCOUNT_EMAIL", "terraformwars-cloudrun-sa@terraformwars.iam.gserviceaccount.com"
 )
 GCP_TERRAFORM_EXECUTOR_SERVICE_ACCOUNT_EMAIL = config(
-    "GCP_TERRAFORM_EXECUTOR_SERVICE_ACCOUNT_EMAIL", "twa-tf-executor-sa@terraform-wars-dev.iam.gserviceaccount.com"
+    "GCP_TERRAFORM_EXECUTOR_SERVICE_ACCOUNT_EMAIL", "terraformwars-executor-sa@terraformwars.iam.gserviceaccount.com"
 )
 GCP_TERRAFORM_VALIDATOR_SERVICE_ACCOUNT_EMAIL = config(
-    "GCP_TERRAFORM_VALIDATOR_SERVICE_ACCOUNT_EMAIL", "twa-tf-validator-sa@terraform-wars-dev.iam.gserviceaccount.com"
+    "GCP_TERRAFORM_VALIDATOR_SERVICE_ACCOUNT_EMAIL", "terraformwars-validator-sa@terraformwars.iam.gserviceaccount.com"
 )
 GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID = config(
     "GCP_TASKS_TUTORIAL_SUBMISSION_QUEUE_ID", default="terraform-wars-tutorial-submission-tasks-production-queue"
