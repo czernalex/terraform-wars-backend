@@ -157,9 +157,9 @@ jobs:
             DJANGO_SETTINGS_MODULE=main.settings.production
             SERVICE_TYPE=internal-api
             DB_HOST=/cloudsql/terraformwars:europe-west3:terraformwars
-            CSRF_TRUSTED_ORIGINS="https://api.app.terraformwars.com\,https://www.api.app.terraformwars.com\,https://app.terraformwars.com\,https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app"
-            CORS_ALLOWED_ORIGINS="https://api.app.terraformwars.com\,https://www.api.app.terraformwars.com\,https://app.terraformwars.com\,https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app"
-            ALLOWED_HOSTS="localhost\,127.0.0.1\,api.app.terraformwars.com\,www.api.app.terraformwars.com\,terraform-wars-task-worker-production-436901077292.europe-west3.run.app"
+            CSRF_TRUSTED_ORIGINS="https://api.app.terraformwars.com\,https://www.api.app.terraformwars.com\,https://app.terraformwars.com\,https://terraform-wars-task-worker-production-482421189795.europe-west3.run.app"
+            CORS_ALLOWED_ORIGINS="https://api.app.terraformwars.com\,https://www.api.app.terraformwars.com\,https://app.terraformwars.com\,https://terraform-wars-task-worker-production-482421189795.europe-west3.run.app"
+            ALLOWED_HOSTS="localhost\,127.0.0.1\,api.app.terraformwars.com\,www.api.app.terraformwars.com\,terraform-wars-task-worker-production-482421189795.europe-west3.run.app"
             GCP_PROJECT_ID=${{ vars.GCP_PROJECT_ID }}
             GCP_REGION=${{ vars.GCP_REGION }}
           secrets: |-
@@ -179,9 +179,9 @@ jobs:
             DJANGO_SETTINGS_MODULE=main.settings.production
             SERVICE_TYPE=events-api
             DB_HOST=/cloudsql/terraformwars:europe-west3:terraformwars
-            CSRF_TRUSTED_ORIGINS="https://api.app.terraformwars.com\,https://www.api.app.terraformwars.com\,https://app.terraformwars.com\,https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app"
-            CORS_ALLOWED_ORIGINS="https://api.app.terraformwars.com\,https://www.api.app.terraformwars.com\,https://app.terraformwars.com\,https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app"
-            ALLOWED_HOSTS="localhost\,127.0.0.1\,api.app.terraformwars.com\,www.api.app.terraformwars.com\,terraform-wars-task-worker-production-436901077292.europe-west3.run.app"
+            CSRF_TRUSTED_ORIGINS="https://api.app.terraformwars.com\,https://www.api.app.terraformwars.com\,https://app.terraformwars.com\,https://terraform-wars-task-worker-production-482421189795.europe-west3.run.app"
+            CORS_ALLOWED_ORIGINS="https://api.app.terraformwars.com\,https://www.api.app.terraformwars.com\,https://app.terraformwars.com\,https://terraform-wars-task-worker-production-482421189795.europe-west3.run.app"
+            ALLOWED_HOSTS="localhost\,127.0.0.1\,api.app.terraformwars.com\,www.api.app.terraformwars.com\,terraform-wars-task-worker-production-482421189795.europe-west3.run.app"
             GCP_PROJECT_ID=${{ vars.GCP_PROJECT_ID }}
             GCP_REGION=${{ vars.GCP_REGION }}
           secrets: |-
