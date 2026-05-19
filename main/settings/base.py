@@ -150,12 +150,17 @@ if SERVICE_TYPE in {
 }:
     DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True
     DATABASES["default"]["OPTIONS"]["pool"] = {
-        "min_size": 4,
+        "min_size": 0,
         "max_size": 8,
-        "timeout": 10,  # aggresive timeout
-        "max_lifetime": 1800,  # 30 minutes maximum connection age
-        "max_idle": 300,  # Close idle connections after 5 minutes
+        "timeout": 10,
+        "max_lifetime": 1800,
+        "max_idle": 120,  # Close idle connections after 2 min — below GCP/Cloud SQL TCP drop threshold
+        "reconnect_timeout": 5,  # Fast-fail stale reconnects instead of blocking
     }
+    DATABASES["default"]["OPTIONS"]["keepalives"] = 1
+    DATABASES["default"]["OPTIONS"]["keepalives_idle"] = 60
+    DATABASES["default"]["OPTIONS"]["keepalives_interval"] = 10
+    DATABASES["default"]["OPTIONS"]["keepalives_count"] = 3
 
 ATOMIC_REQUESTS = False
 AUTOCOMMIT = True
