@@ -20,7 +20,7 @@ class AbstractTimestampedModel(models.Model):
         abstract = True
 
     def __str__(self) -> str:
-        return str(self.id)
+        return str(self.pk)
 
 
 class AbstractUUIDModel(AbstractTimestampedModel):
@@ -36,4 +36,4 @@ class AbstractUUIDModel(AbstractTimestampedModel):
         abstract = True
 
     def __str__(self) -> str:
-        return str(self.id)
+        return str(self.pk)

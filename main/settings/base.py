@@ -218,7 +218,7 @@ LOCALE_PATHS = [
 # Google Cloud
 
 INTERNAL_API_BASE_URL = config(
-    "INTERNAL_API_BASE_URL", "https://terraform-wars-task-worker-production-436901077292.europe-west3.run.app"
+    "INTERNAL_API_BASE_URL", "https://terraform-wars-task-worker-production-482421189795.europe-west3.run.app"
 )
 GCP_PROJECT_ID = config("GCP_PROJECT_ID")
 GCP_REGION = config("GCP_REGION")

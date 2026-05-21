@@ -378,14 +378,14 @@ google = [
 
 [[package]]
 name = "django-unfold"
-version = "0.79.0"
+version = "0.94.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f7/29/4070c59b13ef2a22274780390e738d85b583bde3a276056a17689fa8cd18/django_unfold-0.79.0.tar.gz", hash = "sha256:16ef6a097130d54785b5dea03c40b3593bd31039fd13df44b6d9ac3a7897ba46", size = 1110455, upload-time = "2026-02-11T10:37:07.581Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c5/26/d1e4f9ca3b23e020323c2b90ac57ac515acdfb6108fff47ad9354a47edd8/django_unfold-0.94.0.tar.gz", hash = "sha256:4c1f73b5371e8b45be548e520a9dc1b7b18e9de5bba65267784407776941f627", size = 1124721, upload-time = "2026-05-18T08:00:13.14Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/13/e3/022ed3fc8c0d37113871c5319d464ff0196061e4f7d95700a73dc8019095/django_unfold-0.79.0-py3-none-any.whl", hash = "sha256:e1642f43555a7aab7916b3c2d70fa22391b48110971438bc6fb6fc5081c12d97", size = 1225853, upload-time = "2026-02-11T10:37:08.868Z" },
+    { url = "https://files.pythonhosted.org/packages/d9/fe/a064bb7195d0d50890c15562d7257646d1bce9240545af7c0e2a48fab408/django_unfold-0.94.0-py3-none-any.whl", hash = "sha256:89de4e1fe3be3477358afa92aa847940ca250e05e88724dd78f7e9499dccda0e", size = 1250343, upload-time = "2026-05-18T08:00:15.342Z" },
 ]
 
 [[package]]
@@ -1299,7 +1299,7 @@ requires-dist = [
     { name = "django-json-widget", specifier = ">=2.1.0" },
     { name = "django-ninja", specifier = "==1.5.3" },
     { name = "django-storages", extras = ["google"], specifier = ">=1.14.6" },
-    { name = "django-unfold", specifier = ">=0.78.0" },
+    { name = "django-unfold", specifier = ">=0.94.0" },
     { name = "google-auth", specifier = ">=2.43.0" },
     { name = "google-cloud-billing", specifier = ">=1.18.0" },
     { name = "google-cloud-iam", specifier = ">=2.20.0" },

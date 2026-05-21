@@ -13,7 +13,7 @@ dependencies = [
   "django-json-widget>=2.1.0",
   "django-ninja==1.5.3",
   "django-storages[google]>=1.14.6",
-  "django-unfold>=0.78.0",
+  "django-unfold>=0.94.0",
   "google-auth>=2.43.0",
   "google-cloud-billing>=1.18.0",
   "google-cloud-iam>=2.20.0",

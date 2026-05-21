@@ -1,3 +1,4 @@
+from main.apps.tutorials.services import TutorialRetrievalService
 import logging
 from uuid import UUID
 
@@ -15,8 +16,13 @@ logger = logging.getLogger(__name__)
 
 class TutorialCreateService:
     @inject
-    def __init__(self, tutorial_validation_service: TutorialValidationService):
+    def __init__(
+        self,
+        tutorial_validation_service: TutorialValidationService,
+        tutorial_retrieval_service: TutorialRetrievalService,
+    ):
         self._tutorial_validation_service = tutorial_validation_service
+        self._tutorial_retrieval_service = tutorial_retrieval_service
 
     def _create_tutorial(
         self,
@@ -48,4 +54,5 @@ class TutorialCreateService:
     @transaction.atomic
     def create(self, user_id: UUID, data: CreateTutorialSchema) -> Tutorial:
         validated_data = self._tutorial_validation_service.validate_create_data(data)
-        return self._create_tutorial(user_id, data, validated_data)
+        tutorial = self._create_tutorial(user_id, data, validated_data)
+        return self._tutorial_retrieval_service.get_detail_by_id(tutorial.id, user_id)
